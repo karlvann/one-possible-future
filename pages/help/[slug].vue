@@ -182,7 +182,17 @@ const route = useRoute()
 const slug = computed(() => route.params.slug)
 
 // Raw mode: strips header, footer, and all annotations for clean LLM ingestion
-const isRaw = computed(() => route.query.raw === 'true')
+// Check both route.query and direct URL parsing for SSR compatibility
+const isRaw = computed(() => {
+  // Client-side: use route query
+  if (import.meta.client) {
+    return route.query.raw === 'true'
+  }
+  // Server-side: check the request URL directly
+  const event = useRequestEvent()
+  const url = event?.node?.req?.url || ''
+  return url.includes('raw=true')
+})
 
 // Use raw layout when ?raw=true (no header/footer)
 definePageMeta({
