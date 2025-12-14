@@ -1,7 +1,8 @@
 <template>
   <div class="shadow-page">
-    <!-- SEO Annotation: What is a Shadow Page? -->
+    <!-- SEO Annotation: What is a Shadow Page? (hidden in raw mode) -->
     <SeoAnnotation
+      v-if="!isRaw"
       type="strategy"
       title="This is a Details Page (SSOT)"
       forWho="Karl & Alex"
@@ -29,8 +30,9 @@
       </p>
     </SeoAnnotation>
 
-    <!-- SEO Annotation: Technical Implementation -->
+    <!-- SEO Annotation: Technical Implementation (hidden in raw mode) -->
     <SeoAnnotation
+      v-if="!isRaw"
       type="technical"
       title="How This Page Works"
       forWho="Alex (Dev)"
@@ -68,7 +70,7 @@
 
     <!-- Error State -->
     <div v-else-if="error" class="shadow-page__error">
-      <SeoAnnotation type="warning" title="Error Loading Content" forWho="Alex (Dev)">
+      <SeoAnnotation v-if="!isRaw" type="warning" title="Error Loading Content" forWho="Alex (Dev)">
         <p>The Notion API returned an error. Check:</p>
         <ul>
           <li>Is NOTION_API_KEY set in environment variables?</li>
@@ -77,12 +79,13 @@
         </ul>
         <p>Error: {{ error.message }}</p>
       </SeoAnnotation>
+      <p v-else>Error loading content.</p>
     </div>
 
     <!-- Content -->
     <div v-else-if="data" class="shadow-page__container">
-      <!-- Breadcrumb for LLM context -->
-      <nav class="shadow-page__breadcrumb">
+      <!-- Breadcrumb for LLM context (hidden in raw mode) -->
+      <nav v-if="!isRaw" class="shadow-page__breadcrumb">
         <NuxtLink to="/">Home</NuxtLink>
         <span>/</span>
         <NuxtLink to="/help">Help Centre</NuxtLink>
@@ -90,8 +93,9 @@
         <span>{{ data.title }}</span>
       </nav>
 
-      <!-- SEO Annotation: Content Format -->
+      <!-- SEO Annotation: Content Format (hidden in raw mode) -->
       <SeoAnnotation
+        v-if="!isRaw"
         type="llm"
         title="Fin-Optimized Q&A Format"
         forWho="Karl"
@@ -118,8 +122,8 @@
       <!-- Notion Content -->
       <article class="shadow-page__content" v-html="data.content"></article>
 
-      <!-- Cross-links to related shadow pages -->
-      <aside class="shadow-page__related">
+      <!-- Cross-links to related shadow pages (hidden in raw mode) -->
+      <aside v-if="!isRaw" class="shadow-page__related">
         <SeoAnnotation
           type="info"
           title="Internal Linking for LLM Discovery"
@@ -145,8 +149,8 @@
         </div>
       </aside>
 
-      <!-- Back to hub -->
-      <footer class="shadow-page__footer">
+      <!-- Back to hub (hidden in raw mode) -->
+      <footer v-if="!isRaw" class="shadow-page__footer">
         <NuxtLink to="/help" class="shadow-page__back">
           &larr; Back to Help Centre
         </NuxtLink>
@@ -167,10 +171,28 @@
  * - trial -> /help/trial
  * - warranty -> /help/warranty
  * - adjustments -> /help/adjustments
+ *
+ * Raw mode: Add ?raw=true to get clean content without header/footer/annotations
+ * Useful for NotebookLM, AI tools, or any system that just needs the content
  */
 
 const route = useRoute()
 const slug = computed(() => route.params.slug)
+
+// Raw mode: strips header, footer, and all annotations for clean LLM ingestion
+const isRaw = computed(() => route.query.raw === 'true')
+
+// Switch to bare layout when in raw mode (no header/footer)
+if (import.meta.client) {
+  watch(isRaw, (raw) => {
+    setPageLayout(raw ? 'raw' : 'default')
+  }, { immediate: true })
+} else {
+  // SSR: check query directly
+  if (route.query.raw === 'true') {
+    setPageLayout('raw')
+  }
+}
 
 // Map new slugs to old Notion page keys
 const slugMapping = {
