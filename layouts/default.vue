@@ -10,10 +10,12 @@
     >
       <slot />
     </main>
+    <div v-if="!hideChrome" class="dev-toggle-bar">
+      <DevModeToggle />
+    </div>
     <Footer v-if="!hideChrome" />
     <Cart v-if="!hideChrome" />
     <LoadingModal v-if="checkoutPage" />
-    <DevModeToggle v-if="!hideChrome" />
   </div>
 </template>
 
@@ -33,3 +35,13 @@ const hideChrome = computed(() => checkoutPage.value || rawMode.value)
 const settingsStore = useSettingsStore()
 const { banner } = storeToRefs(settingsStore)
 </script>
+
+<style scoped>
+.dev-toggle-bar {
+  display: flex;
+  justify-content: flex-end;
+  padding: 16px 20px;
+  background: #f3f4f6;
+  border-top: 1px solid #e5e7eb;
+}
+</style>
