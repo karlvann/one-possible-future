@@ -18,7 +18,7 @@ const { isDevMode, toggleDevMode } = useDevMode()
 .dev-mode-toggle {
   position: fixed;
   bottom: 20px;
-  right: 20px;
+  left: 20px;
   z-index: 9999;
   display: flex;
   align-items: center;
@@ -61,7 +61,7 @@ const { isDevMode, toggleDevMode } = useDevMode()
 @media (max-width: 640px) {
   .dev-mode-toggle {
     bottom: 16px;
-    right: 16px;
+    left: 16px;
     padding: 8px 12px;
     font-size: 12px;
   }
