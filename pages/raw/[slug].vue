@@ -204,6 +204,24 @@ function formatDate(isoDate) {
   font-weight: 600;
 }
 
+/* YouTube video embeds (lite-youtube-embed) */
+.raw-page__content :deep(.video-container) {
+  margin: 24px 0;
+}
+
+.raw-page__content :deep(lite-youtube) {
+  border-radius: 8px;
+  overflow: hidden;
+  max-width: 100%;
+}
+
+.raw-page__content :deep(.video-caption) {
+  font-size: 0.875rem;
+  color: #6b7280;
+  text-align: center;
+  margin-top: 8px;
+}
+
 .raw-page__loading,
 .raw-page__error {
   text-align: center;

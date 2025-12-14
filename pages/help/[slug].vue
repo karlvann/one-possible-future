@@ -496,6 +496,24 @@ useHead({
   margin-top: 8px;
 }
 
+/* YouTube video embeds (lite-youtube-embed) */
+.shadow-page__content :deep(.video-container) {
+  margin: 24px 0;
+}
+
+.shadow-page__content :deep(lite-youtube) {
+  border-radius: 8px;
+  overflow: hidden;
+  max-width: 100%;
+}
+
+.shadow-page__content :deep(.video-caption) {
+  font-size: 0.875rem;
+  color: #6b7280;
+  text-align: center;
+  margin-top: 8px;
+}
+
 /* Related links */
 .shadow-page__related {
   margin-top: 48px;

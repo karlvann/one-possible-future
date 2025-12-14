@@ -264,9 +264,29 @@ export function blocksToHtml(blocks) {
         }
         break
 
+      case 'video':
+        // Handle YouTube videos with lite-youtube-embed
+        const videoData = block.video
+        let videoUrl = ''
+
+        if (videoData?.type === 'external') {
+          videoUrl = videoData.external?.url || ''
+        }
+
+        const youtubeId = extractYouTubeId(videoUrl)
+        if (youtubeId) {
+          const videoCaption = richTextToHtml(videoData.caption)
+          html += `<div class="video-container">\n`
+          html += `<lite-youtube videoid="${youtubeId}" playlabel="Play video"></lite-youtube>\n`
+          if (videoCaption) {
+            html += `<p class="video-caption">${videoCaption}</p>\n`
+          }
+          html += `</div>\n`
+        }
+        break
+
       // Unsupported blocks - skip silently
       case 'embed':
-      case 'video':
       case 'file':
       case 'pdf':
       case 'bookmark':
@@ -310,6 +330,26 @@ export function escapeHtml(text) {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#039;')
+}
+
+/**
+ * Extract YouTube video ID from various URL formats
+ * Supports: youtube.com/watch?v=, youtu.be/, youtube.com/embed/
+ */
+export function extractYouTubeId(url) {
+  if (!url) return null
+
+  const patterns = [
+    /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/,
+    /^([a-zA-Z0-9_-]{11})$/ // Just the ID
+  ]
+
+  for (const pattern of patterns) {
+    const match = url.match(pattern)
+    if (match) return match[1]
+  }
+
+  return null
 }
 
 /**
