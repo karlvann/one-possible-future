@@ -1,0 +1,1241 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "crons": [
+    {
+      "path": "/api/cron/cartReminder",
+      "schedule": "0 10 * * *"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/wp-content/cache/:remainder*",
+      "destination": "https://ausbeds.com.au",
+      "permanent": true
+    },
+    {
+      "source": "/wp-content/plugins/:remainder*",
+      "destination": "https://ausbeds.com.au",
+      "permanent": true
+    },
+    {
+      "source": "/wp-content/themes/:remainder*",
+      "destination": "https://ausbeds.com.au",
+      "permanent": true
+    },
+    {
+      "source": "/product-category/bed-bases/",
+      "destination": "https://ausbeds.com.au/mattresses/base",
+      "permanent": true
+    },
+    {
+      "source": "/ausbeds-founders-story",
+      "destination": "https://ausbeds.com.au/about/our-story",
+      "permanent": true
+    },
+    {
+      "source": "/shop/",
+      "destination": "https://ausbeds.com.au/mattresses",
+      "permanent": true
+    },
+    {
+      "source": "/sienna/",
+      "destination": "https://ausbeds.com.au/sienna-mattress",
+      "permanent": true
+    },
+    {
+      "source": "/shop/mattresses/mattress-sienna-r6",
+      "destination": "https://ausbeds.com.au/sienna-mattress",
+      "permanent": true
+    },
+    {
+      "source": "/about/",
+      "destination": "https://ausbeds.com.au/about/our-story",
+      "permanent": true
+    },
+    {
+      "source": "/buy-mattress-online",
+      "destination": "https://ausbeds.com.au/mattresses",
+      "permanent": true
+    },
+    {
+      "source": "/whats-the-best-mattress-in-australia",
+      "destination": "https://ausbeds.com.au/guides/whats-the-best-mattress-in-australia",
+      "permanent": true
+    },
+    {
+      "source": "/shop/mattresses/buy/",
+      "destination": "https://ausbeds.com.au/mattresses",
+      "permanent": true
+    },
+    {
+      "source": "/learn-about/mattress-sales/",
+      "destination": "https://ausbeds.com.au",
+      "permanent": true
+    },
+    {
+      "source": "/type-of-mattress/memory-foam-mattress",
+      "destination": "https://ausbeds.com.au",
+      "permanent": true
+    },
+    {
+      "source": "/buy-mattress-online/",
+      "destination": "https://ausbeds.com.au/mattresses",
+      "permanent": true
+    },
+    {
+      "source": "/karls-mattress-reviews/",
+      "destination": "https://ausbeds.com.au/about/reviews",
+      "permanent": true
+    },
+    {
+      "source": "/videos-sitemap.xml",
+      "destination": "https://ausbeds.com.au/sitemap.xml",
+      "permanent": true
+    },
+    {
+      "source": "/news-sitemap.xml",
+      "destination": "https://ausbeds.com.au/sitemap.xml",
+      "permanent": true
+    },
+    {
+      "source": "/pa_base-sitemap.xml",
+      "destination": "https://ausbeds.com.au/sitemap.xml",
+      "permanent": true
+    },
+    {
+      "source": "/product-sitemap.xml",
+      "destination": "https://ausbeds.com.au/sitemap.xml",
+      "permanent": true
+    },
+    {
+      "source": "/video-sitemap.xml",
+      "destination": "https://ausbeds.com.au/sitemap.xml",
+      "permanent": true
+    },
+    {
+      "source": "/mattress-thoughts/",
+      "destination": "https://ausbeds.com.au/mattress-guide",
+      "permanent": true
+    },
+    {
+      "source": "/shop/our-mattresses/latex-mattress-jr7/",
+      "destination": "https://ausbeds.com.au/mattresses/cloud",
+      "permanent": true
+    },
+    {
+      "source": "/wp-content/uploads/ausbeds-aurora-mattress.jpg",
+      "destination": "https://cdn.ausbeds.com.au/893dfc33-3056-4a0f-9331-5abd7838c056/aurora-mattress-sm.jpg",
+      "permanent": true
+    },
+    {
+      "source": "/page-sitemap.xml",
+      "destination": "https://ausbeds.com.au/sitemap.xml",
+      "permanent": true
+    },
+    {
+      "source": "/pa_mattress-number-sitemap.xml",
+      "destination": "https://ausbeds.com.au/sitemap.xml",
+      "permanent": true
+    },
+    {
+      "source": "/sitemap_index.xml",
+      "destination": "https://ausbeds.com.au/sitemap.xml",
+      "permanent": true
+    },
+    {
+      "source": "/shop/base/slimline-mattress-base/",
+      "destination": "https://ausbeds.com.au/mattresses/base",
+      "permanent": true
+    },
+    {
+      "source": "/mattress-base",
+      "destination": "https://ausbeds.com.au/mattresses/base",
+      "permanent": true
+    },
+    {
+      "source": "/shop/mattresses/aurora-mattress/",
+      "destination": "https://ausbeds.com.au/mattresses/aurora",
+      "permanent": true
+    },
+    {
+      "source": "/guides/mattresses/aurora",
+      "destination": "https://ausbeds.com.au/mattresses/aurora",
+      "permanent": true
+    },
+    {
+      "source": "/shop/mattresses/cooper-mattress/",
+      "destination": "https://ausbeds.com.au/mattresses/cooper",
+      "permanent": true
+    },
+    {
+      "source": "/shop/mattresses/cooper-mattress",
+      "destination": "https://ausbeds.com.au/mattresses/cooper",
+      "permanent": true
+    },
+    {
+      "source": "/shop/mattresses/cooper/",
+      "destination": "https://ausbeds.com.au/mattresses/cooper",
+      "permanent": true
+    },
+    {
+      "source": "/shop/mattresses/cloud/",
+      "destination": "https://ausbeds.com.au/mattresses/cloud",
+      "permanent": true
+    },
+    {
+      "source": "/shop/mattresses/aurora/",
+      "destination": "https://ausbeds.com.au/mattresses/aurora",
+      "permanent": true
+    },
+    {
+      "source": "/shop/mattresses/cloud-latex/",
+      "destination": "https://ausbeds.com.au/mattresses/cloud",
+      "permanent": true
+    },
+    {
+      "source": "/mattress-sizes/king/",
+      "destination": "https://ausbeds.com.au/mattresses",
+      "permanent": true
+    },
+    {
+      "source": "/mattress-size",
+      "destination": "https://ausbeds.com.au/mattresses",
+      "permanent": true
+    },
+    {
+      "source": "/mattress-forum-answers",
+      "destination": "https://ausbeds.com.au/mattress-guide",
+      "permanent": true
+    },
+    {
+      "source": "/ausbeds-is-reddits-favourite-mattress/",
+      "destination": "https://ausbeds.com.au",
+      "permanent": true
+    },
+    {
+      "source": "/eco-mattresses",
+      "destination": "https://ausbeds.com.au",
+      "permanent": true
+    },
+    {
+      "source": "/mattress-sizes/queen/",
+      "destination": "https://ausbeds.com.au/mattresses",
+      "permanent": true
+    },
+    {
+      "source": "/guide/mattress-weight-durability",
+      "destination": "https://ausbeds.com.au/guides/mattress-weight-durability",
+      "permanent": true
+    },
+    {
+      "source": "/mattress-sizes/double/",
+      "destination": "https://ausbeds.com.au/mattresses",
+      "permanent": true
+    },
+    {
+      "source": "/mattress-sizes/kingsingle/",
+      "destination": "https://ausbeds.com.au/mattresses",
+      "permanent": true
+    },
+    {
+      "source": "/mattress-sizes/single/",
+      "destination": "https://ausbeds.com.au/mattresses",
+      "permanent": true
+    },
+    {
+      "source": "/mattress-number/3-softer/",
+      "destination": "https://ausbeds.com.au/mattresses",
+      "permanent": true
+    },
+    {
+      "source": "/mattress-number/6-med-soft/",
+      "destination": "https://ausbeds.com.au/mattresses",
+      "permanent": true
+    },
+    {
+      "source": "/mattress-firmness/med-firm/",
+      "destination": "https://ausbeds.com.au/mattresses",
+      "permanent": true
+    },
+    {
+      "source": "/mattress-number/9-firm/",
+      "destination": "https://ausbeds.com.au/mattresses",
+      "permanent": true
+    },
+    {
+      "source": "/mattress-number/10-super-firm/",
+      "destination": "https://ausbeds.com.au/mattresses",
+      "permanent": true
+    },
+    {
+      "source": "/mattress-firmness/super-firm/",
+      "destination": "https://ausbeds.com.au/mattresses",
+      "permanent": true
+    },
+    {
+      "source": "/base/king/",
+      "destination": "https://ausbeds.com.au/mattresses/base?size=king",
+      "permanent": true
+    },
+    {
+      "source": "/base/queen/",
+      "destination": "https://ausbeds.com.au/mattresses/base?size=queen",
+      "permanent": true
+    },
+    {
+      "source": "/base/double/",
+      "destination": "https://ausbeds.com.au/mattresses/base?size=double",
+      "permanent": true
+    },
+    {
+      "source": "/base/king-single/",
+      "destination": "https://ausbeds.com.au/mattresses/base?size=king-single",
+      "permanent": true
+    },
+    {
+      "source": "/base/single/",
+      "destination": "https://ausbeds.com.au/mattresses/base?size=single",
+      "permanent": true
+    },
+    {
+      "source": "/product-category/base/",
+      "destination": "https://ausbeds.com.au/mattresses/base",
+      "permanent": true
+    },
+    {
+      "source": "/product-category/mattresses/",
+      "destination": "https://ausbeds.com.au/mattresses",
+      "permanent": true
+    },
+    {
+      "source": "/product-category/memory-foam/",
+      "destination": "https://ausbeds.com.au/mattresses/cooper",
+      "permanent": true
+    },
+    {
+      "source": "/mattress-guide/videos/",
+      "destination": "https://ausbeds.com.au/mattress-guide",
+      "permanent": true
+    },
+    {
+      "source": "/ausbeds.com/mattress-guide/videos/",
+      "destination": "https://ausbeds.com.au/mattress-guide",
+      "permanent": true
+    },
+    {
+      "source": "/product-category/memory-foam/page/2/",
+      "destination": "https://ausbeds.com.au/mattresses",
+      "permanent": true
+    },
+    {
+      "source": "/type-of-mattress/adjustable-mattress/",
+      "destination": "https://ausbeds.com.au/mattresses",
+      "permanent": true
+    },
+    {
+      "source": "/type-of-mattress/memory-foam-mattress/",
+      "destination": "https://ausbeds.com.au/mattresses/cooper",
+      "permanent": true
+    },
+    {
+      "source": "/type-of-mattress/micro-spring-mattress/",
+      "destination": "https://ausbeds.com.au/mattresses/cloud",
+      "permanent": true
+    },
+    {
+      "source": "/type-of-mattress/pocket-spring-mattress/",
+      "destination": "https://ausbeds.com.au/mattresses/aurora",
+      "permanent": true
+    },
+    {
+      "source": "/type-of-mattress/honeycomb-foam-mattress/",
+      "destination": "https://ausbeds.com.au/mattresses",
+      "permanent": true
+    },
+    {
+      "source": "/mattress-sale/",
+      "destination": "https://ausbeds.com.au/",
+      "permanent": true
+    },
+    {
+      "source": "/about-our/really-low-price/",
+      "destination": "https://ausbeds.com.au/",
+      "permanent": true
+    },
+    {
+      "source": "/learn-about/mattress-types/",
+      "destination": "https://ausbeds.com.au/mattress-guide",
+      "permanent": true
+    },
+    {
+      "source": "/type-of-mattress/",
+      "destination": "https://ausbeds.com.au/mattresses",
+      "permanent": true
+    },
+    {
+      "source": "/mattress-base/queen-bed-base/",
+      "destination": "https://ausbeds.com.au/mattresses/base?size=queen",
+      "permanent": true
+    },
+    {
+      "source": "/mattress-base/king-bed-base/",
+      "destination": "https://ausbeds.com.au/mattresses/base?size=king",
+      "permanent": true
+    },
+    {
+      "source": "/mattress-base/",
+      "destination": "https://ausbeds.com.au/mattresses/base",
+      "permanent": true
+    },
+    {
+      "source": "/mattress-base/double-bed-base/",
+      "destination": "https://ausbeds.com.au/mattresses/base?size=double",
+      "permanent": true
+    },
+    {
+      "source": "/mattress-base/king-single-bed-base/",
+      "destination": "https://ausbeds.com.au/mattresses/base?size=king-single",
+      "permanent": true
+    },
+    {
+      "source": "/mattress-base/single-bed-base/",
+      "destination": "https://ausbeds.com.au/mattresses/base?size=single",
+      "permanent": true
+    },
+    {
+      "source": "/mattress-size/queen-size-mattress/",
+      "destination": "https://ausbeds.com.au/mattresses",
+      "permanent": true
+    },
+    {
+      "source": "/mattress-size/single-size-mattress/",
+      "destination": "https://ausbeds.com.au/mattresses",
+      "permanent": true
+    },
+    {
+      "source": "/mattress-size/king-single-size-mattress/",
+      "destination": "https://ausbeds.com.au/mattresses",
+      "permanent": true
+    },
+    {
+      "source": "/mattress-size/double-size-mattress/",
+      "destination": "https://ausbeds.com.au/mattresses",
+      "permanent": true
+    },
+    {
+      "source": "/mattress-firmness/med-soft/",
+      "destination": "https://ausbeds.com.au/mattresses",
+      "permanent": true
+    },
+    {
+      "source": "/policies/",
+      "destination": "https://ausbeds.com.au/policies/terms",
+      "permanent": true
+    },
+    {
+      "source": "/my-account/",
+      "destination": "https://ausbeds.com.au/",
+      "permanent": true
+    },
+    {
+      "source": "/mattress-firmness/soft/",
+      "destination": "https://ausbeds.com.au/mattresses",
+      "permanent": true
+    },
+    {
+      "source": "/cart/",
+      "destination": "https://ausbeds.com.au/checkout",
+      "permanent": true
+    },
+    {
+      "source": "/day-before-delivery/",
+      "destination": "https://ausbeds.com.au/support/delivery",
+      "permanent": true
+    },
+    {
+      "source": "/help/",
+      "destination": "https://ausbeds.com.au/support/faqs",
+      "permanent": true
+    },
+    {
+      "source": "/help/mattress-layers/",
+      "destination": "https://ausbeds.com.au/support/adjustment-options",
+      "permanent": true
+    },
+    {
+      "source": "/adjust/aurora/",
+      "destination": "https://ausbeds.com.au/support/adjustment-options",
+      "permanent": true
+    },
+    {
+      "source": "/adjust/cooper/",
+      "destination": "https://ausbeds.com.au/support/adjustment-options",
+      "permanent": true
+    },
+    {
+      "source": "/adjust/",
+      "destination": "https://ausbeds.com.au/support/adjustment-options",
+      "permanent": true
+    },
+    {
+      "source": "/mattress-size/king-size-mattress/",
+      "destination": "https://ausbeds.com.au/mattresses",
+      "permanent": true
+    },
+    {
+      "source": "/apps/",
+      "destination": "https://ausbeds.com.au/",
+      "permanent": true
+    },
+    {
+      "source": "/apps/order-from-china/",
+      "destination": "https://ausbeds.com.au/",
+      "permanent": true
+    },
+    {
+      "source": "/apps/mattress-sales-app/",
+      "destination": "https://ausbeds.com.au/",
+      "permanent": true
+    },
+    {
+      "source": "/apps/delivery-calculator/",
+      "destination": "https://ausbeds.com.au/",
+      "permanent": true
+    },
+    {
+      "source": "/app-showcase/",
+      "destination": "https://ausbeds.com.au/",
+      "permanent": true
+    },
+    {
+      "source": "/checkout/",
+      "destination": "https://ausbeds.com.au/checkout",
+      "permanent": true
+    },
+    {
+      "source": "/showrooms/",
+      "destination": "https://ausbeds.com.au/showrooms",
+      "permanent": true
+    },
+    {
+      "source": "/willoughby/",
+      "destination": "https://ausbeds.com.au/showrooms/willoughby",
+      "permanent": true
+    },
+    {
+      "source": "/adjust/cloud/",
+      "destination": "https://ausbeds.com.au/support/adjustment-options",
+      "permanent": true
+    },
+    {
+      "source": "/really-easy-returns/if-you-live-outside-sydney/",
+      "destination": "https://ausbeds.com.au/support/returns",
+      "permanent": true
+    },
+    {
+      "source": "/really-easy-returns/if-you-live-outside-sydney",
+      "destination": "https://ausbeds.com.au/support/returns",
+      "permanent": true
+    },
+    {
+      "source": "/really-easy-adjustments/",
+      "destination": "https://ausbeds.com.au/support/adjustment-options",
+      "permanent": true
+    },
+    {
+      "source": "/really-easy-adjustments",
+      "destination": "https://ausbeds.com.au/support/adjustment-options",
+      "permanent": true
+    },
+    {
+      "source": "/help/ausbeds-mattress-layering/",
+      "destination": "https://ausbeds.com.au/about/how-it-works",
+      "permanent": true
+    },
+    {
+      "source": "/.well-known/security.txt",
+      "destination": "https://ausbeds.com.au/security.txt",
+      "permanent": true
+    },
+    {
+      "source": "/wp-admin",
+      "destination": "https://ausbeds.com.au",
+      "permanent": true
+    },
+    {
+      "source": "/wp-admin/",
+      "destination": "https://ausbeds.com.au",
+      "permanent": true
+    },
+    {
+      "source": "/wp-login.php",
+      "destination": "https://ausbeds.com.au",
+      "permanent": true
+    },
+    {
+      "source": "/our-mattress-shops/tel:0289993333",
+      "destination": "https://ausbeds.com.au/showrooms",
+      "permanent": true
+    },
+    {
+      "source": "/my-account/lost-password/tel:0289993333/",
+      "destination": "https://ausbeds.com.au",
+      "permanent": true
+    },
+    {
+      "source": "/ausbeds-online-business-scholarship/",
+      "destination": "https://ausbeds.com.au",
+      "permanent": true
+    },
+    {
+      "source": "/accessories/double/",
+      "destination": "https://ausbeds.com.au/mattresses",
+      "permanent": true
+    },
+    {
+      "source": "/learn-about/",
+      "destination": "https://ausbeds.com.au/about/how-it-works",
+      "permanent": true
+    },
+    {
+      "source": "/medium",
+      "destination": "https://ausbeds.com.au/mattresses",
+      "permanent": true
+    },
+    {
+      "source": "/firmer",
+      "destination": "https://ausbeds.com.au/mattresses",
+      "permanent": true
+    },
+    {
+      "source": "/faq",
+      "destination": "https://ausbeds.com.au/support/faqs",
+      "permanent": true
+    },
+    {
+      "source": "/slimline-base/king/",
+      "destination": "https://ausbeds.com.au/mattresses/base?size=king",
+      "permanent": true
+    },
+    {
+      "source": "/shop/base/slimline-base/",
+      "destination": "https://ausbeds.com.au/mattresses/base",
+      "permanent": true
+    },
+    {
+      "source": "/comments/feed/",
+      "destination": "https://ausbeds.com.au",
+      "permanent": true
+    },
+    {
+      "source": "/getcmd",
+      "destination": "https://ausbeds.com.au",
+      "permanent": true
+    },
+    {
+      "source": "/shop/mattresses/sienna-mattress/",
+      "destination": "https://ausbeds.com.au/sienna-mattress",
+      "permanent": true
+    },
+    {
+      "source": "/sienna-r4/",
+      "destination": "https://ausbeds.com.au/sienna-mattress",
+      "permanent": true
+    },
+    {
+      "source": "/mattress-for-medium-side-sleeper/",
+      "destination": "https://ausbeds.com.au/mattresses/cloud",
+      "permanent": true
+    },
+    {
+      "source": "/mattress-for-medium-side-sleeper/",
+      "destination": "https://ausbeds.com.au/mattresses/cloud",
+      "permanent": true
+    },
+    {
+      "source": "/mattress-for-light-side-sleeper/",
+      "destination": "https://ausbeds.com.au/mattresses/cloud",
+      "permanent": true
+    },
+    {
+      "source": "/mattress-for-med-heavy-back-sleeper/",
+      "destination": "https://ausbeds.com.au/mattresses/aurora",
+      "permanent": true
+    },
+    {
+      "source": "/mattress-for-med-heavy-back-sleeper/",
+      "destination": "https://ausbeds.com.au/mattresses/aurora",
+      "permanent": true
+    },
+    {
+      "source": "/type-of-mattress/adjustable-mattress",
+      "destination": "https://ausbeds.com.au/about/how-it-works",
+      "permanent": true
+    },
+    {
+      "source": "/our-mattress-shops",
+      "destination": "https://ausbeds.com.au/showrooms",
+      "permanent": true
+    },
+    {
+      "source": "/about",
+      "destination": "https://ausbeds.com.au/about/how-it-works",
+      "permanent": true
+    },
+    {
+      "source": "/info",
+      "destination": "https://ausbeds.com.au/about/how-it-works",
+      "permanent": true
+    },
+    {
+      "source": "/files/",
+      "destination": "https://ausbeds.com.au",
+      "permanent": true
+    },
+    {
+      "source": "/images/",
+      "destination": "https://ausbeds.com.au",
+      "permanent": true
+    },
+    {
+      "source": "/uploads/",
+      "destination": "https://ausbeds.com.au",
+      "permanent": true
+    },
+    {
+      "source": "/accessories/queen/",
+      "destination": "https://ausbeds.com.au/mattresses",
+      "permanent": true
+    },
+    {
+      "source": "/product-category/base",
+      "destination": "https://ausbeds.com.au/mattresses/base",
+      "permanent": true
+    },
+    {
+      "source": "/buy-mattress-online/",
+      "destination": "https://ausbeds.com.au/guides/how-to-buy-a-mattress-online",
+      "permanent": true
+    },
+    {
+      "source": "/about-our/about-ausbeds/",
+      "destination": "https://ausbeds.com.au/about/our-philosophy",
+      "permanent": true
+    },
+    {
+      "source": "/eco-mattresses/",
+      "destination": "https://ausbeds.com.au/about/our-philosophy",
+      "permanent": true
+    },
+    {
+      "source": "/contact-us/",
+      "destination": "https://ausbeds.com.au/",
+      "permanent": true
+    },
+    {
+      "source": "/mattress-delivery-sydney/",
+      "destination": "https://ausbeds.com.au/support/delivery",
+      "permanent": true
+    },
+    {
+      "source": "/very-firm/",
+      "destination": "https://ausbeds.com.au/guides/mattress-firmness-guide",
+      "permanent": true
+    },
+    {
+      "source": "/softer",
+      "destination": "https://ausbeds.com.au/guides/mattress-firmness-guide",
+      "permanent": true
+    },
+    {
+      "source": "/very-firm",
+      "destination": "https://ausbeds.com.au/guides/mattress-firmness-guide",
+      "permanent": true
+    },
+    {
+      "source": "/mattress-fitting-guide/",
+      "destination": "https://ausbeds.com.au/guides/mattress-firmness-guide",
+      "permanent": true
+    },
+    {
+      "source": "/help/delivery-options/",
+      "destination": "https://ausbeds.com.au/support/delivery",
+      "permanent": true
+    },
+    {
+      "source": "/ausbeds-reviews/",
+      "destination": "https://ausbeds.com.au/about/reviews",
+      "permanent": true
+    },
+    {
+      "source": "/our-mattress-shops/",
+      "destination": "https://ausbeds.com.au/showrooms",
+      "permanent": true
+    },
+    {
+      "source": "/really-easy-returns/",
+      "destination": "https://ausbeds.com.au/support/returns",
+      "permanent": true
+    },
+    {
+      "source": "/really-easy-returns",
+      "destination": "https://ausbeds.com.au/support/returns",
+      "permanent": true
+    },
+    {
+      "source": "/ausbeds-founders-story/",
+      "destination": "https://ausbeds.com.au/about/our-story",
+      "permanent": true
+    },
+    {
+      "source": "/medium/",
+      "destination": "https://ausbeds.com.au/mattresses",
+      "permanent": true
+    },
+    {
+      "source": "/firmer/",
+      "destination": "https://ausbeds.com.au/mattresses",
+      "permanent": true
+    },
+    {
+      "source": "/half-half-mattress/",
+      "destination": "https://ausbeds.com.au/support/half-half-mattress",
+      "permanent": true
+    },
+    {
+      "source": "/faqs/",
+      "destination": "https://ausbeds.com.au/support/faqs",
+      "permanent": true
+    },
+    {
+      "source": "/about-our/foam-layer-purchase-prices/",
+      "destination": "https://ausbeds.com.au/support/faqs",
+      "permanent": true
+    },
+    {
+      "source": "/softer/",
+      "destination": "https://ausbeds.com.au/mattresses",
+      "permanent": true
+    },
+    {
+      "source": "/type-of-mattress/polyfoam-mattress/",
+      "destination": "https://ausbeds.com.au/mattresses",
+      "permanent": true
+    },
+    {
+      "source": "/mattress-size/",
+      "destination": "https://ausbeds.com.au/mattresses",
+      "permanent": true
+    },
+    {
+      "source": "/mattress-firmness/",
+      "destination": "https://ausbeds.com.au/mattresses",
+      "permanent": true
+    },
+    {
+      "source": "/about-our/buy-a-new-cover/",
+      "destination": "https://ausbeds.com.au/support/faqs",
+      "permanent": true
+    },
+    {
+      "source": "/our-mattress-shops/marrickville/",
+      "destination": "https://ausbeds.com.au/showrooms/marrickville",
+      "permanent": true
+    },
+    {
+      "source": "/our-mattress-shops/willoughby/",
+      "destination": "https://ausbeds.com.au/showrooms/willoughby",
+      "permanent": true
+    },
+    {
+      "source": "/reviews/",
+      "destination": "https://ausbeds.com.au/about/reviews",
+      "permanent": true
+    },
+    {
+      "source": "/about-our/mattress-reviews/",
+      "destination": "https://ausbeds.com.au/about/reviews",
+      "permanent": true
+    },
+    {
+      "source": "/contact-link-here/",
+      "destination": "https://ausbeds.com.au/",
+      "permanent": true
+    },
+    {
+      "source": "/about-our/compare-mattresses/",
+      "destination": "https://ausbeds.com.au/mattresses",
+      "permanent": true
+    },
+    {
+      "source": "/mattress-overview/",
+      "destination": "https://ausbeds.com.au/mattresses",
+      "permanent": true
+    },
+    {
+      "source": "/really-smooth-delivery/",
+      "destination": "https://ausbeds.com.au/support/delivery",
+      "permanent": true
+    },
+    {
+      "source": "/mattress-firmness/firm-2/",
+      "destination": "https://ausbeds.com.au/mattresses",
+      "permanent": true
+    },
+    {
+      "source": "/compare-mattresses/",
+      "destination": "https://ausbeds.com.au/mattresses",
+      "permanent": true
+    },
+    {
+      "source": "/about-our/adjustment-process/",
+      "destination": "https://ausbeds.com.au/support/adjustment-options",
+      "permanent": true
+    },
+    {
+      "source": "/mattress-delivery/",
+      "destination": "https://ausbeds.com.au/support/delivery",
+      "permanent": true
+    },
+    {
+      "source": "/shop/uncategorized/sienna-mattress/",
+      "destination": "https://ausbeds.com.au/sienna-mattress",
+      "permanent": true
+    },
+    {
+      "source": "/shop/memory-foam/sienna-mattress/",
+      "destination": "https://ausbeds.com.au/sienna-mattress",
+      "permanent": true
+    },
+    {
+      "source": "/mattress-forum-answers/",
+      "destination": "https://ausbeds.com.au/",
+      "permanent": true
+    },
+    {
+      "source": "/70-90kgs/",
+      "destination": "https://ausbeds.com.au/",
+      "permanent": true
+    },
+    {
+      "source": "/product-category/mattresses/page/5/",
+      "destination": "https://ausbeds.com.au/mattresses",
+      "permanent": true
+    },
+    {
+      "source": "/product-category/mattresses/page/4/",
+      "destination": "https://ausbeds.com.au/mattresses",
+      "permanent": true
+    },
+    {
+      "source": "/product-category/mattresses/page/3/",
+      "destination": "https://ausbeds.com.au/mattresses",
+      "permanent": true
+    },
+    {
+      "source": "/product-category/mattresses/page/2/",
+      "destination": "https://ausbeds.com.au/mattresses",
+      "permanent": true
+    },
+    {
+      "source": "/product-category/mattresses/page/1/",
+      "destination": "https://ausbeds.com.au/mattresses",
+      "permanent": true
+    },
+    {
+      "source": "/shop/page/6/",
+      "destination": "https://ausbeds.com.au/mattresses",
+      "permanent": true
+    },
+    {
+      "source": "/shop/page/5/",
+      "destination": "https://ausbeds.com.au/mattresses",
+      "permanent": true
+    },
+    {
+      "source": "/shop/page/4/",
+      "destination": "https://ausbeds.com.au/mattresses",
+      "permanent": true
+    },
+    {
+      "source": "/shop/page/3/",
+      "destination": "https://ausbeds.com.au/mattresses",
+      "permanent": true
+    },
+    {
+      "source": "/shop/page/2/",
+      "destination": "https://ausbeds.com.au/mattresses",
+      "permanent": true
+    },
+    {
+      "source": "/shop/page/1/",
+      "destination": "https://ausbeds.com.au/mattresses",
+      "permanent": true
+    },
+    {
+      "source": "/product-tag/latex/page/3/",
+      "destination": "https://ausbeds.com.au/mattresses/cloud",
+      "permanent": true
+    },
+    {
+      "source": "/product-tag/latex/page/2/",
+      "destination": "https://ausbeds.com.au/mattresses/cloud",
+      "permanent": true
+    },
+    {
+      "source": "/product-tag/latex/page/1/",
+      "destination": "https://ausbeds.com.au/mattresses/cloud",
+      "permanent": true
+    },
+    {
+      "source": "/product-category/memory-foam/page/2/",
+      "destination": "https://ausbeds.com.au/mattresses/cooper",
+      "permanent": true
+    },
+    {
+      "source": "/product-category/memory-foam/page/1/",
+      "destination": "https://ausbeds.com.au/mattresses/cooper",
+      "permanent": true
+    },
+    {
+      "source": "/my-account/orders/",
+      "destination": "https://ausbeds.com.au/",
+      "permanent": true
+    },
+    {
+      "source": "/my-account/lost-password/",
+      "destination": "https://ausbeds.com.au/",
+      "permanent": true
+    },
+    {
+      "source": "/my-account/edit-address/",
+      "destination": "https://ausbeds.com.au/",
+      "permanent": true
+    },
+    {
+      "source": "/my-account/edit-account/",
+      "destination": "https://ausbeds.com.au/",
+      "permanent": true
+    },
+    {
+      "source": "/my-account/downloads/",
+      "destination": "https://ausbeds.com.au/",
+      "permanent": true
+    },
+    {
+      "source": "/my-account/payment-methods/",
+      "destination": "https://ausbeds.com.au/",
+      "permanent": true
+    },
+    {
+      "source": "/my-account/view-order/:orderId*/",
+      "destination": "https://ausbeds.com.au/",
+      "permanent": true
+    },
+    {
+      "source": "/checkout/order-received/:orderId*/",
+      "destination": "https://ausbeds.com.au/",
+      "permanent": true
+    },
+    {
+      "source": "/checkout/order-pay/:orderId*/",
+      "destination": "https://ausbeds.com.au/",
+      "permanent": true
+    },
+    {
+      "source": "/about-our/opinions-on-the-mattress-buying-process/",
+      "destination": "https://ausbeds.com.au/",
+      "permanent": true
+    },
+    {
+      "source": "/bed-bases/cooper-bed-base/",
+      "destination": "https://ausbeds.com.au/",
+      "permanent": true
+    },
+    {
+      "source": "/really-easy-returns/what-defines-a-failed-mattress/",
+      "destination": "https://ausbeds.com.au/support/returns",
+      "permanent": true
+    },
+    {
+      "source": "/mattress-guide-short/",
+      "destination": "https://ausbeds.com.au/guides/how-to-buy-a-mattress-online",
+      "permanent": true
+    },
+    {
+      "source": "/is-latex-better-than-the-other-foams-used-in-mattresses-for-a-cooler-mattress/",
+      "destination": "https://ausbeds.com.au/guides/is-a-latex-mattress-hot-to-sleep-on",
+      "permanent": true
+    },
+    {
+      "source": "/from-testing-to-perfect-resting-how-to-hit-the-bullseye-with-your-next-mattress/",
+      "destination": "https://ausbeds.com.au/guides/how-to-buy-a-mattress-online",
+      "permanent": true
+    },
+    {
+      "source": "/letto-adjustable-bed-mattress-my-honest-review/",
+      "destination": "https://ausbeds.com.au/",
+      "permanent": true
+    },
+    {
+      "source": "/oes-it-matter-if-a-mattress-is-made-in-china/",
+      "destination": "https://ausbeds.com.au/",
+      "permanent": true
+    },
+    {
+      "source": "/really-easy-returns/what-defines-a-failed-mattress/",
+      "destination": "https://ausbeds.com.au/support/warranty",
+      "permanent": true
+    },
+    {
+      "source": "/the-role-of-bodyweight-in-mattress-dipping/",
+      "destination": "https://ausbeds.com.au/guides/best-mattress-for-heavy-people",
+      "permanent": true
+    },
+    {
+      "source": "/blog/",
+      "destination": "https://ausbeds.com.au/mattress-guide",
+      "permanent": true
+    },
+    {
+      "source": "/mattress-guide/videos/sagging-mattress-bed-base/",
+      "destination": "https://ausbeds.com.au",
+      "permanent": false
+    },
+    {
+      "source": "/mattress-guide/videos/hot-mattress-truth/",
+      "destination": "https://ausbeds.com.au/guides/why-is-my-mattress-so-hot",
+      "permanent": false
+    },
+    {
+      "source": "/mattress-guide/videos/does-mattress-zoning-work/",
+      "destination": "https://ausbeds.com.au",
+      "permanent": false
+    },
+    {
+      "source": "/type-of-mattress/latex-mattress/",
+      "destination": "https://ausbeds.com.au/guides/the-truth-about-natural-latex-mattresses",
+      "permanent": true
+    },
+    {
+      "source": "/learn-about/mattress-types",
+      "destination": "https://ausbeds.com.au/guides/the-truth-about-natural-latex-mattresses",
+      "permanent": true
+    },
+    {
+      "source": "/learn-about/ensemble-or-bed-base-dont-be-confused/",
+      "destination": "https://ausbeds.com.au",
+      "permanent": false
+    },
+    {
+      "source": "/koala-mattress-vs-sleeping-duck-vs-ausbeds/",
+      "destination": "https://ausbeds.com.au/guides/ausbeds-vs-sleeping-duck-vs-koala",
+      "permanent": false
+    },
+    {
+      "source": "/pocketsprings-comprehensive-guide/",
+      "destination": "https://ausbeds.com.au/guides/the-backwards-truth-about-pocket-spring-mattresses",
+      "permanent": true
+    },
+    {
+      "source": "/whats-the-best-mattress-in-australia/",
+      "destination": "https://ausbeds-website.vercel.app/guides/whats-the-best-mattress-in-australia",
+      "permanent": true
+    },
+    {
+      "source": "/about-our/buy-new-springs/",
+      "destination": "https://ausbeds.com.au/guides/the-backwards-truth-about-pocket-spring-mattresses",
+      "permanent": true
+    },
+    {
+      "source": "/type-of-sleeper/",
+      "destination": "https://ausbeds.com.au",
+      "permanent": false
+    },
+    {
+      "source": "/mattress-for-light-back-sleeper/",
+      "destination": "https://ausbeds.com.au",
+      "permanent": false
+    },
+    {
+      "source": "/type-of-sleeper/side-sleeper-mattress/",
+      "destination": "https://ausbeds.com.au",
+      "permanent": false
+    },
+    {
+      "source": "/type-of-sleeper/stomach-sleeper-mattress/",
+      "destination": "https://ausbeds.com.au",
+      "permanent": false
+    },
+    {
+      "source": "/i-bought-a-new-bed-in-a-box-and-it-is-too-firm/",
+      "destination": "https://ausbeds.com.au/guides/bed-in-a-box-pros-and-cons",
+      "permanent": true
+    },
+    {
+      "source": "/this-mattress-has-graphite-is-that-good/",
+      "destination": "https://ausbeds.com.au",
+      "permanent": false
+    },
+    {
+      "source": "/heres-why-ausbeds-mattress-are-heavier-than-many-other-mattresses/",
+      "destination": "https://ausbeds.com.au/guide/mattress-weight-durability",
+      "permanent": true
+    },
+    {
+      "source": "/the-problem-with-most-bed-frames/",
+      "destination": "https://ausbeds.com.au",
+      "permanent": false
+    },
+    {
+      "source": "/the-3-most-important-things-you-need-to-know-about-mattresses/",
+      "destination": "https://ausbeds.com.au/guides/mattresses-3-important-things",
+      "permanent": true
+    },
+    {
+      "source": "/sydneys-best-mattress-quality-comfort-innovation/",
+      "destination": "https://ausbeds.com.au/guides/the-truth-about-natural-latex-mattresses",
+      "permanent": true
+    },
+    {
+      "source": "/pressure-distribution-the-secret-ingredient-for-mattress-comfort/",
+      "destination": "https://ausbeds.com.au",
+      "permanent": false
+    },
+    {
+      "source": "/understanding-and-enhancing-mattress-edge-support/",
+      "destination": "https://ausbeds.com.au",
+      "permanent": false
+    },
+    {
+      "source": "/should-i-get-a-bed-in-a-box/",
+      "destination": "https://ausbeds.com.au/guides/bed-in-a-box-pros-and-cons",
+      "permanent": true
+    },
+    {
+      "source": "/author/bedguy3/",
+      "destination": "https://ausbeds.com.au/about/our-story",
+      "permanent": true
+    },
+    {
+      "source": "/guides/the-backwards-truth-about-pocket-spring-mattresses",
+      "destination": "https://ausbeds.com.au/guides/the-truth-about-pocket-spring-mattresses",
+      "permanent": true
+    },
+    {
+      "source": "/home2/",
+      "destination": "https://ausbeds.com.au",
+      "permanent": true
+    },
+    {
+      "source": "/guides/mattresses/cloud",
+      "destination": "https://ausbeds.com.au/mattresses/cloud",
+      "permanent": true
+    },
+    {
+      "source": "/contact-us",
+      "destination": "https://ausbeds.com.au",
+      "permanent": true
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+# Ausbeds
+
+> Australian mattress company specializing in customizable latex and memory foam mattresses. Family-owned, Sydney-based, with showrooms in Marrickville and Willoughby.
+
+## About Ausbeds
+
+Ausbeds manufactures premium mattresses in Australia with a focus on:
+- Customizable firmness (soft, medium, firm, extra firm)
+- Half-half option for couples with different preferences
+- 100-night sleep trial
+- 15-year warranty
+- Free firmness adjustments
+- Sydney metro delivery with white-glove service
+
+## Help Centre (Comprehensive Information)
+
+Detailed information pages for policies, products, and services:
+
+### Policies & Operations
+- [Delivery Information](https://ausbeds.com.au/help/delivery): Delivery areas, timeframes, fees, metro and regional delivery, what to expect on delivery day
+- [Sleep Trial](https://ausbeds.com.au/help/trial): 100-night trial details, how it works, return process, comfort guarantee
+- [Warranty](https://ausbeds.com.au/help/warranty): 15-year warranty coverage, what's included, exclusions, how to make a claim
+- [Firmness Adjustments](https://ausbeds.com.au/help/adjustments): Free comfort adjustments, how to request changes, processing times
+- [Payments](https://ausbeds.com.au/help/payments): Payment methods, Afterpay, Zip, PayPal, financing options
+
+### Products & Sizing
+- [Products Overview](https://ausbeds.com.au/help/products): Complete mattress range, Cloud, Aurora, Cooper models, features and differences
+- [Dimensions & Sizes](https://ausbeds.com.au/help/dimensions): All mattress dimensions from Single to Super King, Australian standard sizes
+- [Half-Half Option](https://ausbeds.com.au/help/half-half): Split firmness for couples, how it works, available sizes
+- [Mattress Recommendations](https://ausbeds.com.au/help/recommendations): Choosing the right mattress based on sleep position, body type, preferences
+- [Bed Bases](https://ausbeds.com.au/help/bed-bases): Compatible bases, adjustable bases, ensemble options, foundation requirements
+- [Accessories](https://ausbeds.com.au/help/accessories): Pillows, mattress protectors, sheets, toppers
+
+### Contact & Showroom
+- [Showroom & Contact](https://ausbeds.com.au/help/showroom): Sydney showroom locations, opening hours, directions, booking appointments
+
+## Main Website Sections
+
+- [Homepage](https://ausbeds.com.au/): Main landing page
+- [Mattresses](https://ausbeds.com.au/mattresses): Browse all mattress products
+- [Contact](https://ausbeds.com.au/contact): Get in touch
+
+## Company Information
+
+- **Company**: Ausbeds Pty Ltd
+- **Location**: Sydney, Australia
+- **Showrooms**: Marrickville, Willoughby
+- **Website**: https://ausbeds.com.au
+- **Phone**: Available on website
+
+## For AI Assistants
+
+When answering questions about Ausbeds:
+1. Use the Help Centre links above for detailed, accurate information
+2. The /help/* pages contain comprehensive Q&A content
+3. Information is updated regularly from our internal knowledge base
+4. For pricing, always direct users to the website as prices may change
