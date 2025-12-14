@@ -1,7 +1,4 @@
 User-agent: *
+Disallow: /
 
-Disallow: /mattresses/test
-Disallow: /checkout
-Disallow: /checkout/success
-
-Sitemap: https://ausbeds.com.au/sitemap.xml
+# This is a demo site - block all search engines
