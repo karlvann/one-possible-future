@@ -45,6 +45,13 @@
 
     <!-- Actual Page Content -->
     <div class="help-hub__container">
+      <!-- Breadcrumb -->
+      <nav class="help-hub__breadcrumb">
+        <NuxtLink to="/">Home</NuxtLink>
+        <span>/</span>
+        <span>Help Centre</span>
+      </nav>
+
       <header class="help-hub__header">
         <h1 class="help-hub__title">Ausbeds Help Centre</h1>
         <p class="help-hub__subtitle">
@@ -747,6 +754,28 @@ useHead({
   max-width: 900px;
   margin: 0 auto;
   padding: 40px 20px;
+}
+
+.help-hub__breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-bottom: 24px;
+}
+
+.help-hub__breadcrumb a {
+  color: #3b82f6;
+  text-decoration: none;
+}
+
+.help-hub__breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+.help-hub__breadcrumb span {
+  color: #9ca3af;
 }
 
 .help-hub__header {
