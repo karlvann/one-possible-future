@@ -180,16 +180,18 @@ const route = useRoute()
 const slug = computed(() => route.params.slug)
 
 // Raw mode: strips header, footer, and all annotations for clean LLM ingestion
-// Check both route.query and direct URL parsing for SSR compatibility
+// Get request event at setup time (required for SSR)
+const event = import.meta.server ? useRequestEvent() : null
+const serverUrl = event?.node?.req?.url || ''
+const isRawFromServer = serverUrl.includes('raw=true')
+
 const isRaw = computed(() => {
-  // Client-side: use route query
-  if (import.meta.client) {
-    return route.query.raw === 'true'
+  // Server-side: use pre-computed value from request event
+  if (import.meta.server) {
+    return isRawFromServer
   }
-  // Server-side: check the request URL directly
-  const event = useRequestEvent()
-  const url = event?.node?.req?.url || ''
-  return url.includes('raw=true')
+  // Client-side: use route query
+  return route.query.raw === 'true'
 })
 
 // Map new slugs to old Notion page keys
