@@ -11,7 +11,7 @@
         </div>
         <p class="text-gray-600">
           This demo showcases Notion-powered content. Check out
-          <NuxtLink to="/articles" class="text-blue underline hover:text-blue-dark">Articles</NuxtLink>
+          <NuxtLink to="/guides" class="text-blue underline hover:text-blue-dark">Guides</NuxtLink>
           and
           <NuxtLink to="/help" class="text-blue underline hover:text-blue-dark">Help Centre</NuxtLink>
           in the footer.
