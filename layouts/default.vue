@@ -20,19 +20,12 @@
 const route = useRoute()
 const checkoutPage = computed(() => route.path.includes('/checkout'))
 
-// Raw mode: SSR-compatible detection
-// Get request event at setup time (required for SSR)
-const event = import.meta.server ? useRequestEvent() : null
-const serverUrl = event?.node?.req?.url || ''
-const isRawFromServer = serverUrl.includes('raw=true')
-
+// Raw mode: SSR-compatible detection using useRequestURL
+// This works reliably on both client and server (Vercel compatible)
+const requestURL = useRequestURL()
 const rawMode = computed(() => {
-  // Server-side: use pre-computed value from request event
-  if (import.meta.server) {
-    return isRawFromServer
-  }
-  // Client-side: use route query
-  return route.query.raw === 'true'
+  // Check URL search params (works on both client and server)
+  return requestURL.searchParams.get('raw') === 'true'
 })
 
 const hideChrome = computed(() => checkoutPage.value || rawMode.value)
