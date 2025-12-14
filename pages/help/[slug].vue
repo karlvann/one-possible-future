@@ -55,7 +55,7 @@
       <ul>
         <li>This page: <code>pages/help/[slug].vue</code></li>
         <li>Notion utility: <code>server/utils/notion.js</code></li>
-        <li>API route: <code>server/api/notion/[slug].js</code></li>
+        <li>API route: <code>server/api/notion-knowledge/[...slug].js</code></li>
         <li>Route rules: <code>nuxt.config.js</code> (line ~296)</li>
       </ul>
     </SeoAnnotation>
@@ -192,7 +192,7 @@ const notionPageId = computed(() => {
 })
 
 // Fetch content from Notion API
-const { data: response, pending, error } = await useFetch(`/api/notion/${notionSlug.value}`, {
+const { data: response, pending, error } = await useFetch(`/api/notion-knowledge/${notionSlug.value}`, {
   key: `shadow-page-${notionSlug.value}`
 })
 

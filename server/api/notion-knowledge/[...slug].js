@@ -4,9 +4,9 @@
  * Fetches content from Notion and returns it as HTML for shadow pages.
  * This API is used by the shadow page Vue components to render Notion content.
  *
- * Route: /api/notion/:slug
- * Example: /api/notion/delivery-details
- *          /api/notion/voice/cloud
+ * Route: /api/notion-knowledge/:slug
+ * Example: /api/notion-knowledge/delivery-details
+ *          /api/notion-knowledge/voice/cloud
  */
 
 import { getNotionPage, isValidShadowPage } from '../../utils/notion'

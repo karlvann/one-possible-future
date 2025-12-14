@@ -7,7 +7,7 @@
  */
 
 export function useShadowPage(slug) {
-  const { data, pending, error, refresh } = useFetch(`/api/notion/${slug}`, {
+  const { data, pending, error, refresh } = useFetch(`/api/notion-knowledge/${slug}`, {
     key: `shadow-page-${slug}`,
     // Transform the response to extract the content
     transform: (response) => {

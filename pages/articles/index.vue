@@ -116,7 +116,7 @@
  */
 
 // Fetch articles from API
-const { data: response, pending, error, refresh } = await useFetch('/api/articles', {
+const { data: response, pending, error, refresh } = await useFetch('/api/notion-blog', {
   key: 'articles-list'
 })
 

@@ -397,7 +397,7 @@ export async function getNotionPage(slug) {
           <!-- Step 4: API Route -->
           <div class="dev-guide__section">
             <h3>Step 4: Create API Route</h3>
-            <p>File: <code>server/api/notion/[...slug].js</code></p>
+            <p>File: <code>server/api/notion-knowledge/[...slug].js</code></p>
             <pre class="dev-guide__code"><code>import { getNotionPage, isValidShadowPage } from '../../utils/notion'
 
 export default defineEventHandler(async (event) => {
@@ -438,7 +438,7 @@ export default defineEventHandler(async (event) => {
       robots: false
     },
     // API route caching
-    '/api/notion/**': {
+    '/api/notion-knowledge/**': {
       headers: {
         'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400'
       }
@@ -460,7 +460,7 @@ const route = useRoute()
 const slug = route.params.slug
 
 // Fetch from API
-const { data: response } = await useFetch(`/api/notion/${slug}`)
+const { data: response } = await useFetch(`/api/notion-knowledge/${slug}`)
 const data = computed(() => response.value?.data)
 
 // Canonical URL - points to the marketing page

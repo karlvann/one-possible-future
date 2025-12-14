@@ -109,7 +109,7 @@ const slug = computed(() => route.params.slug)
 
 // Fetch article from API
 const { data: response, pending, error } = await useFetch(
-  () => `/api/articles/${slug.value}`,
+  () => `/api/notion-blog/${slug.value}`,
   {
     key: `article-${slug.value}`
   }
