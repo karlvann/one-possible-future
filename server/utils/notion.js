@@ -317,7 +317,30 @@ export function blocksToHtml(blocks) {
     html += '</ol>\n'
   }
 
+  // Post-process: Convert standalone YouTube links to embeds
+  html = convertYouTubeLinksToEmbeds(html)
+
   return html
+}
+
+/**
+ * Convert standalone YouTube links in HTML to lite-youtube embeds
+ * Matches links where the link text is the URL itself (not descriptive text)
+ */
+export function convertYouTubeLinksToEmbeds(html) {
+  // Match <a> tags where href is a YouTube URL and the link text is also the URL
+  const youtubeRegex = /<a[^>]*href="(https?:\/\/(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})[^"]*)"[^>]*>([^<]*)<\/a>/gi
+
+  return html.replace(youtubeRegex, (match, fullUrl, videoId, linkText) => {
+    // Only convert if the link text looks like a URL (not descriptive text)
+    if (linkText.includes('youtube.com') || linkText.includes('youtu.be') || linkText === fullUrl) {
+      return `<div class="video-container">
+<lite-youtube videoid="${videoId}" playlabel="Play video"></lite-youtube>
+</div>`
+    }
+    // Keep descriptive links as-is (e.g., "Watch the video here")
+    return match
+  })
 }
 
 /**
