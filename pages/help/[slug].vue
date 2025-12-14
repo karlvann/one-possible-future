@@ -1,5 +1,4 @@
 <template>
-  <NuxtLayout :name="isRaw ? 'raw' : 'default'">
   <div class="shadow-page">
     <!-- SEO Annotation: What is a Shadow Page? (hidden in raw mode) -->
     <SeoAnnotation
@@ -158,7 +157,6 @@
       </footer>
     </div>
   </div>
-  </NuxtLayout>
 </template>
 
 <script setup>
@@ -192,11 +190,6 @@ const isRaw = computed(() => {
   const event = useRequestEvent()
   const url = event?.node?.req?.url || ''
   return url.includes('raw=true')
-})
-
-// Use raw layout when ?raw=true (no header/footer)
-definePageMeta({
-  layout: false
 })
 
 // Map new slugs to old Notion page keys
