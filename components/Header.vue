@@ -10,6 +10,21 @@
     v-if="banner"
     class="bg-green-dark">
       <Container class="flex flex-row w-full py-2">
+        <div class="flex items-center">
+          <button
+            @click="refreshCache"
+            :disabled="isRefreshing"
+            class="text-xs text-white/70 hover:text-white flex items-center gap-1 transition-colors"
+            title="Refresh Notion content cache"
+          >
+            <Icon
+              name="ic:outline-refresh"
+              class="size-4"
+              :class="{ 'animate-spin': isRefreshing }"
+            />
+            <span class="hidden sm:inline">{{ isRefreshing ? 'Refreshing...' : 'Refresh' }}</span>
+          </button>
+        </div>
         <div class="flex-1 flex flex-row gap-2 items-center justify-center">
           <div
           class="hidden md:block text-sm text-white">
@@ -630,6 +645,25 @@ const settingsStore = useSettingsStore()
 const { banner } = storeToRefs(settingsStore)
 
 const scrollY = ref(0)
+
+// Cache refresh functionality
+const isRefreshing = ref(false)
+const refreshCache = async () => {
+  if (isRefreshing.value) return
+  isRefreshing.value = true
+  try {
+    const response = await $fetch('/api/refresh-cache', { method: 'POST' })
+    if (response.success) {
+      // Reload the current page to get fresh content
+      window.location.reload()
+    }
+  } catch (error) {
+    console.error('Failed to refresh cache:', error)
+    alert('Failed to refresh cache. Try reloading the page.')
+  } finally {
+    isRefreshing.value = false
+  }
+}
 
 const toggleShopMenu = () => {
   shopMenuOpen.value = !shopMenuOpen.value
