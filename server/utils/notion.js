@@ -14,7 +14,7 @@ let notionClient = null
 
 export function getNotionClient() {
   if (!notionClient) {
-    const apiKey = process.env.NOTION_API_KEY
+    const apiKey = process.env.NOTION_API_KEY?.trim()
     if (!apiKey) {
       throw new Error('NOTION_API_KEY environment variable is not set')
     }
