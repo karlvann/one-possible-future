@@ -26,7 +26,7 @@ export async function getDynamicSitemapRoutes() {
   const formatDate = (d) => (d ? d.substring(0, 10) : defaultDate)
 
   const standardEndpoints = [
-    { name: 'articles', path: '/articles/' },
+    { name: 'articles', path: '/guides/' },
     { name: 'products', path: '/mattresses/' },
     { name: 'article_categories', path: '/mattress-guide/' },
     { name: 'policies', path: '/policies/' }

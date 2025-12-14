@@ -1,132 +1,206 @@
 <template>
-    
-  <article 
-  v-if="page"
-  :class="!pageCat ? 'pb-12 md:pb-16 lg:pb-20' : ''"
-  >
-    
-    <ElementHeroBlog :data="page" />
+  <div class="relative overflow-hidden">
+    <!-- Loading State -->
+    <Section v-if="pending" margins="lg">
+      <Container>
+        <div class="flex items-center justify-center py-24 text-grey-medium">
+          <div class="w-8 h-8 border-2 border-grey-med-light border-t-grey rounded-full animate-spin mr-3"></div>
+          <span>Loading guide...</span>
+        </div>
+      </Container>
+    </Section>
 
-    <Container class="px-0 pl-4 sm:pl-8 sm:px-0 md:px-8">
-      <div class="md:grid md:grid-cols-12 lg:grid-cols-12 gap-8 relative">
-                
-        <div class="md:col-start-3 md:col-span-8 lg:col-start-3 lg:col-span-8 xl:col-span-6 xl:col-start-4 relative">
+    <!-- Error State -->
+    <Section v-else-if="error || !article" margins="lg">
+      <Container>
+        <div class="max-w-xl mx-auto text-center py-24">
+          <h1 class="text-2xl font-bold text-grey-dark mb-3">Guide not found</h1>
+          <p class="text-grey-medium mb-8">
+            The guide you're looking for doesn't exist or has been removed.
+          </p>
+          <NuxtLink
+            to="/guides"
+            class="inline-block px-6 py-3 bg-grey-dark text-white rounded-lg hover:bg-grey transition-colors"
+          >
+            &larr; Back to Guides
+          </NuxtLink>
+        </div>
+      </Container>
+    </Section>
 
-          <template v-if="page?.blocks && page?.blocks.length">
-            <template v-for="(section, index) in page?.blocks">
-              <component
-              :is="getSectionComponent(section.collection)"
-              :section-index="index"
-              :data="section.item"
-              :section-total="page.blocks.length"
-              />
-            </template>
-          </template>
+    <!-- Article Content - matches mattress-guide/guides pattern -->
+    <article v-else>
+      <!-- Hero Section - matches ElementHeroBlog pattern -->
+      <div class="pt-8 sm:pt-16">
+        <Container class="prose">
+          <div class="md:grid md:grid-cols-12 lg:grid-cols-12 xl:grid-cols-12 gap-8 relative">
+            <div class="md:col-start-3 md:col-span-8 lg:col-start-3 lg:col-span-8 xl:col-span-6 xl:col-start-4 relative">
+              <!-- Date -->
+              <time
+                v-if="article.publishDate"
+                :datetime="article.publishDate"
+                class="text-grey-medium mb-2 block"
+              >
+                {{ formatDate(article.publishDate) }}
+              </time>
 
-          <!-- Author Block -->
-          <div class="mt-8 md:mt-10 lg:mt-12">
-            <div class="prose"><h2>About the author</h2></div>
-            <div class="flex flex-col sm:flex-row gap-6 mt-6">
-              <img
-              src="https://cdn.ausbeds.com.au/3e598d9e-0716-4a54-b0e7-2ab8a0e9a72e/karl.jpg"
-              alt="Karl from Ausbeds"
-              class="w-32 h-32 rounded-full object-cover flex-shrink-0"
-              />
-              <div class="prose text-sm">
-                <p>Karl is the owner of Ausbeds. He started the company after realising how many people were frustrated by mattresses that failed too soon and too often. So he built a workshop in Sydney and began making mattresses the way they should be made - with transparent materials, adjustable designs, and customer-first thinking. When he's not in the showroom/workshop, he's on Reddit, Whirlpool, and OzBargain, cutting through industry fluff with honest mattress advice.</p>
+              <!-- Title -->
+              <h1>{{ article.title }}</h1>
+
+              <!-- Description/Subtitle -->
+              <div v-if="article.metaDescription" class="blog-subtitle mb-4">
+                <p>{{ article.metaDescription }}</p>
               </div>
+
+              <!-- Featured Image -->
+              <img
+                v-if="article.featuredImage"
+                :src="article.featuredImage"
+                :alt="article.title"
+                class="w-full rounded-lg"
+                loading="eager"
+              />
             </div>
           </div>
-
-        </div>
+        </Container>
       </div>
-    </Container>
 
-  </article>
+      <!-- Article Body - matches guides/[slug] pattern -->
+      <Section margins="reset-top">
+        <Container class="prose">
+          <div class="md:grid md:grid-cols-12 lg:grid-cols-12 xl:grid-cols-12 gap-8 relative">
+            <div class="md:col-start-3 md:col-span-8 lg:col-start-3 lg:col-span-8 xl:col-span-6 xl:col-start-4 relative">
+              <div class="article-content" v-html="sanitizedContent"></div>
+            </div>
+          </div>
+        </Container>
+      </Section>
 
-  <ElementArticlesRelated
-  v-if="pageCat"
-  :category="pageCat" 
-  :exclude="excludeSlug" 
-  />
-    
+      <!-- Footer -->
+      <Section margins="lg">
+        <Container>
+          <div class="md:grid md:grid-cols-12 lg:grid-cols-12 xl:grid-cols-12 gap-8 relative">
+            <div class="md:col-start-3 md:col-span-8 lg:col-start-3 lg:col-span-8 xl:col-span-6 xl:col-start-4 relative pt-8 border-t border-grey-med-light">
+              <NuxtLink
+                to="/guides"
+                class="inline-flex items-center gap-2 text-grey-medium hover:text-grey-dark transition-colors"
+              >
+                <span>&larr;</span>
+                <span>Back to Guides</span>
+              </NuxtLink>
+            </div>
+          </div>
+        </Container>
+      </Section>
+    </article>
+  </div>
 </template>
 
 <script setup>
-const { getItems } = useDirectusItems()
-const fields = useFields()
+/**
+ * Single Article Page
+ *
+ * Displays a single article with clean, centered typography
+ * optimized for reading. Content is fetched from Notion.
+ */
+
 const route = useRoute()
-const router = useRouter()
-const contentSections = useContentSections()
+const slug = computed(() => route.params.slug)
 
-const excludeSlug = computed(() => {
-  return route.params?.slug
-})
-
-const { data } = await useAsyncData(
-  'article-'+route.params.slug,
-  () => getItems({
-    collection: 'articles',
-    params: {
-      filter: {
-        slug: {
-          "_eq": route.params.slug
-        }
-      },
-      fields
-    }
-  })
+// Fetch article from API
+const { data: response, pending, error } = await useFetch(
+  () => `/api/notion-blog/${slug.value}`,
+  {
+    key: `article-${slug.value}`
+  }
 )
 
-if (!data.value || !data.value.length) {
-  router.push({ path: '/mattress-guide' })
-}
+// Extract article from response
+const article = computed(() => response.value?.data)
 
-const page = data?.value[0]
-
-const pageCat = computed(() => {
-  if (page?.categories?.length) {
-    if (page?.categories[0]?.article_categories_id?.slug) {
-      return page?.categories[0]?.article_categories_id?.slug
-    }
-  }
-  return null
+// Sanitize article content
+const sanitizedContent = computed(() => {
+  if (!article.value?.content) return ''
+  return useSanitize(article.value.content)
 })
 
-const seo = computed(() => {
-  if (page?.seo) {
-    return useSeo(page.seo, route.fullPath)
-  }
-  return {}
+// SEO Meta
+useSeoMeta({
+  title: () => article.value?.metaTitle
+    ? `${article.value.metaTitle} | Ausbeds`
+    : article.value?.title
+      ? `${article.value.title} | Ausbeds`
+      : 'Guide | Ausbeds',
+  description: () => article.value?.metaDescription || '',
+  ogTitle: () => article.value?.metaTitle || article.value?.title || 'Guide',
+  ogDescription: () => article.value?.metaDescription || '',
+  ogType: 'article',
+  ogImage: () => article.value?.featuredImage || '',
+  articlePublishedTime: () => article.value?.publishDate || '',
+  articleModifiedTime: () => article.value?.lastEditedTime || ''
 })
 
-useHead(seo)
-
-const schema = {
-  "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": page?.seo?.meta_title || '',
-  "description": page?.seo?.meta_description || '',
-  "image": page?.seo?.meta_image?.id ? useCdn(page?.seo?.meta_image.id, page?.seo?.meta_image.filename_download) : '',
-  "datePublished": page?.date_created || '',
-  "dateModified": page?.date_updated || '',
-  "author": {
-    "@type": "Person",
-    "name": "Karl from Ausbeds",
-    "url": "https://ausbeds.com.au/about/our-story"
-  }
+// Format date for display
+function formatDate(dateString) {
+  if (!dateString) return ''
+  return new Date(dateString).toLocaleDateString('en-AU', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  })
 }
 
+// Structured data
 useHead({
   script: [
     {
       type: 'application/ld+json',
-      innerHTML: JSON.stringify(schema)
+      innerHTML: computed(() => {
+        if (!article.value) return '{}'
+        return JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'Article',
+          headline: article.value.title,
+          description: article.value.metaDescription || '',
+          image: article.value.featuredImage || '',
+          datePublished: article.value.publishDate || '',
+          dateModified: article.value.lastEditedTime || article.value.publishDate || '',
+          author: {
+            '@type': 'Organization',
+            name: 'Ausbeds'
+          },
+          publisher: {
+            '@type': 'Organization',
+            name: 'Ausbeds',
+            url: 'https://ausbeds.com.au'
+          }
+        })
+      })
     }
   ]
 })
-
-const getSectionComponent = key => {
-  return contentSections[key]
-}
 </script>
+
+<style scoped>
+/* Article content - inherits from prose class, with Notion-specific overrides */
+.article-content :deep(img) {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+  margin: 1.5rem 0;
+}
+
+/* Callout boxes from Notion */
+.article-content :deep(.callout) {
+  background: #f7f7f7;
+  border-left: 3px solid #787878;
+  padding: 1rem 1.25rem;
+  margin: 1.5rem 0;
+  border-radius: 0 0.5rem 0.5rem 0;
+}
+
+/* Blog subtitle matches ElementHeroBlog */
+.blog-subtitle :deep(p) {
+  margin-bottom: 0;
+}
+</style>

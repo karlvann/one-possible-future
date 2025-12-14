@@ -5,7 +5,7 @@
       <Container class="prose">
         <div class="md:grid md:grid-cols-12 lg:grid-cols-12 xl:grid-cols-12 gap-8 relative">
           <div class="md:col-start-3 md:col-span-8 lg:col-start-3 lg:col-span-8 xl:col-span-6 xl:col-start-4 relative">
-            <h1>Articles</h1>
+            <h1>Guides</h1>
             <div class="mb-4">
               <p>Insights, guides, and tips for better sleep from the Ausbeds team.</p>
             </div>
@@ -19,7 +19,7 @@
       <Container>
         <div class="flex items-center justify-center py-16 text-grey-medium">
           <div class="w-8 h-8 border-2 border-grey-med-light border-t-grey rounded-full animate-spin mr-3"></div>
-          <span>Loading articles...</span>
+          <span>Loading guides...</span>
         </div>
       </Container>
     </Section>
@@ -28,7 +28,7 @@
     <Section v-else-if="error" margins="reset-top">
       <Container>
         <div class="text-center py-16">
-          <h2 class="text-xl text-grey-dark mb-2">Unable to load articles</h2>
+          <h2 class="text-xl text-grey-dark mb-2">Unable to load guides</h2>
           <p class="text-grey-medium mb-6">{{ error.message }}</p>
           <button
             @click="refresh"
@@ -44,7 +44,7 @@
     <Section v-else-if="!articles?.length" margins="reset-top">
       <Container>
         <div class="text-center py-16 text-grey-medium">
-          <p>No articles published yet. Check back soon!</p>
+          <p>No guides published yet. Check back soon!</p>
         </div>
       </Container>
     </Section>
@@ -64,7 +64,7 @@
           >
             <div class="relative w-full">
               <NuxtLink
-                :to="`/articles/${article.slug}`"
+                :to="`/guides/${article.slug}`"
                 :aria-label="article.title"
               >
                 <img
@@ -84,7 +84,7 @@
             </div>
             <div class="max-w-xl mt-2 sm:mt-4">
               <div class="group relative">
-                <NuxtLink :to="`/articles/${article.slug}`">
+                <NuxtLink :to="`/guides/${article.slug}`">
                   <h3 class="text-md font-semibold leading-6 md:leading-6 text-grey-dark md:text-md lg:text-lg">
                     {{ article.title }}
                   </h3>
@@ -137,8 +137,8 @@ function formatDate(dateString) {
 const route = useRoute()
 const seo = computed(() => {
   return useSeo({
-    meta_title: 'Articles - Ausbeds | Sleep Tips & Mattress Guides',
-    meta_description: 'Read our latest articles about sleep, mattresses, and bedroom tips from Ausbeds Sydney.',
+    meta_title: 'Guides - Ausbeds | Sleep Tips & Mattress Guides',
+    meta_description: 'Read our latest guides about sleep, mattresses, and bedroom tips from Ausbeds Sydney.',
     meta_image: null
   }, route.fullPath)
 })

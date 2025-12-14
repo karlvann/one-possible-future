@@ -199,8 +199,8 @@
                   <span class="text-xs text-white/40 block">Detailed policy info</span>
                 </li>
                 <li>
-                  <NuxtLink to="/articles" class="font-regular text-base leading-6.5 text-white/90">
-                    Articles
+                  <NuxtLink to="/guides" class="font-regular text-base leading-6.5 text-white/90">
+                    Guides
                   </NuxtLink>
                   <span class="text-xs text-white/40 block">Sleep tips & guides</span>
                 </li>
