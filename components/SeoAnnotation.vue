@@ -1,5 +1,5 @@
 <template>
-  <div class="seo-annotation" :class="[`seo-annotation--${type}`, { 'seo-annotation--collapsed': isCollapsed }]">
+  <div v-if="isDevMode" class="seo-annotation" :class="[`seo-annotation--${type}`, { 'seo-annotation--collapsed': isCollapsed }]">
     <button
       class="seo-annotation__toggle"
       @click="isCollapsed = !isCollapsed"
@@ -49,6 +49,8 @@
  */
 
 import { ref, computed } from 'vue'
+
+const { isDevMode } = useDevMode()
 
 const props = defineProps({
   type: {

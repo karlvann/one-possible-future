@@ -13,6 +13,7 @@
     <Footer v-if="!hideChrome" />
     <Cart v-if="!hideChrome" />
     <LoadingModal v-if="checkoutPage" />
+    <DevModeToggle v-if="!hideChrome" />
   </div>
 </template>
 
