@@ -287,6 +287,14 @@ export default defineNuxtConfig({
       robots: false
     },
 
+    // Raw content pages for LLM/NotebookLM ingestion
+    // /raw/delivery, /raw/trial, etc. - clean content without chrome
+    '/raw/**': {
+      isr: 3600,
+      prerender: false,
+      robots: false
+    },
+
     // Legacy URL redirects
     // Redirect old internal development routes to new canonical /help/* URLs
     '/delivery-details': { redirect: '/help/delivery' },
