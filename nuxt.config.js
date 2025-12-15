@@ -219,6 +219,10 @@ export default defineNuxtConfig({
     zipPrivateKey: process.env.ZIP_PRIVATE_KEY,
     mailjetApiKey: process.env.MAILJET_API_KEY,
     mailjetApiSecret: process.env.MAILJET_API_SECRET,
+    // On-demand ISR revalidation
+    revalidateSecret: process.env.REVALIDATE_SECRET,
+    vercelToken: process.env.VERCEL_TOKEN,
+    vercelProjectId: process.env.VERCEL_PROJECT_ID,
   },
 
   hooks: {
