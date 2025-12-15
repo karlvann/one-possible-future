@@ -26,4 +26,4 @@ pnpm-lock.yaml
 # Sentry Config File
 .env.sentry-build-plugin
 .git
-.claude
+.claude.env.vercel
