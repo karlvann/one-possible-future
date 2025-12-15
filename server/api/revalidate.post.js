@@ -1,5 +1,5 @@
 /**
- * On-Demand ISR Revalidation API
+ * On-Demand ISR Revalidation API (v2)
  *
  * Triggers Vercel's on-demand ISR revalidation for specific paths.
  * Works by sending a HEAD request with x-prerender-revalidate header.
