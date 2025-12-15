@@ -85,6 +85,12 @@ export const notionPages = {
   'comparisons': '2c6bd057-a789-81ae-ba0d-e931679556d3',
   'last-mattress': '2c8bd057-a789-81a8-8f4e-e5e24a1d9fc3',
   'prices': '2c8bd057-a789-8168-b842-e7045802d619',
+  'analogies': '2cabd057-a789-81ba-b7d1-c575c087df76',
+
+  // ===========================================
+  // REFERENCE
+  // ===========================================
+  'website-links': '2c8bd057-a789-815e-9a08-fb3d34725733',
 
   // ===========================================
   // VOICE & PROOF SSOT (narrative format, add when created)
