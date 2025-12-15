@@ -68,18 +68,27 @@ const data = computed(() => response.value?.data)
 
 // Page titles for meta
 const pageTitles = {
+  // Policies & Operations
   'delivery': 'Delivery Information',
   'trial': 'Sleep Trial',
   'warranty': 'Warranty',
   'adjustments': 'Firmness Adjustments',
   'payments': 'Payments',
+  // Products & Sizing
   'products': 'Products Overview',
   'dimensions': 'Dimensions & Sizes',
   'half-half': 'Half-Half (Couples)',
   'recommendations': 'Mattress Recommendations',
   'bed-bases': 'Bed Bases',
   'accessories': 'Accessories',
-  'showroom': 'Showroom & Contact'
+  // Contact
+  'showroom': 'Showroom & Contact',
+  // Comfort & Sleep
+  'heat': 'Heat & Sleeping Hot',
+  // Why Ausbeds
+  'comparisons': 'Mattress Comparisons',
+  'last-mattress': 'Your Last Mattress',
+  'prices': 'Pricing & Value'
 }
 
 // Meta tags - noindex for raw pages

@@ -228,7 +228,13 @@ const pageTitles = {
   'bed-bases': 'Bed Bases',
   'accessories': 'Accessories',
   // Contact
-  'showroom': 'Showroom & Contact'
+  'showroom': 'Showroom & Contact',
+  // Comfort & Sleep
+  'heat': 'Heat & Sleeping Hot',
+  // Why Ausbeds
+  'comparisons': 'Mattress Comparisons',
+  'last-mattress': 'Your Last Mattress',
+  'prices': 'Pricing & Value'
 }
 
 // Canonical URL mapping: help page slug → marketing page URL
@@ -248,7 +254,13 @@ const canonicalUrls = {
   'bed-bases': '/bed-bases',
   'accessories': '/accessories',
   // Contact
-  'showroom': '/contact'
+  'showroom': '/contact',
+  // Comfort & Sleep
+  'heat': '/mattresses',
+  // Why Ausbeds
+  'comparisons': '/mattresses',
+  'last-mattress': '/mattresses',
+  'prices': '/mattresses'
 }
 
 // Get the canonical URL for this page
@@ -274,7 +286,13 @@ const allLinks = [
   { slug: 'bed-bases', title: 'Bed Bases', url: '/faq/bed-bases', category: 'products' },
   { slug: 'accessories', title: 'Accessories', url: '/faq/accessories', category: 'products' },
   // Contact
-  { slug: 'showroom', title: 'Showroom & Contact', url: '/faq/showroom', category: 'contact' }
+  { slug: 'showroom', title: 'Showroom & Contact', url: '/faq/showroom', category: 'contact' },
+  // Comfort & Sleep
+  { slug: 'heat', title: 'Heat & Sleeping Hot', url: '/faq/heat', category: 'comfort' },
+  // Why Ausbeds
+  { slug: 'comparisons', title: 'Mattress Comparisons', url: '/faq/comparisons', category: 'why-ausbeds' },
+  { slug: 'last-mattress', title: 'Your Last Mattress', url: '/faq/last-mattress', category: 'why-ausbeds' },
+  { slug: 'prices', title: 'Pricing & Value', url: '/faq/prices', category: 'why-ausbeds' }
 ]
 
 // Related links: show pages from same category first, then others (max 5)

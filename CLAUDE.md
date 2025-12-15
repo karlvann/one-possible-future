@@ -80,6 +80,10 @@ Both URLs work automatically:
 | accessories | 2c8bd057-a789-81bd-b892-d1ad96018a1b | /faq/accessories | /raw/accessories |
 | recommendations | 2c8bd057-a789-8184-a02e-fdc38733164f | /faq/recommendations | /raw/recommendations |
 | showroom | 2c6bd057-a789-8176-a125-cbca4893b4ab | /faq/showroom | /raw/showroom |
+| heat | 2cabd057-a789-81ea-9253-c712c3ea5f86 | /faq/heat | /raw/heat |
+| comparisons | 2c6bd057-a789-81ae-ba0d-e931679556d3 | /faq/comparisons | /raw/comparisons |
+| last-mattress | 2c8bd057-a789-81a8-8f4e-e5e24a1d9fc3 | /faq/last-mattress | /raw/last-mattress |
+| prices | 2c8bd057-a789-8168-b842-e7045802d619 | /faq/prices | /raw/prices |
 
 ---
 
@@ -146,6 +150,10 @@ https://one-possible-future.vercel.app/raw/bed-bases
 https://one-possible-future.vercel.app/raw/accessories
 https://one-possible-future.vercel.app/raw/recommendations
 https://one-possible-future.vercel.app/raw/showroom
+https://one-possible-future.vercel.app/raw/heat
+https://one-possible-future.vercel.app/raw/comparisons
+https://one-possible-future.vercel.app/raw/last-mattress
+https://one-possible-future.vercel.app/raw/prices
 ```
 
 These pages contain only:

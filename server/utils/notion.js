@@ -157,6 +157,7 @@ export function blocksToHtml(blocks) {
   let html = ''
   let inBulletedList = false
   let inNumberedList = false
+  let inTable = false
 
   for (const block of blocks) {
     // Close lists if we're not in a list item
@@ -167,6 +168,11 @@ export function blocksToHtml(blocks) {
     if (block.type !== 'numbered_list_item' && inNumberedList) {
       html += '</ol>\n'
       inNumberedList = false
+    }
+    // Close table if we're not in a table row anymore
+    if (block.type !== 'table_row' && inTable) {
+      html += '</table>\n'
+      inTable = false
     }
 
     switch (block.type) {
@@ -239,7 +245,9 @@ export function blocksToHtml(blocks) {
 
       case 'table':
         // Tables are handled separately with table_row children
+        // The inTable flag ensures we close the table after all rows
         html += '<table>\n'
+        inTable = true
         break
 
       case 'table_row':
@@ -321,12 +329,15 @@ export function blocksToHtml(blocks) {
     }
   }
 
-  // Close any open lists
+  // Close any open lists or tables
   if (inBulletedList) {
     html += '</ul>\n'
   }
   if (inNumberedList) {
     html += '</ol>\n'
+  }
+  if (inTable) {
+    html += '</table>\n'
   }
 
   // Post-process: Convert standalone YouTube links to embeds

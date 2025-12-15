@@ -291,6 +291,19 @@ export default defineNuxtConfig({
       robots: false
     },
 
+    // ============================================
+    // GUIDES/BLOG - Notion-powered articles
+    // ISR: Revalidate every hour (3600 seconds)
+    // ============================================
+    '/guides': {
+      isr: 3600,
+      prerender: false
+    },
+    '/guides/**': {
+      isr: 3600,
+      prerender: false
+    },
+
     // Legacy URL redirects
     // Redirect old internal development routes to new canonical /faq/* URLs
     '/delivery-details': { redirect: '/faq/delivery' },
