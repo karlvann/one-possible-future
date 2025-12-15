@@ -121,15 +121,36 @@
       padding-left: 1px;
     }
 
+    /* Blockquote reviews - italic text gets Permanent Marker */
+    blockquote em {
+      font-family: 'Permanent Marker', cursive;
+      font-style: normal;
+      font-size: 1.1em;
+      color: #1e3a5f;
+    }
+
     table {
       thead {
         @apply font-bold;
       }
       td {
-        @apply px-2;      
+        @apply px-2;
       }
     }
 
+  }
+
+  /* Featured review callout (⭐ emoji in Notion) */
+  .featured-review {
+    background: linear-gradient(135deg, #f0f9ff 0%, #e8f4fd 100%);
+    border-left: 4px solid #3B82F6;
+    padding: 1.25rem 1.5rem;
+    margin: 2rem 0;
+    border-radius: 0 12px 12px 0;
+    font-family: 'Permanent Marker', cursive;
+    font-size: 1.2rem;
+    line-height: 1.5;
+    color: #1e40af;
   }
 
   .p-reset {

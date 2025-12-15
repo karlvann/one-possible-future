@@ -209,8 +209,15 @@ export function blocksToHtml(blocks) {
         break
 
       case 'callout':
-        // Flatten callouts to paragraphs (ignore icon)
-        html += `<p class="callout">${richTextToHtml(block.callout?.rich_text)}</p>\n`
+        // Check for featured review pattern (⭐ or 💬 emoji)
+        const calloutIcon = block.callout?.icon?.emoji
+        if (calloutIcon === '⭐' || calloutIcon === '💬') {
+          // Render as featured review with special styling
+          html += `<div class="featured-review">${richTextToHtml(block.callout?.rich_text)}</div>\n`
+        } else {
+          // Regular callout - flatten to paragraph
+          html += `<p class="callout">${richTextToHtml(block.callout?.rich_text)}</p>\n`
+        }
         break
 
       case 'toggle':
