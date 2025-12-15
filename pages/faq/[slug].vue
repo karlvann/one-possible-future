@@ -38,7 +38,7 @@
       forWho="Alex (Dev)"
       :collapsed="true"
       :codeExample="`// Route: /faq/${slug}
-// Maps to Notion page: ${notionPageId}
+// Source: FAQ Database (slug lookup)
 // Cache: ISR 3600s (1 hour)
 // Meta: index, follow (indexed for SEO)`"
     >
@@ -55,8 +55,8 @@
       </p>
       <ul>
         <li>This page: <code>pages/faq/[slug].vue</code></li>
-        <li>Notion utility: <code>server/utils/notion.js</code></li>
-        <li>API route: <code>server/api/notion-knowledge/[...slug].js</code></li>
+        <li>FAQ utility: <code>server/utils/notionFaq.js</code></li>
+        <li>API route: <code>server/api/notion-faq/[slug].js</code></li>
         <li>Route rules: <code>nuxt.config.js</code> (line ~296)</li>
       </ul>
     </SeoAnnotation>
@@ -185,134 +185,52 @@ const isRaw = computed(() => {
   return requestURL.searchParams.get('raw') === 'true'
 })
 
-// Map new slugs to old Notion page keys
-const slugMapping = {
-  'delivery': 'delivery-details',
-  'trial': 'trial-details',
-  'warranty': 'warranty-details',
-  'adjustments': 'adjustments-details'
-}
-
-const notionSlug = computed(() => slugMapping[slug.value] || slug.value)
-const notionPageId = computed(() => {
-  const pageIds = {
-    'delivery-details': '2c6bd057-a789-81d6-b551-f6e5bebce61b',
-    'trial-details': '2c6bd057-a789-81bc-b86d-c5aeb2094098',
-    'warranty-details': '2c6bd057-a789-814c-801b-d893a535c5d4',
-    'adjustments-details': '2c6bd057-a789-816c-bf7c-eba63efa9823'
-  }
-  return pageIds[notionSlug.value] || 'unknown'
+// Fetch content from FAQ database API
+const { data: response, pending, error } = await useFetch(`/api/notion-faq/${slug.value}`, {
+  key: `faq-page-${slug.value}`
 })
 
-// Fetch content from Notion API
-const { data: response, pending, error } = await useFetch(`/api/notion-knowledge/${notionSlug.value}`, {
-  key: `shadow-page-${notionSlug.value}`
+// Fetch all FAQ articles for related links
+const { data: allFaqResponse } = await useFetch('/api/notion-faq', {
+  key: 'all-faq-articles'
 })
 
 // Extract the page data from the API response
 const data = computed(() => response.value?.data)
 
-// Page titles for meta and related links
-const pageTitles = {
-  // Policies & Operations
-  'delivery': 'Delivery Information',
-  'trial': 'Sleep Trial',
-  'warranty': 'Warranty',
-  'adjustments': 'Firmness Adjustments',
-  'payments': 'Payments',
-  // Products & Sizing
-  'products': 'Products Overview',
-  'dimensions': 'Dimensions & Sizes',
-  'half-half': 'Half-Half (Couples)',
-  'recommendations': 'Mattress Recommendations',
-  'bed-bases': 'Bed Bases',
-  'accessories': 'Accessories',
-  // Contact
-  'showroom': 'Showroom & Contact',
-  // Comfort & Sleep
-  'heat': 'Heat & Sleeping Hot',
-  // Why Ausbeds
-  'comparisons': 'Mattress Comparisons',
-  'last-mattress': 'Your Last Mattress',
-  'prices': 'Pricing & Value'
-}
-
-// Canonical URL mapping: help page slug → marketing page URL
-// This tells search engines which page is the "main" version
-const canonicalUrls = {
-  // Policies & Operations
-  'delivery': '/delivery',
-  'trial': '/trial',
-  'warranty': '/warranty',
-  'adjustments': '/adjustments',
-  'payments': '/payments',
-  // Products & Sizing
-  'products': '/mattresses',
-  'dimensions': '/mattresses',
-  'half-half': '/half-half',
-  'recommendations': '/mattresses',
-  'bed-bases': '/bed-bases',
-  'accessories': '/accessories',
-  // Contact
-  'showroom': '/contact',
-  // Comfort & Sleep
-  'heat': '/mattresses',
-  // Why Ausbeds
-  'comparisons': '/mattresses',
-  'last-mattress': '/mattresses',
-  'prices': '/mattresses'
-}
-
-// Get the canonical URL for this page
+// Get the canonical URL from database or fall back to default
 const canonicalUrl = computed(() => {
   const baseUrl = 'https://ausbeds.com.au'
-  const path = canonicalUrls[slug.value] || `/${slug.value}`
+  const path = data.value?.canonicalUrl || `/${slug.value}`
   return `${baseUrl}${path}`
 })
 
-// All FAQ pages organized by category
-const allLinks = [
-  // Policies & Operations
-  { slug: 'delivery', title: 'Delivery Information', url: '/faq/delivery', category: 'policies' },
-  { slug: 'trial', title: 'Sleep Trial', url: '/faq/trial', category: 'policies' },
-  { slug: 'warranty', title: 'Warranty', url: '/faq/warranty', category: 'policies' },
-  { slug: 'adjustments', title: 'Firmness Adjustments', url: '/faq/adjustments', category: 'policies' },
-  { slug: 'payments', title: 'Payments', url: '/faq/payments', category: 'policies' },
-  // Products & Sizing
-  { slug: 'products', title: 'Products Overview', url: '/faq/products', category: 'products' },
-  { slug: 'dimensions', title: 'Dimensions & Sizes', url: '/faq/dimensions', category: 'products' },
-  { slug: 'half-half', title: 'Half-Half (Couples)', url: '/faq/half-half', category: 'products' },
-  { slug: 'recommendations', title: 'Mattress Recommendations', url: '/faq/recommendations', category: 'products' },
-  { slug: 'bed-bases', title: 'Bed Bases', url: '/faq/bed-bases', category: 'products' },
-  { slug: 'accessories', title: 'Accessories', url: '/faq/accessories', category: 'products' },
-  // Contact
-  { slug: 'showroom', title: 'Showroom & Contact', url: '/faq/showroom', category: 'contact' },
-  // Comfort & Sleep
-  { slug: 'heat', title: 'Heat & Sleeping Hot', url: '/faq/heat', category: 'comfort' },
-  // Why Ausbeds
-  { slug: 'comparisons', title: 'Mattress Comparisons', url: '/faq/comparisons', category: 'why-ausbeds' },
-  { slug: 'last-mattress', title: 'Your Last Mattress', url: '/faq/last-mattress', category: 'why-ausbeds' },
-  { slug: 'prices', title: 'Pricing & Value', url: '/faq/prices', category: 'why-ausbeds' }
-]
+// All FAQ articles from database
+const allFaqArticles = computed(() => allFaqResponse.value?.data || [])
 
 // Related links: show pages from same category first, then others (max 5)
 const relatedLinks = computed(() => {
   const currentSlug = slug.value
-  const currentPage = allLinks.find(link => link.slug === currentSlug)
-  const currentCategory = currentPage?.category || 'policies'
+  const currentCategory = data.value?.category
 
   // Filter out current page
-  const otherPages = allLinks.filter(link => link.slug !== currentSlug)
+  const otherPages = allFaqArticles.value.filter(article => article.slug !== currentSlug)
 
   // Sort: same category first
-  const sorted = otherPages.sort((a, b) => {
+  const sorted = [...otherPages].sort((a, b) => {
     if (a.category === currentCategory && b.category !== currentCategory) return -1
     if (b.category === currentCategory && a.category !== currentCategory) return 1
-    return 0
+    // Then by order
+    return (a.order || 0) - (b.order || 0)
   })
 
-  // Return max 5 related links to avoid cluttering
-  return sorted.slice(0, 5)
+  // Return max 5 related links with url added
+  return sorted.slice(0, 5).map(article => ({
+    slug: article.slug,
+    title: article.title,
+    url: `/faq/${article.slug}`,
+    category: article.category
+  }))
 })
 
 // Meta tags - FAQ pages are now indexed
@@ -320,7 +238,7 @@ useHead({
   title: computed(() => data.value?.title ? `${data.value.title} | Ausbeds FAQ` : 'Loading...'),
   meta: [
     { name: 'robots', content: 'index, follow' },
-    { name: 'description', content: computed(() => `Comprehensive information about Ausbeds ${pageTitles[slug.value] || slug.value}.`) }
+    { name: 'description', content: computed(() => data.value?.metaDescription || `Comprehensive information about ${data.value?.title || slug.value}.`) }
   ]
 })
 
@@ -342,14 +260,14 @@ useHead({
       innerHTML: computed(() => JSON.stringify({
         '@context': 'https://schema.org',
         '@type': 'FAQPage',
-        name: data.value?.title || pageTitles[slug.value],
-        description: `Comprehensive ${pageTitles[slug.value] || slug.value} information for Ausbeds customers.`,
+        name: data.value?.title,
+        description: data.value?.metaDescription || `Comprehensive ${data.value?.title || slug.value} information for Ausbeds customers.`,
         publisher: {
           '@type': 'Organization',
           name: 'Ausbeds',
           url: 'https://ausbeds.com.au'
         },
-        dateModified: data.value?.lastEdited || new Date().toISOString()
+        dateModified: data.value?.lastEditedTime || new Date().toISOString()
       }))
     }
   ]

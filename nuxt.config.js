@@ -336,13 +336,6 @@ export default defineNuxtConfig({
       robots: false
     },
 
-    // Notion Knowledge Base API route (server-side only)
-    '/api/notion-knowledge/**': {
-      cors: false,
-      headers: {
-        'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400'
-      }
-    }
   },
 
   nitro: {

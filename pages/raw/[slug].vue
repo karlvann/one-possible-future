@@ -48,48 +48,13 @@ definePageMeta({
 const route = useRoute()
 const slug = computed(() => route.params.slug)
 
-// Map new slugs to old Notion page keys
-const slugMapping = {
-  'delivery': 'delivery-details',
-  'trial': 'trial-details',
-  'warranty': 'warranty-details',
-  'adjustments': 'adjustments-details'
-}
-
-const notionSlug = computed(() => slugMapping[slug.value] || slug.value)
-
-// Fetch content from Notion API
-const { data: response, pending, error } = await useFetch(`/api/notion-knowledge/${notionSlug.value}`, {
-  key: `raw-page-${notionSlug.value}`
+// Fetch content from FAQ database API
+const { data: response, pending, error } = await useFetch(`/api/notion-faq/${slug.value}`, {
+  key: `raw-page-${slug.value}`
 })
 
 // Extract the page data from the API response
 const data = computed(() => response.value?.data)
-
-// Page titles for meta
-const pageTitles = {
-  // Policies & Operations
-  'delivery': 'Delivery Information',
-  'trial': 'Sleep Trial',
-  'warranty': 'Warranty',
-  'adjustments': 'Firmness Adjustments',
-  'payments': 'Payments',
-  // Products & Sizing
-  'products': 'Products Overview',
-  'dimensions': 'Dimensions & Sizes',
-  'half-half': 'Half-Half (Couples)',
-  'recommendations': 'Mattress Recommendations',
-  'bed-bases': 'Bed Bases',
-  'accessories': 'Accessories',
-  // Contact
-  'showroom': 'Showroom & Contact',
-  // Comfort & Sleep
-  'heat': 'Heat & Sleeping Hot',
-  // Why Ausbeds
-  'comparisons': 'Mattress Comparisons',
-  'last-mattress': 'Your Last Mattress',
-  'prices': 'Pricing & Value'
-}
 
 // Meta tags - noindex for raw pages
 useHead({

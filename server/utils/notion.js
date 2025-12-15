@@ -1,10 +1,14 @@
 /**
- * Notion Integration Utility for Shadow Pages
+ * Notion Integration Utilities
  *
- * This utility handles fetching content from Notion and converting it to HTML
- * for the shadow pages system. Shadow pages are noindex pages that provide
- * comprehensive content for LLMs (ChatGPT, Perplexity) while keeping Google
- * rankings focused on the pretty marketing pages.
+ * Shared utilities for fetching content from Notion and converting it to HTML.
+ * Used by both the Blog (notion-blog) and FAQ (notion-faq) systems.
+ *
+ * Key exports:
+ * - getNotionClient() - Lazily initialized Notion API client
+ * - richTextToHtml() - Convert Notion rich text to HTML
+ * - blocksToHtml() - Convert Notion blocks to HTML
+ * - fetchAllBlocks() - Fetch all blocks from a page (handles pagination)
  */
 
 import { Client } from '@notionhq/client'
@@ -21,84 +25,6 @@ export function getNotionClient() {
     notionClient = new Client({ auth: apiKey })
   }
   return notionClient
-}
-
-/**
- * Page ID Mapping
- * Maps URL slugs to Notion page IDs
- *
- * Operations pages (Fin-optimized, Q&A format):
- * - delivery-details (legacy) -> delivery (new)
- * - trial-details (legacy) -> trial (new)
- * - warranty-details (legacy) -> warranty (new)
- * - adjustments-details (legacy) -> adjustments (new)
- *
- * Voice pages (Narrative format):
- * - voice/cloud
- * - voice/aurora
- * - voice/cooper
- * - voice/why-ausbeds
- *
- * URL Structure:
- * - Legacy: /delivery-details, /trial-details, etc.
- * - New: /help/delivery, /help/trial, etc.
- */
-export const notionPages = {
-  // Operations SSOT pages (legacy URLs)
-  'delivery-details': '2c6bd057-a789-81d6-b551-f6e5bebce61b',
-  'trial-details': '2c6bd057-a789-81bc-b86d-c5aeb2094098',
-  'warranty-details': '2c6bd057-a789-814c-801b-d893a535c5d4',
-  'adjustments-details': '2c6bd057-a789-816c-bf7c-eba63efa9823',
-
-  // ===========================================
-  // POLICIES & OPERATIONS (for /help/* routes)
-  // ===========================================
-  'delivery': '2c6bd057-a789-81d6-b551-f6e5bebce61b',
-  'trial': '2c6bd057-a789-81bc-b86d-c5aeb2094098',
-  'warranty': '2c6bd057-a789-814c-801b-d893a535c5d4',
-  'adjustments': '2c6bd057-a789-816c-bf7c-eba63efa9823',
-  'payments': '2c8bd057-a789-8115-a846-e20f2085f1c2',
-
-  // ===========================================
-  // PRODUCTS & SIZING
-  // ===========================================
-  'products': '2c6bd057-a789-819c-bb41-fb875075c23a',
-  'dimensions': '2c8bd057-a789-81e7-954b-eb16377d5f0e',
-  'half-half': '2c6bd057-a789-8111-8506-e43e4b14f80e',
-  'bed-bases': '2c8bd057-a789-8164-9ca5-d8326dbd541c',
-  'accessories': '2c8bd057-a789-81bd-b892-d1ad96018a1b',
-  'recommendations': '2c8bd057-a789-8184-a02e-fdc38733164f',
-
-  // ===========================================
-  // CONTACT
-  // ===========================================
-  'showroom': '2c6bd057-a789-8176-a125-cbca4893b4ab',
-
-  // ===========================================
-  // COMFORT & SLEEP
-  // ===========================================
-  'heat': '2cabd057-a789-81ea-9253-c712c3ea5f86',
-
-  // ===========================================
-  // WHY AUSBEDS (sales-focused)
-  // ===========================================
-  'comparisons': '2c6bd057-a789-81ae-ba0d-e931679556d3',
-  'last-mattress': '2c8bd057-a789-81a8-8f4e-e5e24a1d9fc3',
-  'prices': '2c8bd057-a789-8168-b842-e7045802d619',
-  'analogies': '2cabd057-a789-81ba-b7d1-c575c087df76',
-
-  // ===========================================
-  // REFERENCE
-  // ===========================================
-  'website-links': '2c8bd057-a789-815e-9a08-fb3d34725733',
-
-  // ===========================================
-  // VOICE & PROOF SSOT (narrative format, add when created)
-  // ===========================================
-  // 'voice/cloud': 'xxx',
-  // 'voice/aurora': 'xxx',
-  // 'voice/cooper': 'xxx',
-  // 'voice/why-ausbeds': 'xxx',
 }
 
 /**
@@ -494,50 +420,3 @@ async function fetchPageMetadata(pageId) {
   }
 }
 
-/**
- * Get Notion page content as HTML
- * Main export function for the API route
- */
-export async function getNotionPage(slug) {
-  const pageId = notionPages[slug]
-
-  if (!pageId) {
-    return null
-  }
-
-  try {
-    // Fetch page metadata and blocks in parallel
-    const [metadata, blocks] = await Promise.all([
-      fetchPageMetadata(pageId),
-      fetchAllBlocks(pageId)
-    ])
-
-    // Convert blocks to HTML
-    const contentHtml = blocksToHtml(blocks)
-
-    return {
-      slug,
-      pageId,
-      title: metadata?.title || 'Untitled',
-      lastEdited: metadata?.lastEditedTime || null,
-      content: contentHtml
-    }
-  } catch (error) {
-    console.error(`[Notion] Error fetching page ${slug}: ${error.message}`)
-    throw error
-  }
-}
-
-/**
- * Check if a slug is a valid shadow page
- */
-export function isValidShadowPage(slug) {
-  return slug in notionPages
-}
-
-/**
- * Get all available shadow page slugs
- */
-export function getAllShadowPageSlugs() {
-  return Object.keys(notionPages)
-}

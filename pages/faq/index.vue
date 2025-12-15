@@ -80,117 +80,60 @@
 
       <nav class="help-hub__nav">
         <!-- SECTION: Policies & Operations -->
-        <div class="help-hub__section">
+        <div v-if="groupedFaqs.Policies?.length" class="help-hub__section">
           <h2 class="help-hub__section-title">Policies & Operations</h2>
 
           <div class="help-hub__links">
-            <NuxtLink to="/faq/delivery" class="help-hub__link">
-              <span class="help-hub__link-icon">🚚</span>
+            <NuxtLink
+              v-for="faq in groupedFaqs.Policies"
+              :key="faq.slug"
+              :to="`/faq/${faq.slug}`"
+              class="help-hub__link"
+            >
+              <span class="help-hub__link-icon">{{ faq.icon || '📄' }}</span>
               <div class="help-hub__link-content">
-                <h3>Delivery Information</h3>
-                <p>Delivery areas, timeframes, fees, and what to expect on delivery day.</p>
-              </div>
-            </NuxtLink>
-
-            <NuxtLink to="/faq/trial" class="help-hub__link">
-              <span class="help-hub__link-icon">🛏️</span>
-              <div class="help-hub__link-content">
-                <h3>Sleep Trial</h3>
-                <p>100-night trial details, how it works, and return process.</p>
-              </div>
-            </NuxtLink>
-
-            <NuxtLink to="/faq/warranty" class="help-hub__link">
-              <span class="help-hub__link-icon">🛡️</span>
-              <div class="help-hub__link-content">
-                <h3>Warranty</h3>
-                <p>15-year warranty coverage, what's included, and how to make a claim.</p>
-              </div>
-            </NuxtLink>
-
-            <NuxtLink to="/faq/adjustments" class="help-hub__link">
-              <span class="help-hub__link-icon">⚙️</span>
-              <div class="help-hub__link-content">
-                <h3>Firmness Adjustments</h3>
-                <p>Free comfort adjustments, how to request changes, and processing times.</p>
-              </div>
-            </NuxtLink>
-
-            <NuxtLink to="/faq/payments" class="help-hub__link">
-              <span class="help-hub__link-icon">💳</span>
-              <div class="help-hub__link-content">
-                <h3>Payments</h3>
-                <p>Payment methods, buy now pay later options, and financing information.</p>
+                <h3>{{ faq.title }}</h3>
+                <p>{{ faq.metaDescription }}</p>
               </div>
             </NuxtLink>
           </div>
         </div>
 
         <!-- SECTION: Products & Sizing -->
-        <div class="help-hub__section">
+        <div v-if="groupedFaqs.Products?.length" class="help-hub__section">
           <h2 class="help-hub__section-title">Products & Sizing</h2>
 
           <div class="help-hub__links">
-            <NuxtLink to="/faq/products" class="help-hub__link">
-              <span class="help-hub__link-icon">🛒</span>
+            <NuxtLink
+              v-for="faq in groupedFaqs.Products"
+              :key="faq.slug"
+              :to="`/faq/${faq.slug}`"
+              class="help-hub__link"
+            >
+              <span class="help-hub__link-icon">{{ faq.icon || '📄' }}</span>
               <div class="help-hub__link-content">
-                <h3>Products Overview</h3>
-                <p>Complete guide to our mattress range, features, and what makes each model unique.</p>
-              </div>
-            </NuxtLink>
-
-            <NuxtLink to="/faq/dimensions" class="help-hub__link">
-              <span class="help-hub__link-icon">📐</span>
-              <div class="help-hub__link-content">
-                <h3>Dimensions & Sizes</h3>
-                <p>Mattress dimensions for all sizes from Single to Super King.</p>
-              </div>
-            </NuxtLink>
-
-            <NuxtLink to="/faq/half-half" class="help-hub__link">
-              <span class="help-hub__link-icon">👫</span>
-              <div class="help-hub__link-content">
-                <h3>Half-Half (Couples)</h3>
-                <p>Split firmness options for couples who prefer different comfort levels.</p>
-              </div>
-            </NuxtLink>
-
-            <NuxtLink to="/faq/recommendations" class="help-hub__link">
-              <span class="help-hub__link-icon">💡</span>
-              <div class="help-hub__link-content">
-                <h3>Mattress Recommendations</h3>
-                <p>Help choosing the right mattress based on sleep position, body type, and preferences.</p>
-              </div>
-            </NuxtLink>
-
-            <NuxtLink to="/faq/bed-bases" class="help-hub__link">
-              <span class="help-hub__link-icon">🛏️</span>
-              <div class="help-hub__link-content">
-                <h3>Bed Bases</h3>
-                <p>Compatible bed bases, adjustable bases, and foundation requirements.</p>
-              </div>
-            </NuxtLink>
-
-            <NuxtLink to="/faq/accessories" class="help-hub__link">
-              <span class="help-hub__link-icon">🎁</span>
-              <div class="help-hub__link-content">
-                <h3>Accessories</h3>
-                <p>Pillows, protectors, sheets, and other sleep accessories.</p>
+                <h3>{{ faq.title }}</h3>
+                <p>{{ faq.metaDescription }}</p>
               </div>
             </NuxtLink>
           </div>
         </div>
 
         <!-- SECTION: Contact & Showroom -->
-        <div class="help-hub__section">
+        <div v-if="groupedFaqs.Contact?.length" class="help-hub__section">
           <h2 class="help-hub__section-title">Contact & Showroom</h2>
 
           <div class="help-hub__links">
-            <NuxtLink to="/faq/showroom" class="help-hub__link">
-              <span class="help-hub__link-icon">📍</span>
+            <NuxtLink
+              v-for="faq in groupedFaqs.Contact"
+              :key="faq.slug"
+              :to="`/faq/${faq.slug}`"
+              class="help-hub__link"
+            >
+              <span class="help-hub__link-icon">{{ faq.icon || '📄' }}</span>
               <div class="help-hub__link-content">
-                <h3>Showroom & Contact</h3>
-                <p>Visit our Sydney showrooms in Marrickville and Willoughby. Hours, directions, and booking.</p>
+                <h3>{{ faq.title }}</h3>
+                <p>{{ faq.metaDescription }}</p>
               </div>
             </NuxtLink>
           </div>
@@ -266,91 +209,40 @@
             <pre class="dev-guide__code"><code>ausbeds-website/
 ├── server/
 │   ├── api/
-│   │   └── notion/
-│   │       └── [...slug].js      ← API endpoint
+│   │   └── notion-faq/
+│   │       ├── index.js          ← List all FAQ articles
+│   │       └── [slug].js         ← Get single FAQ article
 │   └── utils/
-│       └── notion.js             ← Notion client + HTML converter
+│       ├── notion.js             ← Shared Notion utilities (HTML converter)
+│       └── notionFaq.js          ← FAQ database queries
 ├── pages/
 │   └── faq/
 │       ├── index.vue             ← This hub page
 │       └── [slug].vue            ← Dynamic FAQ pages
 ├── components/
 │   └── SeoAnnotation.vue         ← These explanation boxes
-└── nuxt.config.js                ← Route rules (ISR, noindex)</code></pre>
+└── nuxt.config.js                ← Route rules (ISR)</code></pre>
           </div>
 
           <!-- Step 1: Environment -->
           <div class="dev-guide__section">
             <h3>Step 1: Environment Setup</h3>
-            <p>Create a <code>.env</code> file in the project root. Copy this entire block:</p>
+            <p>Add these Notion-related variables to your <code>.env</code> file:</p>
             <pre class="dev-guide__code"><code># ==============================================
-# AUSBEDS WEBSITE - ENVIRONMENT VARIABLES
-# ==============================================
-
-# ==============================================
-# NOTION API (Shadow Pages System)
+# NOTION API (FAQ System)
 # ==============================================
 # Get your API key from: https://www.notion.so/my-integrations
-# Make sure to share the relevant Notion pages with your integration
 NOTION_API_KEY=your_notion_api_key_here
 
-# ==============================================
-# VERCEL / BUILD
-# ==============================================
-VERCEL_ENV=development
-ENVIRONMENT=development
-
-# ==============================================
-# DIRECTUS CMS
-# ==============================================
-DIRECTUS_URL=https://content.ausbeds.com.au
-DIRECTUS_TOKEN=
-
-# ==============================================
-# PAYMENT PROVIDERS
-# ==============================================
-STRIPE_PUBLISHABLE_KEY=
-STRIPE_SECRET_KEY=
-PAYPAL_CLIENT_ID=
-PAYPAL_SECRET_KEY=
-ZIP_PUBLIC_KEY=
-ZIP_PRIVATE_KEY=
-ZIP_API_URL=
-
-# ==============================================
-# GOOGLE
-# ==============================================
-GOOGLE_MAPS_API_KEY=
-
-# ==============================================
-# SENTRY
-# ==============================================
-SENTRY_DSN_PUBLIC=
-SENTRY_ORG=
-SENTRY_PROJECT=
-SENTRY_AUTH_TOKEN=
-
-# ==============================================
-# EMAIL (MAILJET)
-# ==============================================
-MAILJET_API_KEY=
-MAILJET_API_SECRET=
-
-# ==============================================
-# DELIVERY ROUTES (Polylines)
-# ==============================================
-SYDNEY_TO_BRISBANE_POLYLINE=
-SYDNEY_TO_MELBOURNE_POLYLINE=
-SYDNEY_TO_CANBERRA_POLYLINE=
-
-# ==============================================
-# DEVELOPMENT
-# ==============================================
-NGROK_WEBHOOK_HOST=localhost</code></pre>
+# FAQ Database ID (for /faq/* and /raw/* pages)
+# This is the Notion database containing FAQ articles
+NOTION_FAQ_DATABASE_ID=f0502a707e3b4d1cb6d3410102d05cee</code></pre>
             <p class="dev-guide__note">
-              <strong>Note:</strong> The NOTION_API_KEY above is the actual key. For production, you may want to create a separate integration.
-              <br><br>
               <strong>To get a new key:</strong> Notion Settings → Integrations → Create integration → Copy "Internal Integration Secret"
+              <br><br>
+              <strong>Database ID:</strong> Copy from the Notion database URL: <code>notion.so/abc123...</code>
+              <br><br>
+              <strong>Important:</strong> Share the database with your integration (Database → Share → Add integration)
             </p>
           </div>
 
@@ -360,68 +252,75 @@ NGROK_WEBHOOK_HOST=localhost</code></pre>
             <pre class="dev-guide__code"><code>yarn add @notionhq/client</code></pre>
           </div>
 
-          <!-- Step 3: Notion Utility -->
+          <!-- Step 3: Notion FAQ Utility -->
           <div class="dev-guide__section">
-            <h3>Step 3: Create Notion Utility</h3>
-            <p>File: <code>server/utils/notion.js</code></p>
-            <pre class="dev-guide__code"><code>import { Client } from '@notionhq/client'
+            <h3>Step 3: Create FAQ Utility</h3>
+            <p>File: <code>server/utils/notionFaq.js</code> - Queries the FAQ database:</p>
+            <pre class="dev-guide__code"><code>import { getNotionClient, fetchAllBlocks, blocksToHtml } from './notion'
 
-// Lazy-load the client
-let notionClient = null
-function getNotionClient() {
-  if (!notionClient) {
-    notionClient = new Client({
-      auth: process.env.NOTION_API_KEY
-    })
-  }
-  return notionClient
+const FAQ_DATABASE_ID = process.env.NOTION_FAQ_DATABASE_ID
+
+// Fetch all FAQ articles from database
+export async function getAllFaqArticles() {
+  const notion = getNotionClient()
+  const response = await notion.databases.query({
+    database_id: FAQ_DATABASE_ID,
+    filter: { property: 'Status', select: { equals: 'Published' } },
+    sorts: [{ property: 'Sort', direction: 'ascending' }]
+  })
+  return response.results.map(page => extractArticle(page))
 }
 
-// Map slugs to Notion page IDs
-export const notionPages = {
-  'delivery': '2c6bd057-a789-81d6-xxxx-xxxxxxxxxxxx',
-  'trial': '2c6bd057-a789-81bc-xxxx-xxxxxxxxxxxx',
-  // Add more pages here...
-}
+// Fetch single FAQ article by slug
+export async function getFaqArticleBySlug(slug) {
+  const notion = getNotionClient()
+  const response = await notion.databases.query({
+    database_id: FAQ_DATABASE_ID,
+    filter: { property: 'Slug', rich_text: { equals: slug } }
+  })
+  if (!response.results.length) return null
 
-// Main export: fetch page and convert to HTML
-export async function getNotionPage(slug) {
-  const pageId = notionPages[slug]
-  if (!pageId) return null
+  const page = response.results[0]
+  const blocks = await fetchAllBlocks(page.id)
 
-  const blocks = await fetchAllBlocks(pageId)
   return {
-    slug,
+    ...extractArticle(page),
     content: blocksToHtml(blocks)
   }
 }</code></pre>
             <p class="dev-guide__note">
-              <strong>Full file:</strong> <code>server/utils/notion.js</code> (~380 lines) handles all block types, pagination, and HTML conversion.
+              <strong>Key difference:</strong> No hardcoded page IDs! The database contains all metadata (slug, title, category, icon).
             </p>
           </div>
 
-          <!-- Step 4: API Route -->
+          <!-- Step 4: API Routes -->
           <div class="dev-guide__section">
-            <h3>Step 4: Create API Route</h3>
-            <p>File: <code>server/api/notion-knowledge/[...slug].js</code></p>
-            <pre class="dev-guide__code"><code>import { getNotionPage, isValidShadowPage } from '../../utils/notion'
+            <h3>Step 4: Create API Routes</h3>
+            <p>File: <code>server/api/notion-faq/index.js</code> - List all articles:</p>
+            <pre class="dev-guide__code"><code>import { getAllFaqArticles, getGroupedFaqArticles } from '../../utils/notionFaq'
 
 export default defineEventHandler(async (event) => {
-  const slugParts = event.context.params?.slug
-  const slug = Array.isArray(slugParts) ? slugParts.join('/') : slugParts
+  const query = getQuery(event)
+  const grouped = query.grouped === 'true'
 
-  if (!isValidShadowPage(slug)) {
-    throw createError({ statusCode: 404 })
+  const data = grouped
+    ? await getGroupedFaqArticles()
+    : await getAllFaqArticles()
+
+  return { success: true, data }
+})</code></pre>
+            <p>File: <code>server/api/notion-faq/[slug].js</code> - Get single article:</p>
+            <pre class="dev-guide__code"><code>import { getFaqArticleBySlug } from '../../utils/notionFaq'
+
+export default defineEventHandler(async (event) => {
+  const slug = event.context.params?.slug
+
+  const article = await getFaqArticleBySlug(slug)
+  if (!article) {
+    throw createError({ statusCode: 404, message: 'Article not found' })
   }
 
-  const pageData = await getNotionPage(slug)
-
-  // Cache for 1 hour (ISR)
-  setResponseHeaders(event, {
-    'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400'
-  })
-
-  return { success: true, data: pageData }
+  return { success: true, data: article }
 })</code></pre>
           </div>
 
@@ -436,16 +335,16 @@ export default defineEventHandler(async (event) => {
       isr: 3600,        // Revalidate every hour
       prerender: false  // Don't pre-render (content is dynamic)
     },
-    // All FAQ pages
+    // All FAQ pages (indexed for SEO)
     '/faq/**': {
       isr: 3600,
       prerender: false
     },
-    // API route caching
-    '/api/notion-knowledge/**': {
-      headers: {
-        'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400'
-      }
+    // Raw content pages (for LLM ingestion, not indexed)
+    '/raw/**': {
+      isr: 3600,
+      prerender: false,
+      robots: false
     }
   }
 })</code></pre>
@@ -456,64 +355,55 @@ export default defineEventHandler(async (event) => {
             <h3>Step 6: Create Dynamic Page</h3>
             <p>File: <code>pages/faq/[slug].vue</code></p>
             <pre class="dev-guide__code"><code>&lt;template&gt;
-  &lt;div v-if="data" v-html="data.content"&gt;&lt;/div&gt;
+  &lt;article v-if="article"&gt;
+    &lt;h1&gt;{{ article.title }}&lt;/h1&gt;
+    &lt;div v-html="article.content"&gt;&lt;/div&gt;
+  &lt;/article&gt;
 &lt;/template&gt;
 
 &lt;script setup&gt;
 const route = useRoute()
 const slug = route.params.slug
 
-// Fetch from API
-const { data: response } = await useFetch(`/api/notion-knowledge/${slug}`)
-const data = computed(() => response.value?.data)
+// Fetch from database-driven API
+const { data: response } = await useFetch(`/api/notion-faq/${slug}`)
+const article = computed(() => response.value?.data)
 
-// Canonical URL - points to the marketing page
-const canonicalUrl = `https://ausbeds.com.au/${slug}`
-
-// Meta tags - indexed for SEO
+// Meta tags from database properties
 useHead({
-  meta: [{ name: 'robots', content: 'index, follow' }]
+  title: computed(() => article.value?.metaTitle || article.value?.title),
+  meta: [
+    { name: 'robots', content: 'index, follow' },
+    { name: 'description', content: computed(() => article.value?.metaDescription) }
+  ]
 })
 &lt;/script&gt;</code></pre>
           </div>
 
-          <!-- Step 7: Canonical URL Mapping -->
+          <!-- Step 7: Database Properties -->
           <div class="dev-guide__section">
-            <h3>Step 7: Configure Canonical URL Mapping</h3>
+            <h3>Step 7: Notion Database Schema</h3>
             <p>
-              Each details page needs a <code>rel="canonical"</code> link pointing to its corresponding marketing page.
-              This tells search engines to consolidate ranking signals to the marketing page.
+              The FAQ database stores all metadata. Each row represents one FAQ article with these properties:
             </p>
-            <p>File: <code>pages/faq/[slug].vue</code> - Add the mapping object:</p>
-            <pre class="dev-guide__code"><code>// Canonical URL mapping: faq slug → marketing page URL
-const canonicalUrls = {
-  // Policies & Operations
-  'delivery': '/delivery',
-  'trial': '/trial',
-  'warranty': '/warranty',
-  'adjustments': '/adjustments',
-  'payments': '/payments',
-  // Products & Sizing
-  'products': '/mattresses',
-  'dimensions': '/mattresses',
-  'half-half': '/half-half',
-  'recommendations': '/mattresses',
-  'bed-bases': '/bed-bases',
-  'accessories': '/accessories',
-  // Contact
-  'showroom': '/contact'
-}
-
-// Generate canonical URL
-const canonicalUrl = computed(() => {
-  const baseUrl = 'https://ausbeds.com.au'
-  const path = canonicalUrls[slug.value] || `/${slug.value}`
-  return `${baseUrl}${path}`
-})</code></pre>
+            <pre class="dev-guide__code"><code>Notion Database Properties:
+┌─────────────────┬──────────────┬─────────────────────────────────┐
+│ Property        │ Type         │ Example                         │
+├─────────────────┼──────────────┼─────────────────────────────────┤
+│ Title           │ Title        │ "Delivery Information"          │
+│ Slug            │ Text         │ "delivery"                      │
+│ Category        │ Select       │ "Policies" | "Products"         │
+│ Icon            │ Text         │ "🚚"                            │
+│ Status          │ Select       │ "Published" | "Draft"           │
+│ Sort            │ Number       │ 1, 2, 3...                      │
+│ Meta Title      │ Text         │ "Delivery | Ausbeds"            │
+│ Meta Description│ Text         │ "Free delivery to most..."      │
+│ Canonical URL   │ URL          │ "/delivery"                     │
+│ (Page Content)  │ Page Body    │ The actual FAQ content          │
+└─────────────────┴──────────────┴─────────────────────────────────┘</code></pre>
             <p class="dev-guide__note">
-              <strong>Why canonical?</strong> These details pages serve as SSOT (Single Source of Truth) for AI apps
-              and customers who want comprehensive info. The canonical tells Google: "This is supplementary content -
-              the main page is the marketing page." Signals get consolidated, no duplicate content issues.
+              <strong>No hardcoded mapping!</strong> All metadata lives in the database.
+              To add a new FAQ article, just add a row with Status = "Published".
             </p>
           </div>
 
@@ -522,24 +412,22 @@ const canonicalUrl = computed(() => {
             <h3>✅ Checklist: Adding a New FAQ Page</h3>
             <ol class="dev-guide__checklist">
               <li>
-                <strong>Create Notion page</strong> - Write content in Notion
+                <strong>Add row to Notion database</strong> - Fill in Title, Slug, Category, Icon
               </li>
               <li>
-                <strong>Share with integration</strong> - Click "Share" → Add your integration
+                <strong>Write content</strong> - Open the page and write your Q&A content
               </li>
               <li>
-                <strong>Copy page ID</strong> - From URL: <code>notion.so/Page-Name-<strong>abc123def456</strong></code>
+                <strong>Set Status = "Published"</strong> - Page will appear within 1 hour (ISR)
               </li>
               <li>
-                <strong>Add to notion.js</strong> - Add entry: <code>'my-slug': 'abc123def456'</code>
-              </li>
-              <li>
-                <strong>Add link to hub</strong> - Add NuxtLink in <code>pages/faq/index.vue</code>
-              </li>
-              <li>
-                <strong>Test locally</strong> - Visit <code>/faq/my-slug</code>
+                <strong>Test</strong> - Visit <code>/faq/your-slug</code>
               </li>
             </ol>
+            <p class="dev-guide__note" style="margin-top: 16px;">
+              <strong>That's it!</strong> No code changes needed. The hub page auto-updates.
+              Both <code>/faq/</code> and <code>/raw/</code> URLs work automatically.
+            </p>
           </div>
 
           <!-- Supported Notion Blocks -->
@@ -556,8 +444,8 @@ const canonicalUrl = computed(() => {
               <span class="dev-guide__block dev-guide__block--supported">Callouts</span>
               <span class="dev-guide__block dev-guide__block--supported">Dividers</span>
               <span class="dev-guide__block dev-guide__block--supported">Code blocks</span>
+              <span class="dev-guide__block dev-guide__block--supported">YouTube Videos</span>
               <span class="dev-guide__block dev-guide__block--unsupported">Embeds</span>
-              <span class="dev-guide__block dev-guide__block--unsupported">Videos</span>
               <span class="dev-guide__block dev-guide__block--unsupported">Databases</span>
             </div>
           </div>
@@ -596,25 +484,25 @@ const canonicalUrl = computed(() => {
               <p><strong>Error: "NOTION_API_KEY environment variable is not set"</strong></p>
               <ul style="margin: 8px 0 0 20px; color: #7f1d1d;">
                 <li>Check <code>.env</code> file exists in project root</li>
-                <li>Verify <code>NOTION_API_KEY=ntn_xxx...</code> is set</li>
+                <li>Verify both <code>NOTION_API_KEY</code> and <code>NOTION_FAQ_DATABASE_ID</code> are set</li>
                 <li>Restart dev server after adding env vars</li>
               </ul>
             </div>
 
             <div style="margin-bottom: 16px;">
-              <p><strong>Error: 404 or "Page not found"</strong></p>
+              <p><strong>Error: 404 or "Article not found"</strong></p>
               <ul style="margin: 8px 0 0 20px; color: #7f1d1d;">
-                <li>Check slug is added to <code>notionPages</code> in <code>server/utils/notion.js</code></li>
-                <li>Verify the Notion page ID is correct (copy from URL)</li>
-                <li>Make sure slug matches exactly (case-sensitive)</li>
+                <li>Check the Slug property in the database matches exactly (case-sensitive)</li>
+                <li>Verify Status is set to "Published"</li>
+                <li>Share the database with your Notion integration</li>
               </ul>
             </div>
 
             <div style="margin-bottom: 16px;">
               <p><strong>Error: "Could not find block" or empty content</strong></p>
               <ul style="margin: 8px 0 0 20px; color: #7f1d1d;">
-                <li>Share the Notion page with your integration (Share → Add integration)</li>
-                <li>Check the page isn't in a private workspace</li>
+                <li>Share the database with your integration (Share → Add integration)</li>
+                <li>Check the database isn't in a private workspace</li>
                 <li>Verify the integration has "Read content" capability</li>
               </ul>
             </div>
@@ -674,6 +562,7 @@ const canonicalUrl = computed(() => {
  *
  * Central hub for all FAQ pages with comprehensive Q&A content.
  * This page is indexed by Google with FAQPage schema markup.
+ * Content is dynamically fetched from the Notion FAQ database.
  *
  * URL: /faq
  * Linked from: Footer of marketing pages
@@ -682,6 +571,14 @@ const canonicalUrl = computed(() => {
 
 // Toggle for developer guide section
 const showDevGuide = ref(false)
+
+// Fetch FAQ articles grouped by category from database
+const { data: faqResponse } = await useFetch('/api/notion-faq?grouped=true', {
+  key: 'faq-index-grouped'
+})
+
+// Extract grouped data
+const groupedFaqs = computed(() => faqResponse.value?.data || { Policies: [], Products: [], Contact: [] })
 
 // Meta tags - indexed for SEO with FAQPage schema
 useHead({
@@ -692,12 +589,33 @@ useHead({
   ]
 })
 
+// Build structured data dynamically from fetched FAQ articles
+const structuredDataItems = computed(() => {
+  const items = []
+  let position = 1
+
+  // Add all articles in order: Policies, Products, Contact
+  for (const category of ['Policies', 'Products', 'Contact']) {
+    const articles = groupedFaqs.value[category] || []
+    for (const article of articles) {
+      items.push({
+        '@type': 'ListItem',
+        position: position++,
+        name: article.title,
+        url: `https://ausbeds.com.au/faq/${article.slug}`
+      })
+    }
+  }
+
+  return items
+})
+
 // Structured data for LLM comprehension
 useHead({
   script: [
     {
       type: 'application/ld+json',
-      innerHTML: JSON.stringify({
+      innerHTML: computed(() => JSON.stringify({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: 'Ausbeds FAQ',
@@ -709,25 +627,9 @@ useHead({
         },
         mainEntity: {
           '@type': 'ItemList',
-          itemListElement: [
-            // Policies & Operations
-            { '@type': 'ListItem', position: 1, name: 'Delivery Information', url: 'https://ausbeds.com.au/faq/delivery' },
-            { '@type': 'ListItem', position: 2, name: 'Sleep Trial', url: 'https://ausbeds.com.au/faq/trial' },
-            { '@type': 'ListItem', position: 3, name: 'Warranty', url: 'https://ausbeds.com.au/faq/warranty' },
-            { '@type': 'ListItem', position: 4, name: 'Firmness Adjustments', url: 'https://ausbeds.com.au/faq/adjustments' },
-            { '@type': 'ListItem', position: 5, name: 'Payments', url: 'https://ausbeds.com.au/faq/payments' },
-            // Products & Sizing
-            { '@type': 'ListItem', position: 6, name: 'Products Overview', url: 'https://ausbeds.com.au/faq/products' },
-            { '@type': 'ListItem', position: 7, name: 'Dimensions & Sizes', url: 'https://ausbeds.com.au/faq/dimensions' },
-            { '@type': 'ListItem', position: 8, name: 'Half-Half (Couples)', url: 'https://ausbeds.com.au/faq/half-half' },
-            { '@type': 'ListItem', position: 9, name: 'Mattress Recommendations', url: 'https://ausbeds.com.au/faq/recommendations' },
-            { '@type': 'ListItem', position: 10, name: 'Bed Bases', url: 'https://ausbeds.com.au/faq/bed-bases' },
-            { '@type': 'ListItem', position: 11, name: 'Accessories', url: 'https://ausbeds.com.au/faq/accessories' },
-            // Contact
-            { '@type': 'ListItem', position: 12, name: 'Showroom & Contact', url: 'https://ausbeds.com.au/faq/showroom' }
-          ]
+          itemListElement: structuredDataItems.value
         }
-      })
+      }))
     }
   ]
 })

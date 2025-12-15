@@ -23,10 +23,11 @@ This is a demo website for Ausbeds (Australian mattress company) showcasing a th
 - **API Route:** `/server/api/notion-blog/`
 - **Examples:** `/articles`, `/articles/[slug]`
 
-### 3. Knowledge Base / FAQ (Notion Pages)
+### 3. Knowledge Base / FAQ (Notion Database)
 - **Purpose:** Comprehensive information for customers and AI chatbots (Fin, ChatGPT, Perplexity, NotebookLM)
-- **Source:** Individual Notion pages (SSOT - Single Source of Truth)
-- **API Route:** `/server/api/notion-knowledge/`
+- **Source:** Notion database (Single Source of Truth)
+- **Database ID:** `f0502a707e3b4d1cb6d3410102d05cee`
+- **API Route:** `/server/api/notion-faq/`
 - **Examples:** `/faq/delivery`, `/faq/trial`, `/faq/warranty`
 - **Characteristics:** Q&A format with FAQPage schema, indexed for SEO
 
@@ -51,51 +52,50 @@ This is a demo website for Ausbeds (Australian mattress company) showcasing a th
 
 ### Adding New FAQ Articles
 
-Add one line to `/server/utils/notion.js`:
+Simply add a new row to the Notion FAQ database with:
 
-```javascript
-export const notionPages = {
-  // ... existing pages
-  'new-topic': 'notion-page-id-here',
-}
-```
+| Property | Type | Required | Description |
+|----------|------|----------|-------------|
+| Title | Title | Yes | The article title (e.g., "Delivery Information") |
+| Slug | Text | Yes | URL slug (e.g., "delivery") |
+| Meta Description | Text | No | SEO description for the page |
+| Category | Select | No | One of: Policies, Products, Contact |
+| Icon | Text | No | Emoji for hub page display |
+| Canonical URL | Text | No | Override canonical URL if needed |
+| Published | Checkbox | No | Must be checked for article to appear |
+| Order | Number | No | Sort order within category |
 
-Both URLs work automatically:
-- `https://one-possible-future.vercel.app/faq/new-topic`
-- `https://one-possible-future.vercel.app/raw/new-topic`
+Both URLs work automatically once published:
+- `https://one-possible-future.vercel.app/faq/[slug]`
+- `https://one-possible-future.vercel.app/raw/[slug]`
 
 ### Current FAQ Articles
 
-| Slug | Notion Page ID | FAQ URL | Raw URL |
-|------|----------------|---------|---------|
-| delivery | 2c6bd057-a789-81d6-b551-f6e5bebce61b | /faq/delivery | /raw/delivery |
-| trial | 2c6bd057-a789-81bc-b86d-c5aeb2094098 | /faq/trial | /raw/trial |
-| warranty | 2c6bd057-a789-814c-801b-d893a535c5d4 | /faq/warranty | /raw/warranty |
-| adjustments | 2c6bd057-a789-816c-bf7c-eba63efa9823 | /faq/adjustments | /raw/adjustments |
-| payments | 2c8bd057-a789-8115-a846-e20f2085f1c2 | /faq/payments | /raw/payments |
-| products | 2c6bd057-a789-819c-bb41-fb875075c23a | /faq/products | /raw/products |
-| dimensions | 2c8bd057-a789-81e7-954b-eb16377d5f0e | /faq/dimensions | /raw/dimensions |
-| half-half | 2c6bd057-a789-8111-8506-e43e4b14f80e | /faq/half-half | /raw/half-half |
-| bed-bases | 2c8bd057-a789-8164-9ca5-d8326dbd541c | /faq/bed-bases | /raw/bed-bases |
-| accessories | 2c8bd057-a789-81bd-b892-d1ad96018a1b | /faq/accessories | /raw/accessories |
-| recommendations | 2c8bd057-a789-8184-a02e-fdc38733164f | /faq/recommendations | /raw/recommendations |
-| showroom | 2c6bd057-a789-8176-a125-cbca4893b4ab | /faq/showroom | /raw/showroom |
-| heat | 2cabd057-a789-81ea-9253-c712c3ea5f86 | /faq/heat | /raw/heat |
-| comparisons | 2c6bd057-a789-81ae-ba0d-e931679556d3 | /faq/comparisons | /raw/comparisons |
-| last-mattress | 2c8bd057-a789-81a8-8f4e-e5e24a1d9fc3 | /faq/last-mattress | /raw/last-mattress |
-| prices | 2c8bd057-a789-8168-b842-e7045802d619 | /faq/prices | /raw/prices |
+Articles are managed in the Notion database. Current categories:
+
+**Policies & Operations:**
+- delivery, trial, warranty, adjustments, payments
+
+**Products & Sizing:**
+- products, dimensions, half-half, bed-bases, accessories, recommendations
+
+**Contact & Showroom:**
+- showroom
 
 ---
 
 ## Key Files
 
 ### Notion Integration
-- `/server/utils/notion.js` - Notion client, page ID mapping, HTML conversion
-- `/server/api/notion-knowledge/[...slug].js` - API route for help/raw pages
+- `/server/utils/notionFaq.js` - FAQ database queries and HTML conversion
+- `/server/utils/notion.js` - Shared Notion client and utilities
+- `/server/api/notion-faq/index.js` - List all FAQ articles (supports `?grouped=true`)
+- `/server/api/notion-faq/[slug].js` - Get single FAQ article by slug
 - `/server/api/notion-blog/` - API routes for blog articles
 
 ### Pages
-- `/pages/faq/[slug].vue` - FAQ pages with full chrome
+- `/pages/faq/index.vue` - FAQ hub page (dynamic from database)
+- `/pages/faq/[slug].vue` - FAQ detail pages with full chrome
 - `/pages/raw/[slug].vue` - Raw pages for LLM ingestion
 - `/layouts/default.vue` - Main layout (header, footer)
 - `/layouts/raw.vue` - Minimal layout for raw pages
@@ -119,8 +119,9 @@ yarn build      # Build for production
 ## Environment Variables
 
 Required on Vercel:
-- `NOTION_API_KEY` - Notion integration token (must have access to all pages)
+- `NOTION_API_KEY` - Notion integration token (must have access to all databases)
 - `NOTION_BLOG_DATABASE_ID` - Database ID for blog articles
+- `NOTION_FAQ_DATABASE_ID` - Database ID for FAQ articles (`f0502a707e3b4d1cb6d3410102d05cee`)
 
 ---
 
@@ -133,27 +134,32 @@ All FAQ and raw pages use ISR (Incremental Static Regeneration):
 
 ---
 
+## API Endpoints
+
+### FAQ API
+
+**List all articles:**
+```
+GET /api/notion-faq
+GET /api/notion-faq?grouped=true  # Grouped by category
+```
+
+**Get single article:**
+```
+GET /api/notion-faq/[slug]
+```
+
+---
+
 ## For NotebookLM / AI Tools
 
-Use the `/raw/` URLs for clean content ingestion:
+Use the `/raw/` URLs for clean content ingestion. These are dynamically generated from the FAQ database.
 
+Example URLs:
 ```
 https://one-possible-future.vercel.app/raw/delivery
 https://one-possible-future.vercel.app/raw/trial
 https://one-possible-future.vercel.app/raw/warranty
-https://one-possible-future.vercel.app/raw/adjustments
-https://one-possible-future.vercel.app/raw/payments
-https://one-possible-future.vercel.app/raw/products
-https://one-possible-future.vercel.app/raw/dimensions
-https://one-possible-future.vercel.app/raw/half-half
-https://one-possible-future.vercel.app/raw/bed-bases
-https://one-possible-future.vercel.app/raw/accessories
-https://one-possible-future.vercel.app/raw/recommendations
-https://one-possible-future.vercel.app/raw/showroom
-https://one-possible-future.vercel.app/raw/heat
-https://one-possible-future.vercel.app/raw/comparisons
-https://one-possible-future.vercel.app/raw/last-mattress
-https://one-possible-future.vercel.app/raw/prices
 ```
 
 These pages contain only:
