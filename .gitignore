@@ -27,3 +27,4 @@ pnpm-lock.yaml
 .env.sentry-build-plugin
 .git
 .claude.env.vercel
+.env.vercel

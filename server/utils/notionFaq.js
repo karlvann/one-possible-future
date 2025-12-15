@@ -16,7 +16,7 @@
  * - Order (number): Display order in listings
  */
 
-import { getNotionClient, fetchAllBlocks, blocksToHtml } from './notion'
+import { getNotionClient, fetchAllBlocks, blocksToHtml, getPropertyText } from './notion'
 
 /**
  * Get the FAQ database ID from environment
@@ -27,30 +27,6 @@ function getFaqDatabaseId() {
     throw new Error('NOTION_FAQ_DATABASE_ID environment variable is not set')
   }
   return databaseId
-}
-
-/**
- * Extract text from a Notion property
- */
-function getPropertyText(property) {
-  if (!property) return ''
-
-  switch (property.type) {
-    case 'title':
-      return property.title?.map(t => t.plain_text).join('') || ''
-    case 'rich_text':
-      return property.rich_text?.map(t => t.plain_text).join('') || ''
-    case 'url':
-      return property.url || ''
-    case 'select':
-      return property.select?.name || ''
-    case 'checkbox':
-      return property.checkbox || false
-    case 'number':
-      return property.number ?? 0
-    default:
-      return ''
-  }
 }
 
 /**

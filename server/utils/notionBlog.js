@@ -16,7 +16,7 @@
  * - Category (select): Article category (optional)
  */
 
-import { getNotionClient, fetchAllBlocks, blocksToHtml, richTextToHtml } from './notion'
+import { getNotionClient, fetchAllBlocks, blocksToHtml, richTextToHtml, getPropertyText } from './notion'
 
 /**
  * Get the blog database ID from environment
@@ -27,40 +27,6 @@ function getBlogDatabaseId() {
     throw new Error('NOTION_BLOG_DATABASE_ID environment variable is not set')
   }
   return databaseId
-}
-
-/**
- * Extract text from a Notion property
- */
-function getPropertyText(property) {
-  if (!property) return ''
-
-  switch (property.type) {
-    case 'title':
-      return property.title?.map(t => t.plain_text).join('') || ''
-    case 'rich_text':
-      return property.rich_text?.map(t => t.plain_text).join('') || ''
-    case 'url':
-      return property.url || ''
-    case 'select':
-      return property.select?.name || ''
-    case 'multi_select':
-      return property.multi_select?.map(s => s.name) || []
-    case 'checkbox':
-      return property.checkbox || false
-    case 'date':
-      return property.date?.start || null
-    case 'files':
-      // Get first file URL
-      if (property.files?.length > 0) {
-        const file = property.files[0]
-        if (file.type === 'external') return file.external?.url || ''
-        if (file.type === 'file') return file.file?.url || ''
-      }
-      return ''
-    default:
-      return ''
-  }
 }
 
 /**
