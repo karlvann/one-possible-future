@@ -27,12 +27,12 @@ export default defineEventHandler(async (event) => {
   const path = body.path || query.path
 
   // Support Notion's webhook format - extract Slug property and build path
-  // Notion sends properties like: { "properties": { "Slug": { "rich_text": [{ "plain_text": "my-article" }] } } }
-  const notionSlug = body?.properties?.Slug?.rich_text?.[0]?.plain_text
+  // Notion sends: { "data": { "properties": { "Slug": { "rich_text": [{ "plain_text": "my-article" }] } } } }
+  const notionSlug = body?.data?.properties?.Slug?.rich_text?.[0]?.plain_text
   const notionPath = notionSlug ? `/guides/${notionSlug}` : null
 
-  // Also check for direct path in nested object (legacy format)
-  const legacyPath = body?.data?.path || body?.properties?.path?.rich_text?.[0]?.plain_text
+  // Also check for direct path or legacy formats
+  const legacyPath = body?.data?.path || body?.properties?.Slug?.rich_text?.[0]?.plain_text
 
   const finalPath = path || notionPath || legacyPath
 
