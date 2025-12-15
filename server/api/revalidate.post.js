@@ -59,8 +59,10 @@ export default defineEventHandler(async (event) => {
   // Ensure path starts with /
   const normalizedPath = finalPath.startsWith('/') ? finalPath : `/${finalPath}`
 
-  // Build full URL for the page
-  const baseUrl = config.public.siteUrl || 'https://ausbeds.com.au'
+  // Build full URL for the page using the request's origin
+  // This ensures revalidation works on any deployment (preview, production)
+  const requestUrl = getRequestURL(event)
+  const baseUrl = `${requestUrl.protocol}//${requestUrl.host}`
   const revalidateUrl = `${baseUrl}${normalizedPath}`
 
   console.log(`[Revalidate] Triggering revalidation for: ${revalidateUrl}`)
