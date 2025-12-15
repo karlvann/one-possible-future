@@ -315,19 +315,9 @@ export default defineNuxtConfig({
     '/adjustments-details': { redirect: '/faq/adjustments' },
 
     // Redirect old /help/* URLs to new /faq/* URLs (SEO migration)
+    // Catch-all redirect for any /help/[slug] to /faq/[slug]
     '/help': { redirect: '/faq' },
-    '/help/delivery': { redirect: '/faq/delivery' },
-    '/help/trial': { redirect: '/faq/trial' },
-    '/help/warranty': { redirect: '/faq/warranty' },
-    '/help/adjustments': { redirect: '/faq/adjustments' },
-    '/help/payments': { redirect: '/faq/payments' },
-    '/help/products': { redirect: '/faq/products' },
-    '/help/dimensions': { redirect: '/faq/dimensions' },
-    '/help/half-half': { redirect: '/faq/half-half' },
-    '/help/bed-bases': { redirect: '/faq/bed-bases' },
-    '/help/accessories': { redirect: '/faq/accessories' },
-    '/help/recommendations': { redirect: '/faq/recommendations' },
-    '/help/showroom': { redirect: '/faq/showroom' },
+    '/help/:slug': { redirect: '/faq/:slug' },
 
     // Voice shadow pages (Narrative format)
     '/voice/**': {
