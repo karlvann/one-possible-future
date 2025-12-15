@@ -26,9 +26,18 @@ export default defineEventHandler(async (event) => {
   const secret = body.secret || query.secret
   const path = body.path || query.path
 
-  // Also support Notion's webhook format where path might be in a nested object
-  const notionPath = body?.data?.path || body?.properties?.path?.rich_text?.[0]?.plain_text
-  const finalPath = path || notionPath
+  // Support Notion's webhook format - extract Slug property and build path
+  // Notion sends properties like: { "properties": { "Slug": { "rich_text": [{ "plain_text": "my-article" }] } } }
+  const notionSlug = body?.properties?.Slug?.rich_text?.[0]?.plain_text
+  const notionPath = notionSlug ? `/guides/${notionSlug}` : null
+
+  // Also check for direct path in nested object (legacy format)
+  const legacyPath = body?.data?.path || body?.properties?.path?.rich_text?.[0]?.plain_text
+
+  const finalPath = path || notionPath || legacyPath
+
+  // Log incoming payload for debugging
+  console.log('[Revalidate] Incoming body:', JSON.stringify(body, null, 2))
 
   // Verify secret
   if (secret !== config.revalidateSecret) {
