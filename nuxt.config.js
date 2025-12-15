@@ -223,6 +223,7 @@ export default defineNuxtConfig({
     revalidateSecret: process.env.REVALIDATE_SECRET,
     vercelToken: process.env.VERCEL_TOKEN,
     vercelProjectId: process.env.VERCEL_PROJECT_ID,
+    vercelTeamId: process.env.VERCEL_TEAM_ID,
   },
 
   hooks: {

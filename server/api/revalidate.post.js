@@ -15,6 +15,7 @@
  * - REVALIDATE_SECRET: Secret to authenticate requests
  * - VERCEL_TOKEN: Your Vercel API token
  * - VERCEL_PROJECT_ID: Your Vercel project ID
+ * - VERCEL_TEAM_ID: Your Vercel team ID (for team projects)
  */
 
 export default defineEventHandler(async (event) => {
@@ -54,20 +55,23 @@ export default defineEventHandler(async (event) => {
   console.log(`[Revalidate] Purging cache for: ${normalizedPath}`)
 
   try {
+    // Build URL with team ID for team projects
+    const teamParam = config.vercelTeamId ? `?teamId=${config.vercelTeamId}` : ''
+    const purgeUrl = `https://api.vercel.com/v1/projects/${config.vercelProjectId}/purge-cache${teamParam}`
+
+    console.log(`[Revalidate] Calling: ${purgeUrl}`)
+
     // Call Vercel's purge cache API
-    const response = await fetch(
-      `https://api.vercel.com/v1/projects/${config.vercelProjectId}/purge-cache`,
-      {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${config.vercelToken}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          paths: [normalizedPath]
-        })
-      }
-    )
+    const response = await fetch(purgeUrl, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${config.vercelToken}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        paths: [normalizedPath]
+      })
+    })
 
     if (!response.ok) {
       const error = await response.text()
