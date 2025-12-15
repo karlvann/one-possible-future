@@ -193,8 +193,8 @@
                   </NuxtLink>
                 </li>
                 <li class="mt-3 pt-3 border-t border-white/20">
-                  <NuxtLink to="/help" class="font-regular text-base leading-6.5 text-white/90">
-                    Help Centre
+                  <NuxtLink to="/faq" class="font-regular text-base leading-6.5 text-white/90">
+                    FAQ
                   </NuxtLink>
                   <span class="text-xs text-white/40 block">Detailed policy info</span>
                 </li>

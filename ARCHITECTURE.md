@@ -13,10 +13,10 @@ The website is divided into three distinct content modules, each with its own da
 │   Marketing Module  │    Blog Module      │  Knowledge Module   │
 │     (Directus)      │   (Notion DB)       │   (Notion Pages)    │
 ├─────────────────────┼─────────────────────┼─────────────────────┤
-│ - Product pages     │ - Articles listing  │ - Shadow pages      │
-│ - Landing pages     │ - Individual posts  │ - Help centre       │
+│ - Product pages     │ - Articles listing  │ - FAQ pages         │
+│ - Landing pages     │ - Individual posts  │ - Knowledge base    │
 │ - Showroom info     │ - Categories/tags   │ - LLM-optimized     │
-│ - CMS-managed       │ - Editorial content │ - noindex pages     │
+│ - CMS-managed       │ - Editorial content │ - SEO indexed       │
 └─────────────────────┴─────────────────────┴─────────────────────┘
 ```
 
@@ -71,30 +71,29 @@ The website is divided into three distinct content modules, each with its own da
 
 **Data Source:** Notion Pages (individual pages, not database)
 
-**Purpose:** Shadow pages optimized for LLM/AI consumption.
+**Purpose:** FAQ pages with structured Q&A content for customers and SEO.
 
 **Location in codebase:**
-- `pages/help/index.vue` - Help centre hub
-- `pages/help/[slug].vue` - Individual shadow pages
+- `pages/faq/index.vue` - FAQ hub page
+- `pages/faq/[slug].vue` - Individual FAQ pages
 - `composables/useShadowPage.js` - Shadow page data fetching
 - `server/api/notion-knowledge/[...slug].js` - Fetches Notion page content
 
 **API Routes:**
-- `GET /api/notion-knowledge/:slug` - Get shadow page content
+- `GET /api/notion-knowledge/:slug` - Get FAQ page content
 
 **Characteristics:**
-- `noindex` meta tag (not indexed by search engines)
-- Canonical URL points to marketing page equivalent
-- Plain text optimized for ChatGPT, Perplexity, etc.
+- Indexed by search engines with FAQPage schema
 - Comprehensive Q&A format content
+- Optimized for ChatGPT, Perplexity, etc.
 - 1-hour ISR cache
 
-**Shadow Page Mapping:**
+**FAQ Page Mapping:**
 ```
-/help/delivery     → Notion: "Delivery Information"
-/help/returns      → Notion: "Returns & Exchanges"
-/help/warranty     → Notion: "Warranty Information"
-/help/mattress-care → Notion: "Mattress Care Guide"
+/faq/delivery      → Notion: "Delivery Information"
+/faq/trial         → Notion: "Sleep Trial"
+/faq/warranty      → Notion: "Warranty Information"
+/faq/adjustments   → Notion: "Firmness Adjustments"
 ```
 
 ---
@@ -107,9 +106,9 @@ The website is divided into three distinct content modules, each with its own da
 │   ├── articles/
 │   │   ├── index.vue           # Blog listing
 │   │   └── [slug].vue          # Blog article
-│   └── help/
-│       ├── index.vue           # Knowledge hub
-│       └── [slug].vue          # Shadow pages
+│   └── faq/
+│       ├── index.vue           # FAQ hub
+│       └── [slug].vue          # FAQ pages
 │
 ├── server/api/
 │   ├── notion-blog/            # Blog Module API
@@ -139,7 +138,7 @@ Knowledge:  Notion Pages → /api/notion-knowledge → Vue pages → ISR HTML
 
 1. **Separation of Concerns:** Each module has a clear purpose and data source
 2. **Team Autonomy:** Marketing edits Directus, content team edits Notion
-3. **Appropriate SEO:** Marketing/Blog indexed, Knowledge pages noindex
+3. **SEO Optimization:** All modules indexed, FAQ pages use FAQPage schema
 4. **LLM Optimization:** Knowledge module specifically designed for AI crawlers
 5. **Maintainability:** Clear folder naming makes the codebase navigable
 
@@ -147,4 +146,4 @@ Knowledge:  Notion Pages → /api/notion-knowledge → Vue pages → ISR HTML
 
 - **New marketing page:** Add to Directus, will auto-generate route
 - **New blog article:** Add to Notion Database with status "Published"
-- **New shadow page:** Add Notion page + map in `pages/help/[slug].vue`
+- **New FAQ page:** Add Notion page + map in `/server/utils/notion.js`

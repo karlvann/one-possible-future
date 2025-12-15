@@ -36,8 +36,8 @@
  * - AI content ingestion
  * - LLM training data
  *
- * URL: /help/[slug]/raw
- * Example: /help/delivery/raw
+ * URL: /raw/[slug]
+ * Example: /raw/delivery
  */
 
 // Use raw layout (no header/footer)

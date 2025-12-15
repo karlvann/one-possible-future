@@ -265,26 +265,22 @@ export default defineNuxtConfig({
     },
 
     // ============================================
-    // SHADOW PAGES - Notion-powered content
+    // FAQ PAGES - Notion-powered content
     // ISR: Revalidate every hour (3600 seconds)
-    // robots: false - excluded from sitemap
-    // These pages are noindex (set in component meta)
-    // LLMs can still crawl them, Google cannot
+    // These pages ARE indexed for SEO (FAQPage schema)
     // ============================================
 
-    // Help hub page (links to all shadow pages)
-    '/help': {
+    // FAQ hub page (links to all FAQ pages)
+    '/faq': {
       isr: 3600,
-      prerender: false,
-      robots: false
+      prerender: false
     },
 
-    // Help shadow pages (new cleaner URLs)
-    // /help/delivery, /help/trial, /help/warranty, /help/adjustments
-    '/help/**': {
+    // FAQ pages with comprehensive Q&A content
+    // /faq/delivery, /faq/trial, /faq/warranty, /faq/adjustments
+    '/faq/**': {
       isr: 3600,
-      prerender: false,
-      robots: false
+      prerender: false
     },
 
     // Raw content pages for LLM/NotebookLM ingestion
@@ -296,11 +292,26 @@ export default defineNuxtConfig({
     },
 
     // Legacy URL redirects
-    // Redirect old internal development routes to new canonical /help/* URLs
-    '/delivery-details': { redirect: '/help/delivery' },
-    '/trial-details': { redirect: '/help/trial' },
-    '/warranty-details': { redirect: '/help/warranty' },
-    '/adjustments-details': { redirect: '/help/adjustments' },
+    // Redirect old internal development routes to new canonical /faq/* URLs
+    '/delivery-details': { redirect: '/faq/delivery' },
+    '/trial-details': { redirect: '/faq/trial' },
+    '/warranty-details': { redirect: '/faq/warranty' },
+    '/adjustments-details': { redirect: '/faq/adjustments' },
+
+    // Redirect old /help/* URLs to new /faq/* URLs (SEO migration)
+    '/help': { redirect: '/faq' },
+    '/help/delivery': { redirect: '/faq/delivery' },
+    '/help/trial': { redirect: '/faq/trial' },
+    '/help/warranty': { redirect: '/faq/warranty' },
+    '/help/adjustments': { redirect: '/faq/adjustments' },
+    '/help/payments': { redirect: '/faq/payments' },
+    '/help/products': { redirect: '/faq/products' },
+    '/help/dimensions': { redirect: '/faq/dimensions' },
+    '/help/half-half': { redirect: '/faq/half-half' },
+    '/help/bed-bases': { redirect: '/faq/bed-bases' },
+    '/help/accessories': { redirect: '/faq/accessories' },
+    '/help/recommendations': { redirect: '/faq/recommendations' },
+    '/help/showroom': { redirect: '/faq/showroom' },
 
     // Voice shadow pages (Narrative format)
     '/voice/**': {

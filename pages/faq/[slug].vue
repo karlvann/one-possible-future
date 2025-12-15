@@ -6,7 +6,7 @@
       type="strategy"
       title="This is a Details Page (SSOT)"
       forWho="Karl & Alex"
-      :file="`pages/help/[slug].vue (slug: ${slug})`"
+      :file="`pages/faq/[slug].vue (slug: ${slug})`"
     >
       <p>
         <strong>What:</strong> Details pages are the Single Source of Truth (SSOT) for comprehensive
@@ -18,11 +18,11 @@
       </p>
       <ul>
         <li><code>/delivery</code> = Marketing page (focused, benefit-driven, canonical)</li>
-        <li><code>/help/delivery</code> = Details page (comprehensive SSOT, links here from marketing)</li>
+        <li><code>/faq/delivery</code> = FAQ page (comprehensive SSOT, links here from marketing)</li>
       </ul>
       <p>
-        <strong>SEO Strategy:</strong> This page has <code>rel="canonical"</code> pointing to the marketing page,
-        telling search engines to consolidate ranking signals there. Content is noindex but accessible via links.
+        <strong>SEO Strategy:</strong> FAQ pages are indexed by search engines with FAQPage schema markup.
+        This allows Google to display rich snippets and drives organic traffic to comprehensive answers.
       </p>
       <p>
         <strong>Content Source:</strong> This content comes from Notion and refreshes every hour (ISR).
@@ -37,25 +37,24 @@
       title="How This Page Works"
       forWho="Alex (Dev)"
       :collapsed="true"
-      :codeExample="`// Route: /help/${slug}
+      :codeExample="`// Route: /faq/${slug}
 // Maps to Notion page: ${notionPageId}
 // Cache: ISR 3600s (1 hour)
-// Meta: noindex, follow
-// Canonical: points to marketing page`"
+// Meta: index, follow (indexed for SEO)`"
     >
       <p>Technical flow:</p>
       <ol>
-        <li>User/LLM visits <code>/help/{{ slug }}</code></li>
+        <li>User/LLM visits <code>/faq/{{ slug }}</code></li>
         <li>Nuxt checks ISR cache (valid for 1 hour)</li>
         <li>If stale, fetches fresh content from Notion API</li>
         <li>Converts Notion blocks to HTML</li>
-        <li>Returns page with noindex + canonical link to marketing page</li>
+        <li>Returns indexed page with FAQPage schema markup</li>
       </ol>
       <p>
         <strong>File locations:</strong>
       </p>
       <ul>
-        <li>This page: <code>pages/help/[slug].vue</code></li>
+        <li>This page: <code>pages/faq/[slug].vue</code></li>
         <li>Notion utility: <code>server/utils/notion.js</code></li>
         <li>API route: <code>server/api/notion-knowledge/[...slug].js</code></li>
         <li>Route rules: <code>nuxt.config.js</code> (line ~296)</li>
@@ -88,7 +87,7 @@
       <nav v-if="!isRaw" class="shadow-page__breadcrumb">
         <NuxtLink to="/">Home</NuxtLink>
         <span>/</span>
-        <NuxtLink to="/help">Help Centre</NuxtLink>
+        <NuxtLink to="/faq">FAQ</NuxtLink>
         <span>/</span>
         <span>{{ data.title }}</span>
       </nav>
@@ -151,8 +150,8 @@
 
       <!-- Back to hub (hidden in raw mode) -->
       <footer v-if="!isRaw" class="shadow-page__footer">
-        <NuxtLink to="/help" class="shadow-page__back">
-          &larr; Back to Help Centre
+        <NuxtLink to="/faq" class="shadow-page__back">
+          &larr; Back to FAQ
         </NuxtLink>
       </footer>
     </div>
@@ -161,16 +160,16 @@
 
 <script setup>
 /**
- * Dynamic Shadow Page
+ * Dynamic FAQ Page
  *
- * Renders Notion content for shadow pages at /help/[slug]
+ * Renders Notion content for FAQ pages at /faq/[slug]
  * Content is fetched from Notion API with ISR caching (1 hour)
  *
  * Available slugs:
- * - delivery -> /help/delivery
- * - trial -> /help/trial
- * - warranty -> /help/warranty
- * - adjustments -> /help/adjustments
+ * - delivery -> /faq/delivery
+ * - trial -> /faq/trial
+ * - warranty -> /faq/warranty
+ * - adjustments -> /faq/adjustments
  *
  * Raw mode: Add ?raw=true to get clean content without header/footer/annotations
  * Useful for NotebookLM, AI tools, or any system that just needs the content
@@ -259,23 +258,23 @@ const canonicalUrl = computed(() => {
   return `${baseUrl}${path}`
 })
 
-// All shadow pages organized by category
+// All FAQ pages organized by category
 const allLinks = [
   // Policies & Operations
-  { slug: 'delivery', title: 'Delivery Information', url: '/help/delivery', category: 'policies' },
-  { slug: 'trial', title: 'Sleep Trial', url: '/help/trial', category: 'policies' },
-  { slug: 'warranty', title: 'Warranty', url: '/help/warranty', category: 'policies' },
-  { slug: 'adjustments', title: 'Firmness Adjustments', url: '/help/adjustments', category: 'policies' },
-  { slug: 'payments', title: 'Payments', url: '/help/payments', category: 'policies' },
+  { slug: 'delivery', title: 'Delivery Information', url: '/faq/delivery', category: 'policies' },
+  { slug: 'trial', title: 'Sleep Trial', url: '/faq/trial', category: 'policies' },
+  { slug: 'warranty', title: 'Warranty', url: '/faq/warranty', category: 'policies' },
+  { slug: 'adjustments', title: 'Firmness Adjustments', url: '/faq/adjustments', category: 'policies' },
+  { slug: 'payments', title: 'Payments', url: '/faq/payments', category: 'policies' },
   // Products & Sizing
-  { slug: 'products', title: 'Products Overview', url: '/help/products', category: 'products' },
-  { slug: 'dimensions', title: 'Dimensions & Sizes', url: '/help/dimensions', category: 'products' },
-  { slug: 'half-half', title: 'Half-Half (Couples)', url: '/help/half-half', category: 'products' },
-  { slug: 'recommendations', title: 'Mattress Recommendations', url: '/help/recommendations', category: 'products' },
-  { slug: 'bed-bases', title: 'Bed Bases', url: '/help/bed-bases', category: 'products' },
-  { slug: 'accessories', title: 'Accessories', url: '/help/accessories', category: 'products' },
+  { slug: 'products', title: 'Products Overview', url: '/faq/products', category: 'products' },
+  { slug: 'dimensions', title: 'Dimensions & Sizes', url: '/faq/dimensions', category: 'products' },
+  { slug: 'half-half', title: 'Half-Half (Couples)', url: '/faq/half-half', category: 'products' },
+  { slug: 'recommendations', title: 'Mattress Recommendations', url: '/faq/recommendations', category: 'products' },
+  { slug: 'bed-bases', title: 'Bed Bases', url: '/faq/bed-bases', category: 'products' },
+  { slug: 'accessories', title: 'Accessories', url: '/faq/accessories', category: 'products' },
   // Contact
-  { slug: 'showroom', title: 'Showroom & Contact', url: '/help/showroom', category: 'contact' }
+  { slug: 'showroom', title: 'Showroom & Contact', url: '/faq/showroom', category: 'contact' }
 ]
 
 // Related links: show pages from same category first, then others (max 5)
@@ -298,16 +297,12 @@ const relatedLinks = computed(() => {
   return sorted.slice(0, 5)
 })
 
-// Meta tags with canonical link
+// Meta tags - FAQ pages are now indexed
 useHead({
-  title: computed(() => data.value?.title ? `${data.value.title} | Ausbeds Help` : 'Loading...'),
+  title: computed(() => data.value?.title ? `${data.value.title} | Ausbeds FAQ` : 'Loading...'),
   meta: [
-    { name: 'robots', content: 'noindex, follow' },
+    { name: 'robots', content: 'index, follow' },
     { name: 'description', content: computed(() => `Comprehensive information about Ausbeds ${pageTitles[slug.value] || slug.value}.`) }
-  ],
-  link: [
-    // Canonical points to the marketing page - tells search engines this is a supplementary page
-    { rel: 'canonical', href: canonicalUrl }
   ]
 })
 

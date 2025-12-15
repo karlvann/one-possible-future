@@ -5,7 +5,7 @@
       type="strategy"
       title="This is a Hub Page for LLM Chatbots"
       forWho="Karl & Alex"
-      file="pages/help/index.vue"
+      file="pages/faq/index.vue"
     >
       <p>
         <strong>What:</strong> This page acts as a central hub linking to all detailed "shadow pages"
@@ -25,21 +25,20 @@
     <!-- SEO Annotation: Technical details -->
     <SeoAnnotation
       type="technical"
-      title="noindex, follow Meta Tag"
+      title="index, follow Meta Tag"
       forWho="Alex (Dev)"
-      :codeExample="`<meta name='robots' content='noindex, follow'>`"
+      :codeExample="`<meta name='robots' content='index, follow'>`"
       :collapsed="true"
     >
       <p>
-        This page has <code>noindex, follow</code> which means:
+        This page has <code>index, follow</code> which means:
       </p>
       <ul>
-        <li><strong>noindex</strong> - Google won't show this page in search results</li>
-        <li><strong>follow</strong> - Google will still follow links on this page</li>
+        <li><strong>index</strong> - Google will show this page in search results</li>
+        <li><strong>follow</strong> - Google will follow links on this page</li>
       </ul>
       <p>
-        <strong>Important:</strong> LLM chatbots don't respect noindex - they crawl everything!
-        That's exactly what we want. Google ignores these pages, but ChatGPT/Perplexity read them.
+        <strong>SEO benefit:</strong> FAQ pages with FAQPage schema can earn rich snippets in Google search results.
       </p>
     </SeoAnnotation>
 
@@ -49,11 +48,11 @@
       <nav class="help-hub__breadcrumb">
         <NuxtLink to="/">Home</NuxtLink>
         <span>/</span>
-        <span>Help Centre</span>
+        <span>FAQ</span>
       </nav>
 
       <header class="help-hub__header">
-        <h1 class="help-hub__title">Ausbeds Help Centre</h1>
+        <h1 class="help-hub__title">Ausbeds FAQ</h1>
         <p class="help-hub__subtitle">
           Comprehensive information about our policies, products, sizing, and showrooms.
         </p>
@@ -85,7 +84,7 @@
           <h2 class="help-hub__section-title">Policies & Operations</h2>
 
           <div class="help-hub__links">
-            <NuxtLink to="/help/delivery" class="help-hub__link">
+            <NuxtLink to="/faq/delivery" class="help-hub__link">
               <span class="help-hub__link-icon">🚚</span>
               <div class="help-hub__link-content">
                 <h3>Delivery Information</h3>
@@ -93,7 +92,7 @@
               </div>
             </NuxtLink>
 
-            <NuxtLink to="/help/trial" class="help-hub__link">
+            <NuxtLink to="/faq/trial" class="help-hub__link">
               <span class="help-hub__link-icon">🛏️</span>
               <div class="help-hub__link-content">
                 <h3>Sleep Trial</h3>
@@ -101,7 +100,7 @@
               </div>
             </NuxtLink>
 
-            <NuxtLink to="/help/warranty" class="help-hub__link">
+            <NuxtLink to="/faq/warranty" class="help-hub__link">
               <span class="help-hub__link-icon">🛡️</span>
               <div class="help-hub__link-content">
                 <h3>Warranty</h3>
@@ -109,7 +108,7 @@
               </div>
             </NuxtLink>
 
-            <NuxtLink to="/help/adjustments" class="help-hub__link">
+            <NuxtLink to="/faq/adjustments" class="help-hub__link">
               <span class="help-hub__link-icon">⚙️</span>
               <div class="help-hub__link-content">
                 <h3>Firmness Adjustments</h3>
@@ -117,7 +116,7 @@
               </div>
             </NuxtLink>
 
-            <NuxtLink to="/help/payments" class="help-hub__link">
+            <NuxtLink to="/faq/payments" class="help-hub__link">
               <span class="help-hub__link-icon">💳</span>
               <div class="help-hub__link-content">
                 <h3>Payments</h3>
@@ -132,7 +131,7 @@
           <h2 class="help-hub__section-title">Products & Sizing</h2>
 
           <div class="help-hub__links">
-            <NuxtLink to="/help/products" class="help-hub__link">
+            <NuxtLink to="/faq/products" class="help-hub__link">
               <span class="help-hub__link-icon">🛒</span>
               <div class="help-hub__link-content">
                 <h3>Products Overview</h3>
@@ -140,7 +139,7 @@
               </div>
             </NuxtLink>
 
-            <NuxtLink to="/help/dimensions" class="help-hub__link">
+            <NuxtLink to="/faq/dimensions" class="help-hub__link">
               <span class="help-hub__link-icon">📐</span>
               <div class="help-hub__link-content">
                 <h3>Dimensions & Sizes</h3>
@@ -148,7 +147,7 @@
               </div>
             </NuxtLink>
 
-            <NuxtLink to="/help/half-half" class="help-hub__link">
+            <NuxtLink to="/faq/half-half" class="help-hub__link">
               <span class="help-hub__link-icon">👫</span>
               <div class="help-hub__link-content">
                 <h3>Half-Half (Couples)</h3>
@@ -156,7 +155,7 @@
               </div>
             </NuxtLink>
 
-            <NuxtLink to="/help/recommendations" class="help-hub__link">
+            <NuxtLink to="/faq/recommendations" class="help-hub__link">
               <span class="help-hub__link-icon">💡</span>
               <div class="help-hub__link-content">
                 <h3>Mattress Recommendations</h3>
@@ -164,7 +163,7 @@
               </div>
             </NuxtLink>
 
-            <NuxtLink to="/help/bed-bases" class="help-hub__link">
+            <NuxtLink to="/faq/bed-bases" class="help-hub__link">
               <span class="help-hub__link-icon">🛏️</span>
               <div class="help-hub__link-content">
                 <h3>Bed Bases</h3>
@@ -172,7 +171,7 @@
               </div>
             </NuxtLink>
 
-            <NuxtLink to="/help/accessories" class="help-hub__link">
+            <NuxtLink to="/faq/accessories" class="help-hub__link">
               <span class="help-hub__link-icon">🎁</span>
               <div class="help-hub__link-content">
                 <h3>Accessories</h3>
@@ -187,7 +186,7 @@
           <h2 class="help-hub__section-title">Contact & Showroom</h2>
 
           <div class="help-hub__links">
-            <NuxtLink to="/help/showroom" class="help-hub__link">
+            <NuxtLink to="/faq/showroom" class="help-hub__link">
               <span class="help-hub__link-icon">📍</span>
               <div class="help-hub__link-content">
                 <h3>Showroom & Contact</h3>
@@ -210,8 +209,8 @@
           This helps LLMs understand the page hierarchy and content relationships.
         </p>
         <p>
-          Even though Google won't index this page (noindex), the structured data
-          helps LLMs parse and understand the content better.
+          FAQ pages are indexed and can earn rich snippets in Google search results
+          with proper FAQPage schema markup.
         </p>
       </SeoAnnotation>
 
@@ -272,9 +271,9 @@
 │   └── utils/
 │       └── notion.js             ← Notion client + HTML converter
 ├── pages/
-│   └── help/
+│   └── faq/
 │       ├── index.vue             ← This hub page
-│       └── [slug].vue            ← Dynamic shadow pages
+│       └── [slug].vue            ← Dynamic FAQ pages
 ├── components/
 │   └── SeoAnnotation.vue         ← These explanation boxes
 └── nuxt.config.js                ← Route rules (ISR, noindex)</code></pre>
@@ -432,17 +431,15 @@ export default defineEventHandler(async (event) => {
             <p>File: <code>nuxt.config.js</code></p>
             <pre class="dev-guide__code"><code>export default defineNuxtConfig({
   routeRules: {
-    // Hub page
-    '/help': {
+    // FAQ hub page
+    '/faq': {
       isr: 3600,        // Revalidate every hour
-      prerender: false, // Don't pre-render (content is dynamic)
-      robots: false     // Exclude from sitemap
+      prerender: false  // Don't pre-render (content is dynamic)
     },
-    // All shadow pages
-    '/help/**': {
+    // All FAQ pages
+    '/faq/**': {
       isr: 3600,
-      prerender: false,
-      robots: false
+      prerender: false
     },
     // API route caching
     '/api/notion-knowledge/**': {
@@ -457,7 +454,7 @@ export default defineEventHandler(async (event) => {
           <!-- Step 6: Vue Page -->
           <div class="dev-guide__section">
             <h3>Step 6: Create Dynamic Page</h3>
-            <p>File: <code>pages/help/[slug].vue</code></p>
+            <p>File: <code>pages/faq/[slug].vue</code></p>
             <pre class="dev-guide__code"><code>&lt;template&gt;
   &lt;div v-if="data" v-html="data.content"&gt;&lt;/div&gt;
 &lt;/template&gt;
@@ -473,10 +470,9 @@ const data = computed(() => response.value?.data)
 // Canonical URL - points to the marketing page
 const canonicalUrl = `https://ausbeds.com.au/${slug}`
 
-// Meta tags with canonical
+// Meta tags - indexed for SEO
 useHead({
-  meta: [{ name: 'robots', content: 'noindex, follow' }],
-  link: [{ rel: 'canonical', href: canonicalUrl }]
+  meta: [{ name: 'robots', content: 'index, follow' }]
 })
 &lt;/script&gt;</code></pre>
           </div>
@@ -488,8 +484,8 @@ useHead({
               Each details page needs a <code>rel="canonical"</code> link pointing to its corresponding marketing page.
               This tells search engines to consolidate ranking signals to the marketing page.
             </p>
-            <p>File: <code>pages/help/[slug].vue</code> - Add the mapping object:</p>
-            <pre class="dev-guide__code"><code>// Canonical URL mapping: help slug → marketing page URL
+            <p>File: <code>pages/faq/[slug].vue</code> - Add the mapping object:</p>
+            <pre class="dev-guide__code"><code>// Canonical URL mapping: faq slug → marketing page URL
 const canonicalUrls = {
   // Policies & Operations
   'delivery': '/delivery',
@@ -523,7 +519,7 @@ const canonicalUrl = computed(() => {
 
           <!-- How to Add New Page -->
           <div class="dev-guide__section dev-guide__section--highlight">
-            <h3>✅ Checklist: Adding a New Details Page</h3>
+            <h3>✅ Checklist: Adding a New FAQ Page</h3>
             <ol class="dev-guide__checklist">
               <li>
                 <strong>Create Notion page</strong> - Write content in Notion
@@ -538,13 +534,10 @@ const canonicalUrl = computed(() => {
                 <strong>Add to notion.js</strong> - Add entry: <code>'my-slug': 'abc123def456'</code>
               </li>
               <li>
-                <strong>Add canonical mapping</strong> - In <code>[slug].vue</code>, add: <code>'my-slug': '/marketing-page'</code>
+                <strong>Add link to hub</strong> - Add NuxtLink in <code>pages/faq/index.vue</code>
               </li>
               <li>
-                <strong>Add link to hub</strong> - Add NuxtLink in <code>pages/help/index.vue</code>
-              </li>
-              <li>
-                <strong>Test locally</strong> - Visit <code>/help/my-slug</code> and check canonical in page source
+                <strong>Test locally</strong> - Visit <code>/faq/my-slug</code>
               </li>
             </ol>
           </div>
@@ -575,13 +568,10 @@ const canonicalUrl = computed(() => {
             <p>After setup, verify everything works:</p>
             <ol class="dev-guide__checklist">
               <li>
-                <strong>Content loads</strong> - Visit <code>/help/delivery</code>, content should appear
+                <strong>Content loads</strong> - Visit <code>/faq/delivery</code>, content should appear
               </li>
               <li>
-                <strong>Check canonical tag</strong> - View Page Source → search for <code>rel="canonical"</code>
-              </li>
-              <li>
-                <strong>Check noindex</strong> - View Page Source → search for <code>noindex</code>
+                <strong>Check index</strong> - View Page Source → search for <code>index, follow</code>
               </li>
               <li>
                 <strong>Test ISR cache</strong> - Edit Notion page, wait 1 hour, content should update
@@ -680,25 +670,24 @@ const canonicalUrl = computed(() => {
 
 <script setup>
 /**
- * Help Hub Page
+ * FAQ Hub Page
  *
- * Central hub for all shadow pages (LLM-optimized content).
- * This page is noindex but followable - Google ignores it,
- * but LLMs can discover and crawl all linked shadow pages.
+ * Central hub for all FAQ pages with comprehensive Q&A content.
+ * This page is indexed by Google with FAQPage schema markup.
  *
- * URL: /help
+ * URL: /faq
  * Linked from: Footer of marketing pages
- * Links to: /help/delivery, /help/trial, /help/warranty, /help/adjustments
+ * Links to: /faq/delivery, /faq/trial, /faq/warranty, /faq/adjustments, etc.
  */
 
 // Toggle for developer guide section
 const showDevGuide = ref(false)
 
-// Meta tags - noindex to hide from Google, follow so links are crawled
+// Meta tags - indexed for SEO with FAQPage schema
 useHead({
-  title: 'Help Centre | Ausbeds',
+  title: 'FAQ | Ausbeds',
   meta: [
-    { name: 'robots', content: 'noindex, follow' },
+    { name: 'robots', content: 'index, follow' },
     { name: 'description', content: 'Comprehensive information about Ausbeds policies, products, sizing, and showrooms.' }
   ]
 })
@@ -711,7 +700,7 @@ useHead({
       innerHTML: JSON.stringify({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
-        name: 'Ausbeds Help Centre',
+        name: 'Ausbeds FAQ',
         description: 'Comprehensive information about Ausbeds policies, products, sizing, and showrooms.',
         publisher: {
           '@type': 'Organization',
@@ -722,20 +711,20 @@ useHead({
           '@type': 'ItemList',
           itemListElement: [
             // Policies & Operations
-            { '@type': 'ListItem', position: 1, name: 'Delivery Information', url: 'https://ausbeds.com.au/help/delivery' },
-            { '@type': 'ListItem', position: 2, name: 'Sleep Trial', url: 'https://ausbeds.com.au/help/trial' },
-            { '@type': 'ListItem', position: 3, name: 'Warranty', url: 'https://ausbeds.com.au/help/warranty' },
-            { '@type': 'ListItem', position: 4, name: 'Firmness Adjustments', url: 'https://ausbeds.com.au/help/adjustments' },
-            { '@type': 'ListItem', position: 5, name: 'Payments', url: 'https://ausbeds.com.au/help/payments' },
+            { '@type': 'ListItem', position: 1, name: 'Delivery Information', url: 'https://ausbeds.com.au/faq/delivery' },
+            { '@type': 'ListItem', position: 2, name: 'Sleep Trial', url: 'https://ausbeds.com.au/faq/trial' },
+            { '@type': 'ListItem', position: 3, name: 'Warranty', url: 'https://ausbeds.com.au/faq/warranty' },
+            { '@type': 'ListItem', position: 4, name: 'Firmness Adjustments', url: 'https://ausbeds.com.au/faq/adjustments' },
+            { '@type': 'ListItem', position: 5, name: 'Payments', url: 'https://ausbeds.com.au/faq/payments' },
             // Products & Sizing
-            { '@type': 'ListItem', position: 6, name: 'Products Overview', url: 'https://ausbeds.com.au/help/products' },
-            { '@type': 'ListItem', position: 7, name: 'Dimensions & Sizes', url: 'https://ausbeds.com.au/help/dimensions' },
-            { '@type': 'ListItem', position: 8, name: 'Half-Half (Couples)', url: 'https://ausbeds.com.au/help/half-half' },
-            { '@type': 'ListItem', position: 9, name: 'Mattress Recommendations', url: 'https://ausbeds.com.au/help/recommendations' },
-            { '@type': 'ListItem', position: 10, name: 'Bed Bases', url: 'https://ausbeds.com.au/help/bed-bases' },
-            { '@type': 'ListItem', position: 11, name: 'Accessories', url: 'https://ausbeds.com.au/help/accessories' },
+            { '@type': 'ListItem', position: 6, name: 'Products Overview', url: 'https://ausbeds.com.au/faq/products' },
+            { '@type': 'ListItem', position: 7, name: 'Dimensions & Sizes', url: 'https://ausbeds.com.au/faq/dimensions' },
+            { '@type': 'ListItem', position: 8, name: 'Half-Half (Couples)', url: 'https://ausbeds.com.au/faq/half-half' },
+            { '@type': 'ListItem', position: 9, name: 'Mattress Recommendations', url: 'https://ausbeds.com.au/faq/recommendations' },
+            { '@type': 'ListItem', position: 10, name: 'Bed Bases', url: 'https://ausbeds.com.au/faq/bed-bases' },
+            { '@type': 'ListItem', position: 11, name: 'Accessories', url: 'https://ausbeds.com.au/faq/accessories' },
             // Contact
-            { '@type': 'ListItem', position: 12, name: 'Showroom & Contact', url: 'https://ausbeds.com.au/help/showroom' }
+            { '@type': 'ListItem', position: 12, name: 'Showroom & Contact', url: 'https://ausbeds.com.au/faq/showroom' }
           ]
         }
       })

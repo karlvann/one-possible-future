@@ -608,11 +608,6 @@
       "permanent": true
     },
     {
-      "source": "/faq",
-      "destination": "https://ausbeds.com.au/support/faqs",
-      "permanent": true
-    },
-    {
       "source": "/slimline-base/king/",
       "destination": "https://ausbeds.com.au/mattresses/base?size=king",
       "permanent": true

@@ -13,7 +13,7 @@
           This demo showcases Notion-powered content. Check out
           <NuxtLink to="/guides" class="text-blue underline hover:text-blue-dark">Guides</NuxtLink>
           and
-          <NuxtLink to="/help" class="text-blue underline hover:text-blue-dark">Help Centre</NuxtLink>
+          <NuxtLink to="/faq" class="text-blue underline hover:text-blue-dark">FAQ</NuxtLink>
           in the footer.
         </p>
       </div>

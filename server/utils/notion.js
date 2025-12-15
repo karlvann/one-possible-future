@@ -75,11 +75,16 @@ export const notionPages = {
   'showroom': '2c6bd057-a789-8176-a125-cbca4893b4ab',
 
   // ===========================================
-  // PHASE 2 - WHY AUSBEDS (sales-focused, add later)
+  // COMFORT & SLEEP
   // ===========================================
-  // 'comparisons': '2c6bd057-a789-81ae-ba0d-e931679556d3',
-  // 'last-mattress': '2c8bd057-a789-81a8-8f4e-e5e24a1d9fc3',
-  // 'prices': '2c8bd057-a789-8168-b842-e7045802d619',
+  'heat': '2cabd057-a789-81ea-9253-c712c3ea5f86',
+
+  // ===========================================
+  // WHY AUSBEDS (sales-focused)
+  // ===========================================
+  'comparisons': '2c6bd057-a789-81ae-ba0d-e931679556d3',
+  'last-mattress': '2c8bd057-a789-81a8-8f4e-e5e24a1d9fc3',
+  'prices': '2c8bd057-a789-8168-b842-e7045802d619',
 
   // ===========================================
   // VOICE & PROOF SSOT (narrative format, add when created)
