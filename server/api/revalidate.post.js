@@ -1,8 +1,8 @@
 /**
  * On-Demand ISR Revalidation API
  *
- * Purges Vercel's edge cache for specific paths, allowing
- * instant content updates from Notion without waiting for ISR expiry.
+ * Triggers Vercel's on-demand ISR revalidation for specific paths.
+ * Works by sending a HEAD request with x-prerender-revalidate header.
  *
  * Usage:
  * POST /api/revalidate
@@ -13,9 +13,7 @@
  *
  * Environment variables required:
  * - REVALIDATE_SECRET: Secret to authenticate requests
- * - VERCEL_TOKEN: Your Vercel API token
- * - VERCEL_PROJECT_ID: Your Vercel project ID
- * - VERCEL_TEAM_ID: Your Vercel team ID (for team projects)
+ * - VERCEL_BYPASS_TOKEN: Token configured in Nitro for ISR bypass
  */
 
 export default defineEventHandler(async (event) => {
@@ -49,46 +47,54 @@ export default defineEventHandler(async (event) => {
     })
   }
 
+  // Validate bypass token is configured
+  if (!config.vercelBypassToken) {
+    console.error('[Revalidate] VERCEL_BYPASS_TOKEN not configured')
+    throw createError({
+      statusCode: 500,
+      message: 'Server configuration error: bypass token not set'
+    })
+  }
+
   // Ensure path starts with /
   const normalizedPath = finalPath.startsWith('/') ? finalPath : `/${finalPath}`
 
-  console.log(`[Revalidate] Purging cache for: ${normalizedPath}`)
+  // Build full URL for the page
+  const baseUrl = config.public.siteUrl || 'https://ausbeds.com.au'
+  const revalidateUrl = `${baseUrl}${normalizedPath}`
+
+  console.log(`[Revalidate] Triggering revalidation for: ${revalidateUrl}`)
 
   try {
-    // Build URL with team ID for team projects
-    const teamParam = config.vercelTeamId ? `?teamId=${config.vercelTeamId}` : ''
-    const purgeUrl = `https://api.vercel.com/v1/projects/${config.vercelProjectId}/purge-cache${teamParam}`
-
-    console.log(`[Revalidate] Calling: ${purgeUrl}`)
-
-    // Call Vercel's purge cache API
-    const response = await fetch(purgeUrl, {
-      method: 'POST',
+    // Send HEAD request with x-prerender-revalidate header
+    // This tells Vercel to revalidate the ISR cache for this path
+    const response = await fetch(revalidateUrl, {
+      method: 'HEAD',
       headers: {
-        'Authorization': `Bearer ${config.vercelToken}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        paths: [normalizedPath]
-      })
+        'x-prerender-revalidate': config.vercelBypassToken
+      }
     })
 
-    if (!response.ok) {
-      const error = await response.text()
-      console.error('[Revalidate] Vercel API error:', error)
-      throw createError({
-        statusCode: response.status,
-        message: `Vercel API error: ${error}`
-      })
+    // Check for successful revalidation
+    const cacheStatus = response.headers.get('x-vercel-cache')
+
+    console.log(`[Revalidate] Response status: ${response.status}`)
+    console.log(`[Revalidate] X-Vercel-Cache: ${cacheStatus}`)
+
+    // REVALIDATED means cache was successfully purged and rebuilt
+    const wasRevalidated = cacheStatus === 'REVALIDATED'
+
+    if (wasRevalidated) {
+      console.log(`[Revalidate] Successfully revalidated: ${normalizedPath}`)
+    } else {
+      console.log(`[Revalidate] Request sent but cache status was: ${cacheStatus}`)
+      console.log('[Revalidate] Note: Cache may still be revalidated on next request')
     }
-
-    const result = await response.json()
-
-    console.log(`[Revalidate] Successfully purged: ${normalizedPath}`)
 
     return {
       success: true,
-      revalidated: true,
+      revalidated: wasRevalidated,
+      cacheStatus: cacheStatus || 'unknown',
       path: normalizedPath,
       timestamp: new Date().toISOString()
     }

@@ -221,9 +221,7 @@ export default defineNuxtConfig({
     mailjetApiSecret: process.env.MAILJET_API_SECRET,
     // On-demand ISR revalidation
     revalidateSecret: process.env.REVALIDATE_SECRET,
-    vercelToken: process.env.VERCEL_TOKEN,
-    vercelProjectId: process.env.VERCEL_PROJECT_ID,
-    vercelTeamId: process.env.VERCEL_TEAM_ID,
+    vercelBypassToken: process.env.VERCEL_BYPASS_TOKEN,
   },
 
   hooks: {
@@ -353,6 +351,12 @@ export default defineNuxtConfig({
       crawlLinks: false,
       failOnError: false,
     },
+    // On-demand ISR revalidation via bypassToken header
+    vercel: {
+      config: {
+        bypassToken: process.env.VERCEL_BYPASS_TOKEN
+      }
+    }
   },
 
   vite: {
