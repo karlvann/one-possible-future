@@ -8,13 +8,43 @@
  * POST /api/revalidate
  * Body: { "path": "/guides/article-slug", "secret": "your-secret" }
  *
- * Or from Notion webhook:
- * POST /api/revalidate?secret=your-secret&path=/guides/article-slug
+ * Or from Notion webhook (guides):
+ * POST /api/revalidate?secret=your-secret&type=guides
+ *
+ * Or from Notion webhook (faq):
+ * POST /api/revalidate?secret=your-secret&type=faq
  *
  * Environment variables required:
  * - REVALIDATE_SECRET: Secret to authenticate requests
  * - VERCEL_BYPASS_TOKEN: Token configured in Nitro for ISR bypass
  */
+
+// Helper function to revalidate a single path
+async function revalidatePath(baseUrl, path, bypassToken) {
+  const normalizedPath = path.startsWith('/') ? path : `/${path}`
+  const revalidateUrl = `${baseUrl}${normalizedPath}`
+
+  console.log(`[Revalidate] Triggering revalidation for: ${revalidateUrl}`)
+
+  const response = await fetch(revalidateUrl, {
+    method: 'HEAD',
+    headers: {
+      'x-prerender-revalidate': bypassToken
+    }
+  })
+
+  const cacheStatus = response.headers.get('x-vercel-cache')
+  const wasRevalidated = cacheStatus === 'REVALIDATED'
+
+  console.log(`[Revalidate] ${normalizedPath} - Status: ${response.status}, Cache: ${cacheStatus}`)
+
+  return {
+    path: normalizedPath,
+    status: response.status,
+    cacheStatus: cacheStatus || 'unknown',
+    revalidated: wasRevalidated
+  }
+}
 
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig()
@@ -25,19 +55,15 @@ export default defineEventHandler(async (event) => {
 
   const secret = body.secret || query.secret
   const path = body.path || query.path
+  const type = body.type || query.type // 'guides' or 'faq'
 
-  // Support Notion's webhook format - extract Slug property and build path
+  // Support Notion's webhook format - extract Slug property
   // Notion sends: { "data": { "properties": { "Slug": { "rich_text": [{ "plain_text": "my-article" }] } } } }
   const notionSlug = body?.data?.properties?.Slug?.rich_text?.[0]?.plain_text
-  const notionPath = notionSlug ? `/guides/${notionSlug}` : null
-
-  // Also check for direct path or legacy formats
-  const legacyPath = body?.data?.path || body?.properties?.Slug?.rich_text?.[0]?.plain_text
-
-  const finalPath = path || notionPath || legacyPath
 
   // Log incoming payload for debugging
   console.log('[Revalidate] Incoming body:', JSON.stringify(body, null, 2))
+  console.log('[Revalidate] Type:', type, 'Slug:', notionSlug)
 
   // Verify secret
   if (secret !== config.revalidateSecret) {
@@ -45,14 +71,6 @@ export default defineEventHandler(async (event) => {
     throw createError({
       statusCode: 401,
       message: 'Invalid secret'
-    })
-  }
-
-  // Validate path
-  if (!finalPath) {
-    throw createError({
-      statusCode: 400,
-      message: 'Missing path parameter. Provide path in body or query string.'
     })
   }
 
@@ -65,48 +83,57 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  // Ensure path starts with /
-  const normalizedPath = finalPath.startsWith('/') ? finalPath : `/${finalPath}`
-
-  // Build full URL for the page using the request's origin
-  // This ensures revalidation works on any deployment (preview, production)
+  // Build base URL from request
   const requestUrl = getRequestURL(event)
   const baseUrl = `${requestUrl.protocol}//${requestUrl.host}`
-  const revalidateUrl = `${baseUrl}${normalizedPath}`
 
-  console.log(`[Revalidate] Triggering revalidation for: ${revalidateUrl}`)
+  // Determine paths to revalidate based on type
+  let pathsToRevalidate = []
+
+  if (type === 'faq') {
+    // FAQ: revalidate the article pages, raw pages, and index/API
+    if (notionSlug) {
+      pathsToRevalidate.push(`/faq/${notionSlug}`)
+      pathsToRevalidate.push(`/raw/${notionSlug}`)
+    }
+    // Always revalidate the index and API so new articles appear in lists
+    pathsToRevalidate.push('/faq')
+    pathsToRevalidate.push('/api/notion-faq')
+  } else if (type === 'guides' || notionSlug) {
+    // Guides: revalidate the single article page
+    const guidesPath = path || (notionSlug ? `/guides/${notionSlug}` : null)
+    if (guidesPath) {
+      pathsToRevalidate.push(guidesPath)
+    }
+  } else if (path) {
+    // Direct path provided
+    pathsToRevalidate.push(path)
+  }
+
+  // Validate we have paths to revalidate
+  if (pathsToRevalidate.length === 0) {
+    throw createError({
+      statusCode: 400,
+      message: 'Missing path or type parameter. Provide path, or type with slug from Notion.'
+    })
+  }
 
   try {
-    // Send HEAD request with x-prerender-revalidate header
-    // This tells Vercel to revalidate the ISR cache for this path
-    const response = await fetch(revalidateUrl, {
-      method: 'HEAD',
-      headers: {
-        'x-prerender-revalidate': config.vercelBypassToken
-      }
-    })
+    // Revalidate all paths
+    const results = await Promise.all(
+      pathsToRevalidate.map(p => revalidatePath(baseUrl, p, config.vercelBypassToken))
+    )
 
-    // Check for successful revalidation
-    const cacheStatus = response.headers.get('x-vercel-cache')
+    const allRevalidated = results.every(r => r.revalidated)
+    const anyRevalidated = results.some(r => r.revalidated)
 
-    console.log(`[Revalidate] Response status: ${response.status}`)
-    console.log(`[Revalidate] X-Vercel-Cache: ${cacheStatus}`)
-
-    // REVALIDATED means cache was successfully purged and rebuilt
-    const wasRevalidated = cacheStatus === 'REVALIDATED'
-
-    if (wasRevalidated) {
-      console.log(`[Revalidate] Successfully revalidated: ${normalizedPath}`)
-    } else {
-      console.log(`[Revalidate] Request sent but cache status was: ${cacheStatus}`)
-      console.log('[Revalidate] Note: Cache may still be revalidated on next request')
-    }
+    console.log(`[Revalidate] Completed. ${results.filter(r => r.revalidated).length}/${results.length} paths revalidated`)
 
     return {
       success: true,
-      revalidated: wasRevalidated,
-      cacheStatus: cacheStatus || 'unknown',
-      path: normalizedPath,
+      revalidated: allRevalidated,
+      partiallyRevalidated: anyRevalidated && !allRevalidated,
+      results,
       timestamp: new Date().toISOString()
     }
 
