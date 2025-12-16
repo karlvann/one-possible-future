@@ -4,3 +4,9 @@
     <p>If you see this, the page is working.</p>
   </div>
 </template>
+
+<script setup>
+definePageMeta({
+  layout: 'raw'
+})
+</script>
