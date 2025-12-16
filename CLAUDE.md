@@ -6,6 +6,7 @@ This is a demo website for Ausbeds (Australian mattress company) showcasing a th
 
 **Production URL:** https://one-possible-future.vercel.app
 **Tech Stack:** Nuxt 3, Vue 3, Tailwind CSS, Vercel (ISR)
+**Deployment:** Push to GitHub → Vercel auto-deploys (not direct to Vercel)
 
 ---
 
