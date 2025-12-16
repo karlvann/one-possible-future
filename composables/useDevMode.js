@@ -6,6 +6,8 @@
  * Persists preference in localStorage.
  */
 
+import { readonly, computed } from 'vue'
+
 export const useDevMode = () => {
   // Default to false (customer view)
   const devMode = useState('devMode', () => false)
