@@ -269,41 +269,41 @@ export default defineNuxtConfig({
 
     // ============================================
     // FAQ PAGES - Notion-powered content
-    // ISR: Revalidate every hour (3600 seconds)
+    // ISR: Cache indefinitely, revalidate on-demand via webhook
     // These pages ARE indexed for SEO (FAQPage schema)
     // ============================================
 
     // FAQ hub page (links to all FAQ pages)
     '/faq': {
-      isr: 3600,
+      isr: true,
       prerender: false
     },
 
     // FAQ pages with comprehensive Q&A content
     // /faq/delivery, /faq/trial, /faq/warranty, /faq/adjustments
     '/faq/**': {
-      isr: 3600,
+      isr: true,
       prerender: false
     },
 
     // Raw content pages for LLM/NotebookLM ingestion
     // /raw/delivery, /raw/trial, etc. - clean content without chrome
     '/raw/**': {
-      isr: 3600,
+      isr: true,
       prerender: false,
       robots: false
     },
 
     // ============================================
     // GUIDES/BLOG - Notion-powered articles
-    // ISR: Revalidate every hour (3600 seconds)
+    // ISR: Cache indefinitely, revalidate on-demand via webhook
     // ============================================
     '/guides': {
-      isr: 3600,
+      isr: true,
       prerender: false
     },
     '/guides/**': {
-      isr: 3600,
+      isr: true,
       prerender: false
     },
 

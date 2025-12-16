@@ -96,9 +96,11 @@ export default defineEventHandler(async (event) => {
       pathsToRevalidate.push(`/faq/${notionSlug}`)
       pathsToRevalidate.push(`/raw/${notionSlug}`)
     }
-    // Always revalidate the index and API so new articles appear in lists
+    // Always revalidate the index, API, and combined knowledge page
     pathsToRevalidate.push('/faq')
     pathsToRevalidate.push('/api/notion-faq')
+    pathsToRevalidate.push('/raw/combined-knowledge')
+    pathsToRevalidate.push('/api/faq/combined')
   } else if (type === 'guides' || notionSlug) {
     // Guides: revalidate the single article page
     const guidesPath = path || (notionSlug ? `/guides/${notionSlug}` : null)

@@ -91,6 +91,7 @@ Articles are managed in the Notion database. Current categories:
 - `/server/utils/notion.js` - Shared Notion client and utilities
 - `/server/api/notion-faq/index.js` - List all FAQ articles (supports `?grouped=true`)
 - `/server/api/notion-faq/[slug].js` - Get single FAQ article by slug
+- `/server/api/faq/combined.get.js` - Combined knowledge base (all FAQs in markdown)
 - `/server/api/notion-blog/` - API routes for blog articles
 - `/server/api/revalidate.post.js` - Webhook endpoint for on-demand ISR revalidation
 
@@ -98,12 +99,13 @@ Articles are managed in the Notion database. Current categories:
 - `/pages/faq/index.vue` - FAQ hub page (dynamic from database)
 - `/pages/faq/[slug].vue` - FAQ detail pages with full chrome
 - `/pages/raw/[slug].vue` - Raw pages for LLM ingestion
+- `/pages/raw/combined-knowledge.vue` - All FAQs combined for LLM ingestion
 - `/layouts/default.vue` - Main layout (header, footer)
 - `/layouts/raw.vue` - Minimal layout for raw pages
 
 ### Route Rules (nuxt.config.js ~line 280)
-- `/faq/**` - ISR 1 hour, indexed
-- `/raw/**` - ISR 1 hour, noindex
+- `/faq/**` - ISR (on-demand revalidation), indexed
+- `/raw/**` - ISR (on-demand revalidation), noindex
 
 ---
 
@@ -129,9 +131,9 @@ Required on Vercel:
 ## Caching (ISR) & On-Demand Revalidation
 
 All FAQ and raw pages use ISR (Incremental Static Regeneration):
-- Cache duration: 1 hour (3600 seconds)
+- Cache duration: Indefinite (until webhook triggers revalidation)
 - First request triggers SSR, subsequent requests serve cached HTML
-- Content updates in Notion appear within 1 hour (or instantly via webhook)
+- Content updates in Notion appear instantly when webhook fires
 
 ### On-Demand Revalidation (Webhooks)
 
@@ -173,13 +175,34 @@ GET /api/notion-faq?grouped=true  # Grouped by category
 GET /api/notion-faq/[slug]
 ```
 
+**Combined knowledge base (all articles in one markdown document):**
+```
+GET /api/faq/combined
+```
+
 ---
 
 ## For NotebookLM / AI Tools
 
-Use the `/raw/` URLs for clean content ingestion. These are dynamically generated from the FAQ database.
+### Combined Knowledge Base (Recommended)
 
-Example URLs:
+For ingesting the entire FAQ knowledge base in one request:
+```
+https://one-possible-future.vercel.app/raw/combined-knowledge
+```
+
+This single URL contains:
+- All FAQ articles combined into one markdown document
+- YAML-like metadata header
+- Table of contents with all articles
+- Articles grouped by category
+- Each article with slug, update date, and URL metadata
+
+**Best for:** NotebookLM, AI training, bulk content ingestion
+
+### Individual Articles
+
+Use `/raw/[slug]` URLs for specific articles:
 ```
 https://one-possible-future.vercel.app/raw/delivery
 https://one-possible-future.vercel.app/raw/trial
