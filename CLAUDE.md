@@ -92,6 +92,7 @@ Articles are managed in the Notion database. Current categories:
 - `/server/api/notion-faq/index.js` - List all FAQ articles (supports `?grouped=true`)
 - `/server/api/notion-faq/[slug].js` - Get single FAQ article by slug
 - `/server/api/notion-blog/` - API routes for blog articles
+- `/server/api/revalidate.post.js` - Webhook endpoint for on-demand ISR revalidation
 
 ### Pages
 - `/pages/faq/index.vue` - FAQ hub page (dynamic from database)
@@ -125,12 +126,35 @@ Required on Vercel:
 
 ---
 
-## Caching (ISR)
+## Caching (ISR) & On-Demand Revalidation
 
 All FAQ and raw pages use ISR (Incremental Static Regeneration):
 - Cache duration: 1 hour (3600 seconds)
 - First request triggers SSR, subsequent requests serve cached HTML
-- Content updates in Notion appear within 1 hour
+- Content updates in Notion appear within 1 hour (or instantly via webhook)
+
+### On-Demand Revalidation (Webhooks)
+
+For instant cache refresh when Notion content changes, set up automations in each Notion database:
+
+**Revalidation Endpoint:**
+```
+POST /api/revalidate?secret=YOUR_SECRET&type=faq
+POST /api/revalidate?secret=YOUR_SECRET&type=guides
+```
+
+**Notion Automation Setup:**
+1. Open the Notion database → **...** menu → **Automations**
+2. Create automation with:
+   - **Trigger:** "Any property edited" **AND** "Page content edited"
+   - **Action:** Send webhook to the revalidation URL
+   - **Content:** Check "Slug" property (required for path-specific revalidation)
+
+**IMPORTANT:** The trigger MUST include "Page content edited" - not just "Any property edited". Otherwise, editing the page body won't trigger revalidation (only property changes will).
+
+**Environment Variables Required:**
+- `REVALIDATE_SECRET` - Secret for webhook authentication
+- `VERCEL_BYPASS_TOKEN` - Vercel's ISR bypass token (from project settings)
 
 ---
 
