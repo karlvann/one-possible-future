@@ -127,6 +127,8 @@ export function blocksToHtml(blocks) {
   let inBulletedList = false
   let inNumberedList = false
   let inTable = false
+  let tableHasHeader = false
+  let isFirstTableRow = false
 
   for (const block of blocks) {
     // Close lists if we're not in a list item
@@ -139,9 +141,11 @@ export function blocksToHtml(blocks) {
       inNumberedList = false
     }
     // Close table if we're not in a table row anymore
-    if (block.type !== 'table_row' && inTable) {
+    if (block.type !== 'table_row' && block.type !== 'table' && inTable) {
       html += '</table>\n'
       inTable = false
+      tableHasHeader = false
+      isFirstTableRow = false
     }
 
     switch (block.type) {
@@ -217,16 +221,21 @@ export function blocksToHtml(blocks) {
         // The inTable flag ensures we close the table after all rows
         html += '<table>\n'
         inTable = true
+        tableHasHeader = block.table?.has_column_header || false
+        isFirstTableRow = true
         break
 
       case 'table_row':
         html += '<tr>\n'
         if (block.table_row?.cells) {
+          // Use <th> for header row cells, <td> for data cells
+          const cellTag = (tableHasHeader && isFirstTableRow) ? 'th' : 'td'
           for (const cell of block.table_row.cells) {
-            html += `<td>${richTextToHtml(cell)}</td>\n`
+            html += `<${cellTag}>${richTextToHtml(cell)}</${cellTag}>\n`
           }
         }
         html += '</tr>\n'
+        isFirstTableRow = false
         break
 
       case 'image':
@@ -307,6 +316,9 @@ export function blocksToHtml(blocks) {
   }
   if (inTable) {
     html += '</table>\n'
+    inTable = false
+    tableHasHeader = false
+    isFirstTableRow = false
   }
 
   // Post-process: Convert standalone YouTube links to embeds
@@ -399,6 +411,7 @@ async function withRetry(fn, maxRetries = 3) {
 
 /**
  * Fetch all blocks from a Notion page (handles pagination)
+ * Recursively fetches children for table blocks so rows are inlined
  */
 export async function fetchAllBlocks(pageId) {
   const notion = getNotionClient()
@@ -415,11 +428,45 @@ export async function fetchAllBlocks(pageId) {
       })
     })
 
-    blocks.push(...response.results)
+    // Process each block, fetching children for tables
+    for (const block of response.results) {
+      blocks.push(block)
+
+      // Tables have their rows as children - fetch and inline them
+      if (block.type === 'table' && block.has_children) {
+        const tableRows = await fetchTableChildren(block.id)
+        blocks.push(...tableRows)
+      }
+    }
+
     cursor = response.has_more ? response.next_cursor : undefined
   } while (cursor)
 
   return blocks
+}
+
+/**
+ * Fetch children of a table block (table rows)
+ */
+async function fetchTableChildren(tableId) {
+  const notion = getNotionClient()
+  const rows = []
+  let cursor = undefined
+
+  do {
+    const response = await withRetry(async () => {
+      return await notion.blocks.children.list({
+        block_id: tableId,
+        start_cursor: cursor,
+        page_size: 100
+      })
+    })
+
+    rows.push(...response.results)
+    cursor = response.has_more ? response.next_cursor : undefined
+  } while (cursor)
+
+  return rows
 }
 
 /**
