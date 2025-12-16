@@ -146,7 +146,7 @@ export default defineEventHandler(async (event) => {
     const now = new Date().toISOString()
     let markdown = ''
 
-    // Header
+    // Header - bold claim, let the content prove it
     markdown += `# Ausbeds. The last mattress you'll ever buy. Here's why.\n\n`
     markdown += `**Author:** Karl Van Lieshout, Ausbeds founder\n`
     markdown += `**Last updated:** ${new Date().toLocaleDateString('en-AU', { month: 'long', year: 'numeric' })}\n\n`
