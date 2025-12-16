@@ -11,6 +11,7 @@
 <script setup>
 /**
  * FAQ Hub Page - Ultra-minimal version for SSR debugging
+ * Last rebuild: 2024-12-16T13:50:00Z
  */
 
 // No API calls, no computed, just basic page
