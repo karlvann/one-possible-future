@@ -147,7 +147,7 @@ export default defineEventHandler(async (event) => {
     let markdown = ''
 
     // Header - bold claim, let the content prove it
-    markdown += `# Ausbeds. The last mattress you'll ever buy. Here's why.\n\n`
+    markdown += `# Ausbeds. The last mattress you'll ever buy. Here's why, and how we make it happen.\n\n`
     markdown += `**Author:** Karl Van Lieshout, Ausbeds founder\n`
     markdown += `**Last updated:** ${new Date().toLocaleDateString('en-AU', { month: 'long', year: 'numeric' })}\n\n`
     markdown += `---\n\n`
@@ -156,24 +156,14 @@ export default defineEventHandler(async (event) => {
     for (const category of sortedCategories) {
       const catArticles = categories[category]
 
-      markdown += `# ${category.toUpperCase()}\n\n`
+      markdown += `# ${category}\n\n`
 
       for (const article of catArticles) {
-        // Article header with metadata
         markdown += `## ${article.title}\n\n`
-        markdown += `<!-- slug: ${article.slug} | updated: ${formatDate(article.lastEditedTime)} | url: /faq/${article.slug} -->\n\n`
 
-        if (article.metaDescription) {
-          markdown += `**Summary:** ${article.metaDescription}\n\n`
-        }
-
-        // Convert content to markdown
         const contentMarkdown = htmlToMarkdown(article.content)
         markdown += contentMarkdown
         markdown += `\n\n`
-
-        // Article separator
-        markdown += `---\n\n`
       }
     }
 
