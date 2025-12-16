@@ -147,25 +147,9 @@ export default defineEventHandler(async (event) => {
     let markdown = ''
 
     // Header
-    markdown += `# Ausbeds FAQ\n\n`
-    markdown += `Everything you need to know about our mattresses, delivery, trial period, and warranty.\n\n`
-    markdown += `By Karl Van Lieshout, Ausbeds founder. I've answered these questions thousands of times, so I wrote them down so AI could answer you.\n\n`
-    markdown += `*Last updated: ${new Date().toLocaleDateString('en-AU', { month: 'long', year: 'numeric' })}*\n\n`
-
-    markdown += `---\n\n`
-
-    // Quick Reference / Table of Contents
-    markdown += `## Quick Reference\n\n`
-
-    for (const category of sortedCategories) {
-      const catArticles = categories[category]
-      markdown += `### ${category} (${catArticles.length} articles)\n\n`
-      for (const article of catArticles) {
-        markdown += `- [${article.title}](#${article.slug}) - ${article.metaDescription || 'No description'}\n`
-      }
-      markdown += `\n`
-    }
-
+    markdown += `# Ausbeds. The last mattress you'll ever buy. Here's why.\n\n`
+    markdown += `**Author:** Karl Van Lieshout, Ausbeds founder\n`
+    markdown += `**Last updated:** ${new Date().toLocaleDateString('en-AU', { month: 'long', year: 'numeric' })}\n\n`
     markdown += `---\n\n`
 
     // Full Content by Category
@@ -192,10 +176,6 @@ export default defineEventHandler(async (event) => {
         markdown += `---\n\n`
       }
     }
-
-    // Footer
-    markdown += `---\n\n`
-    markdown += `Questions? Call us on **02-8999-3333** or visit our showroom at 136 Victoria Rd, Marrickville.\n`
 
     // Set content type to markdown
     setHeader(event, 'Content-Type', 'text/markdown; charset=utf-8')
