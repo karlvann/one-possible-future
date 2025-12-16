@@ -38,7 +38,7 @@ function parseFaqProperties(page) {
   return {
     id: page.id,
     title: getPropertyText(props.Title || props.title),
-    titleTag: getPropertyText(props['Title Tag']),
+    metaTitle: getPropertyText(props['Meta Title']),
     slug: getPropertyText(props.Slug || props.slug),
     metaDescription: getPropertyText(props['Meta Description']),
     category: getPropertyText(props.Category || props.category),

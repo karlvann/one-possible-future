@@ -234,8 +234,8 @@ const relatedLinks = computed(() => {
 })
 
 // Meta tags - FAQ pages are now indexed
-// Title Tag field allows SEO-optimized titles separate from the display title
-const pageTitle = computed(() => data.value?.titleTag || data.value?.title)
+// Meta Title field allows SEO-optimized titles separate from the display title
+const pageTitle = computed(() => data.value?.metaTitle || data.value?.title)
 useHead({
   title: computed(() => pageTitle.value ? `${pageTitle.value} | Ausbeds FAQ` : 'Loading...'),
   meta: [

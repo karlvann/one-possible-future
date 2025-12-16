@@ -57,7 +57,7 @@ Simply add a new row to the Notion FAQ database with:
 | Property | Type | Required | Description |
 |----------|------|----------|-------------|
 | Title | Title | Yes | The article title displayed on the page (e.g., "Delivery Information") |
-| Title Tag | Text | No | SEO title for `<title>` tag (falls back to Title if empty) |
+| Meta Title | Text | No | SEO title for `<title>` tag (falls back to Title if empty) |
 | Slug | Text | Yes | URL slug (e.g., "delivery") |
 | Meta Description | Text | No | SEO description for the page |
 | Category | Select | No | One of: Policies, Products, Contact |
