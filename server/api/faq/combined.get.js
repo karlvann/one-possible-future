@@ -55,18 +55,37 @@ function htmlToMarkdown(html) {
   md = md.replace(/<figure>[\s\S]*?<img[^>]*src="([^"]*)"[^>]*>[\s\S]*?<figcaption>(.*?)<\/figcaption>[\s\S]*?<\/figure>/gi, '![$2]($1)\n\n')
 
   // Tables - convert to markdown tables
-  md = md.replace(/<table>([\s\S]*?)<\/table>/gi, (match, tableContent) => {
+  // Handle both <th> (header) and <td> (data) cells
+  md = md.replace(/<table[^>]*>([\s\S]*?)<\/table>/gi, (match, tableContent) => {
     const rows = []
     const rowRegex = /<tr>([\s\S]*?)<\/tr>/gi
     let rowMatch
+    let hasHeaderRow = false
+    let isFirstRow = true
+
     while ((rowMatch = rowRegex.exec(tableContent)) !== null) {
       const cells = []
-      const cellRegex = /<td[^>]*>([\s\S]*?)<\/td>/gi
+      // Match both <th> and <td> cells
+      const cellRegex = /<(th|td)[^>]*>([\s\S]*?)<\/\1>/gi
       let cellMatch
+      let rowHasHeaders = false
+
       while ((cellMatch = cellRegex.exec(rowMatch[1])) !== null) {
-        cells.push(cellMatch[1].trim())
+        cells.push(cellMatch[2].trim())
+        if (cellMatch[1].toLowerCase() === 'th') {
+          rowHasHeaders = true
+        }
       }
-      rows.push(cells)
+
+      // Track if first row has header cells
+      if (isFirstRow && rowHasHeaders) {
+        hasHeaderRow = true
+      }
+      isFirstRow = false
+
+      if (cells.length > 0) {
+        rows.push(cells)
+      }
     }
 
     if (rows.length === 0) return ''
@@ -75,6 +94,7 @@ function htmlToMarkdown(html) {
     rows.forEach((row, i) => {
       tableMarkdown += '| ' + row.join(' | ') + ' |\n'
       if (i === 0) {
+        // Add separator row after first row (header)
         tableMarkdown += '| ' + row.map(() => '---').join(' | ') + ' |\n'
       }
     })
