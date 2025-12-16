@@ -286,6 +286,13 @@ export default defineNuxtConfig({
       prerender: false
     },
 
+    // Knowledge base - all FAQ content combined for LLM ingestion
+    '/kb': {
+      isr: true,
+      prerender: false,
+      robots: false
+    },
+
     // Raw content pages for LLM/NotebookLM ingestion
     // /raw/delivery, /raw/trial, etc. - clean content without chrome
     '/raw/**': {

@@ -17,16 +17,12 @@
 
 <script setup>
 /**
- * Combined Knowledge Base Page
+ * Ausbeds Knowledge Base
  *
- * Serves ALL FAQ articles combined into a single markdown document.
- * Optimized for LLM ingestion:
- * - NotebookLM
- * - ChatGPT
- * - Perplexity
- * - AI training
+ * ALL FAQ articles combined into a single markdown document.
+ * Optimized for LLM ingestion (NotebookLM, ChatGPT, Perplexity, AI training)
  *
- * URL: /raw/combined-knowledge
+ * URL: /kb
  */
 
 // Use raw layout (no header/footer)
@@ -36,15 +32,15 @@ definePageMeta({
 
 // Fetch combined markdown from API
 const { data: content, pending, error } = await useFetch('/api/faq/combined', {
-  key: 'combined-knowledge'
+  key: 'kb'
 })
 
 // Meta tags - noindex (LLM consumption only)
 useHead({
-  title: 'Ausbeds Complete FAQ Knowledge Base',
+  title: 'Ausbeds Knowledge Base',
   meta: [
     { name: 'robots', content: 'noindex, nofollow' },
-    { name: 'description', content: 'Complete FAQ knowledge base for Ausbeds mattresses - all articles combined for AI/LLM ingestion.' }
+    { name: 'description', content: 'Complete knowledge base for Ausbeds mattresses.' }
   ]
 })
 </script>
