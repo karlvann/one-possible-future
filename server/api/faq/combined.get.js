@@ -147,13 +147,10 @@ export default defineEventHandler(async (event) => {
     let markdown = ''
 
     // Header
-    markdown += `# Ausbeds Complete FAQ Knowledge Base\n\n`
-    markdown += `> **Generated:** ${now}\n`
-    markdown += `> **Total Articles:** ${fullArticles.length}\n`
-    markdown += `> **Source:** Notion FAQ Database\n`
-    markdown += `> **Website:** https://one-possible-future.vercel.app\n\n`
-
-    markdown += `This document contains the complete FAQ knowledge base for Ausbeds, an Australian mattress company. Use this as a reference for answering customer questions about products, policies, delivery, warranty, and more.\n\n`
+    markdown += `# Ausbeds FAQ\n\n`
+    markdown += `Everything you need to know about our mattresses, delivery, trial period, and warranty.\n\n`
+    markdown += `By Karl Van Lieshout, Ausbeds founder. I've answered these questions thousands of times, so I wrote them down so AI could answer you.\n\n`
+    markdown += `*Last updated: ${new Date().toLocaleDateString('en-AU', { month: 'long', year: 'numeric' })}*\n\n`
 
     markdown += `---\n\n`
 
@@ -197,11 +194,8 @@ export default defineEventHandler(async (event) => {
     }
 
     // Footer
-    markdown += `## Document Information\n\n`
-    markdown += `- **Source:** Ausbeds Notion FAQ Database\n`
-    markdown += `- **Generated:** ${now}\n`
-    markdown += `- **Individual Articles:** Available at \`/faq/{slug}\` and \`/raw/{slug}\`\n`
-    markdown += `- **API Endpoint:** \`/api/notion-faq\`\n`
+    markdown += `---\n\n`
+    markdown += `Questions? Call us on **02-8999-3333** or visit our showroom at 136 Victoria Rd, Marrickville.\n`
 
     // Set content type to markdown
     setHeader(event, 'Content-Type', 'text/markdown; charset=utf-8')
