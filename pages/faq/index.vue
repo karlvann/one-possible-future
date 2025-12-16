@@ -589,8 +589,8 @@ useHead({
   ]
 })
 
-// Build structured data dynamically from fetched FAQ articles
-const structuredDataItems = computed(() => {
+// Structured data for LLM comprehension - computed to react to faqResponse changes
+const structuredDataScript = computed(() => {
   const items = []
   let position = 1
 
@@ -607,29 +607,28 @@ const structuredDataItems = computed(() => {
     }
   }
 
-  return items
+  return JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: 'Ausbeds FAQ',
+    description: 'Comprehensive information about Ausbeds policies, products, sizing, and showrooms.',
+    publisher: {
+      '@type': 'Organization',
+      name: 'Ausbeds',
+      url: 'https://ausbeds.com.au'
+    },
+    mainEntity: {
+      '@type': 'ItemList',
+      itemListElement: items
+    }
+  })
 })
 
-// Structured data for LLM comprehension
 useHead({
   script: [
     {
       type: 'application/ld+json',
-      innerHTML: computed(() => JSON.stringify({
-        '@context': 'https://schema.org',
-        '@type': 'WebPage',
-        name: 'Ausbeds FAQ',
-        description: 'Comprehensive information about Ausbeds policies, products, sizing, and showrooms.',
-        publisher: {
-          '@type': 'Organization',
-          name: 'Ausbeds',
-          url: 'https://ausbeds.com.au'
-        },
-        mainEntity: {
-          '@type': 'ItemList',
-          itemListElement: structuredDataItems.value
-        }
-      }))
+      innerHTML: structuredDataScript
     }
   ]
 })
