@@ -7,6 +7,6 @@
 
 <script setup>
 definePageMeta({
-  layout: 'raw'
+  layout: false
 })
 </script>
