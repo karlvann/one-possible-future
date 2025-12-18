@@ -15,6 +15,7 @@
     </div>
     <Footer v-if="!hideChrome" />
     <Cart v-if="!hideChrome" />
+    <ChatWidget v-if="!hideChrome" />
     <LoadingModal v-if="checkoutPage" />
   </div>
 </template>

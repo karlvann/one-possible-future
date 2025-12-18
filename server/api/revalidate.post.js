@@ -96,11 +96,14 @@ export default defineEventHandler(async (event) => {
       pathsToRevalidate.push(`/faq/${notionSlug}`)
       pathsToRevalidate.push(`/raw/${notionSlug}`)
     }
-    // Always revalidate the index, API, and combined knowledge page
+    // Always revalidate FAQ index, KB, and all marketing pages
     pathsToRevalidate.push('/faq')
-    pathsToRevalidate.push('/api/notion-faq')
+    pathsToRevalidate.push('/kb')
     pathsToRevalidate.push('/raw/combined-knowledge')
-    pathsToRevalidate.push('/api/faq/combined')
+    // Marketing pages with FAQ dropdowns - add new pages here
+    const marketingPages = ['/delivery', '/trial', '/warranty', '/adjustments']
+    pathsToRevalidate.push(...marketingPages)
+    // Note: API routes don't need ISR revalidation - they fetch fresh from Notion
   } else if (type === 'guides' || notionSlug) {
     // Guides: revalidate the single article page
     const guidesPath = path || (notionSlug ? `/guides/${notionSlug}` : null)

@@ -28,7 +28,6 @@
     "form-data": "^4.0.5",
     "lite-youtube-embed": "^0.3.4",
     "nuxt": "^4.2.0",
-    "nuxt-3-intercom": "^1.1.5",
     "nuxt-directus": "^5.7.0",
     "nuxt-headlessui": "^1.2.2",
     "nuxt-umami": "^3.2.1",

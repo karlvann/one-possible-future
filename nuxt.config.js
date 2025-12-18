@@ -120,16 +120,11 @@ export default defineNuxtConfig({
       }
     ],
     '@sentry/nuxt/module',
-    'nuxt-3-intercom',
     // 'nuxt-directus', // DISABLED: Running standalone without Directus
     'nuxt-umami',
     'nuxt3-interpolation',
     'pinia-plugin-persistedstate/nuxt',
   ],
-
-  intercom: {
-    appId: 'aimfjsol',
-  },
 
   imports: {
     dirs: ['stores']
@@ -219,6 +214,7 @@ export default defineNuxtConfig({
     zipPrivateKey: process.env.ZIP_PRIVATE_KEY,
     mailjetApiKey: process.env.MAILJET_API_KEY,
     mailjetApiSecret: process.env.MAILJET_API_SECRET,
+    anthropicApiKey: process.env.ANTHROPIC_API_KEY,
     // On-demand ISR revalidation
     revalidateSecret: process.env.REVALIDATE_SECRET,
     vercelBypassToken: process.env.VERCEL_BYPASS_TOKEN,
@@ -292,6 +288,13 @@ export default defineNuxtConfig({
       prerender: false,
       robots: false
     },
+
+    // Marketing pages with FAQ content (revalidated on Notion webhook)
+    // Add new pages here: /trial, /warranty, /adjustments, etc.
+    '/delivery': { isr: true, prerender: false },
+    '/trial': { isr: true, prerender: false },
+    '/warranty': { isr: true, prerender: false },
+    '/adjustments': { isr: true, prerender: false },
 
     // Raw content pages for LLM/NotebookLM ingestion
     // /raw/delivery, /raw/trial, etc. - clean content without chrome

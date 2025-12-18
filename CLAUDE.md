@@ -217,3 +217,120 @@ These pages contain only:
 - The Notion content (formatted HTML)
 
 No navigation, no annotations, no site chrome.
+
+---
+
+## Ragie Knowledge Base Integration
+
+### Pipeline Overview
+
+```
+Notion FAQ Database → Vercel /kb endpoint → Ragie (RAG)
+         ↓
+   /api/faq/combined
+         ↓
+   https://one-possible-future.vercel.app/kb
+         ↓
+   Ragie ingests as "Ausbeds KB v3"
+```
+
+### Ragie Configuration
+
+- **Document Source:** `https://one-possible-future.vercel.app/kb`
+- **Document Name:** Ausbeds KB v3
+- **Document ID:** `16248a9c-bcbf-4a65-9456-402e6bfd2dd0`
+- **Chunk Count:** ~71 chunks
+- **Ingestion Mode:** Fast (text-only, no OCR needed for Q&A content)
+
+### Ragie API Access
+
+```bash
+# List documents
+curl -H "Authorization: Bearer YOUR_API_KEY" https://api.ragie.ai/documents
+
+# View chunks
+curl -H "Authorization: Bearer YOUR_API_KEY" \
+  "https://api.ragie.ai/documents/DOCUMENT_ID/chunks"
+
+# Re-ingest from URL (after Notion updates)
+curl -X PUT -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  "https://api.ragie.ai/documents/DOCUMENT_ID/url" \
+  -d '{"url": "https://one-possible-future.vercel.app/kb"}'
+```
+
+### Ragie MCP (Claude Code)
+
+The Ragie MCP only exposes `retrieve` (read-only). For document management (create, update, delete), use the API directly.
+
+### Re-syncing After Notion Edits
+
+1. **Edit content** in Notion FAQ Database (not Operations pages!)
+2. **Trigger ISR revalidation** (automatic via webhook, or manual):
+   ```bash
+   curl -X POST "https://one-possible-future.vercel.app/api/revalidate?secret=YOUR_SECRET&type=faq"
+   ```
+3. **Re-ingest to Ragie** (manual - no auto-sync):
+   ```bash
+   curl -X PUT -H "Authorization: Bearer YOUR_RAGIE_KEY" \
+     "https://api.ragie.ai/documents/16248a9c-bcbf-4a65-9456-402e6bfd2dd0/url" \
+     -d '{"url": "https://one-possible-future.vercel.app/kb"}'
+   ```
+
+---
+
+## IMPORTANT: Notion Content Architecture
+
+### Two Parallel Systems (Potential Duplication!)
+
+There are TWO places where KB content exists in Notion:
+
+| System | Purpose | Powers |
+|--------|---------|--------|
+| **FAQ Articles Database** | Production content | `/kb` → Ragie, `/faq/*`, `/raw/*` |
+| **Operations Pages** | Internal reference/drafts? | Nothing (orphaned) |
+
+**FAQ Articles Database ID:** `f0502a707e3b4d1cb6d3410102d05cee`
+**Operations Page ID:** `2c8bd057a78980c0a7e7cdbf5b34c930`
+
+### Which to Edit?
+
+- **For changes to appear in Ragie:** Edit the FAQ Articles Database
+- **Operations pages** appear to be a parallel/internal copy - edits there won't reach Ragie
+
+### Verifying Content Flow
+
+1. Edit page in FAQ Articles Database
+2. Visit `https://one-possible-future.vercel.app/kb` to verify changes appear
+3. Re-ingest to Ragie via API
+4. Test retrieval via Ragie MCP
+
+---
+
+## Ragie Retrieval Optimization
+
+### Recommended Query Parameters
+
+```javascript
+{
+  "topK": 6,        // Balance coverage vs noise
+  "rerank": true,   // Filter to most relevant chunks
+  "recencyBias": false  // Content is stable, not time-sensitive
+}
+```
+
+### Query Formulation Tips
+
+The FAQ content uses `## Question?` headings. Queries matching this format retrieve better:
+
+| Query Style | Quality |
+|-------------|---------|
+| "delivery cost Sydney" | Good |
+| "How much is delivery to Sydney?" | Excellent |
+
+### Content Optimization (Done Dec 2025)
+
+- Consolidated repetitive weight Q&As
+- Removed duplicate trial/swap mentions (link to dedicated page instead)
+- Trimmed verbose FAQ sections (flippable, cover, bouncy)
+- Deduplicated Aurora vs Cloud across pages

@@ -28,3 +28,4 @@ pnpm-lock.yaml
 .git
 .claude.env.vercel
 .env.vercel
+.data/
