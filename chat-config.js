@@ -198,12 +198,12 @@ So which one?`,
   // ─────────────────────────────────────────────────────────────────────────
   LIFETIME_PITCH: `Why {productName} lasts:
 • **Latex doesn't dip** - never seen it fail
-• **Springs don't wear out** - foam fails, not springs
+• **Springs don't wear out** - the comfort layer above them can, but that's usually plastic foam or memory foam, not latex
 • **Adjust firmness forever** - not just during trial
-• **Replace parts, not the mattress** - swap springs or latex
-• **Matched to your weight** - proper support day one
+• **Replace parts, not the mattress** - swap springs or latex anytime
+• **Matched to your weight** - proper support from day one
 
-Most replace every 7-10 years. With us, just replace parts.`,
+Most mattresses need replacing every 7-10 years. With us, just replace parts as needed.`,
 
   // ─────────────────────────────────────────────────────────────────────────
   // READY_TO_ORDER - Just browsing, link to website

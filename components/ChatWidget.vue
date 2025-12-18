@@ -18,6 +18,9 @@
     <!-- Chat Drawer -->
     <Transition name="slide">
       <div v-if="isOpen" class="chat-drawer">
+        <!-- Themed background layer -->
+        <div class="chat-drawer-bg" :style="bgPatternStyle"></div>
+
         <!-- Header -->
         <div class="chat-header">
           <div class="chat-header-info">
@@ -47,9 +50,14 @@
             <div class="chat-bubble" v-html="formatMessage(msg.content)"></div>
           </div>
 
-          <!-- Loading indicator with thinking phrases -->
+          <!-- Loading indicator with Zzz animation and thinking phrases -->
           <div v-if="isLoading" class="chat-message chat-message--assistant">
             <div class="chat-bubble chat-bubble--loading">
+              <div class="zzz-container">
+                <span class="zzz zzz-1">z</span>
+                <span class="zzz zzz-2">z</span>
+                <span class="zzz zzz-3">z</span>
+              </div>
               <span class="thinking-text">{{ currentThinkingPhrase }}</span>
             </div>
           </div>
@@ -126,7 +134,7 @@
 import { ref, computed, watch, onMounted, onUnmounted, nextTick } from 'vue'
 import { useChat } from '~/composables/useChat'
 import { POPUP } from '~/chat-config.js'
-import { THEMES, ACTIVE_THEME, getThemeCSS } from '~/chat-themes.js'
+import { THEMES, PATTERNS, ACTIVE_THEME, getThemeCSS } from '~/chat-themes.js'
 import ChatBubble from '~/components/ChatBubble.vue'
 import ChatPopup from '~/components/ChatPopup.vue'
 
@@ -208,6 +216,21 @@ const currentThinkingPhrase = computed(() => currentPhrases.value[thinkingPhrase
 const selectedTheme = ref(ACTIVE_THEME)
 const themeOptions = Object.values(THEMES)
 const themeStyles = computed(() => getThemeCSS(THEMES[selectedTheme.value]))
+
+// Computed background style for the geometric pattern (CSS vars can't be used in data URLs)
+const currentTheme = computed(() => THEMES[selectedTheme.value])
+const bgPatternStyle = computed(() => {
+  const theme = currentTheme.value
+  const patternColor = theme.colors.bgPatternColor || '%237249C3'
+  const baseColor = theme.colors.bgBase || 'rgba(250, 248, 255, 0.95)'
+  const patternType = theme.pattern || 'waves'
+  const pattern = PATTERNS[patternType]
+
+  return {
+    background: `${pattern.svg(patternColor)} repeat, ${baseColor}`,
+    backgroundSize: `${pattern.size}, auto`
+  }
+})
 
 // Handle missing avatar image
 function handleAvatarError(e) {
@@ -343,17 +366,62 @@ onUnmounted(() => {
   max-width: calc(100vw - 40px);
   height: 700px;
   max-height: calc(100vh - 40px);
-  background: var(--chat-drawer-bg, white);
+  background: transparent;
   border-radius: var(--chat-drawer-radius, 16px);
-  box-shadow: var(--chat-drawer-shadow, 0 25px 50px -12px rgba(0, 0, 0, 0.25));
-  border: var(--chat-drawer-border, none);
+  box-shadow: none;
+  border: none;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow: visible;
+}
+
+/* Faded background layer - sits behind content */
+.chat-drawer-bg {
+  position: absolute;
+  inset: 0;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: inherit;
+  z-index: 0;
+  pointer-events: none;
+
+  /* Faded edges vignette effect */
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 20px,
+    black calc(100% - 20px),
+    transparent 100%
+  ),
+  linear-gradient(
+    to right,
+    transparent 0%,
+    black 20px,
+    black calc(100% - 20px),
+    transparent 100%
+  );
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 20px,
+    black calc(100% - 20px),
+    transparent 100%
+  ),
+  linear-gradient(
+    to right,
+    transparent 0%,
+    black 20px,
+    black calc(100% - 20px),
+    transparent 100%
+  );
+  mask-composite: intersect;
 }
 
 /* Header */
 .chat-header {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -439,6 +507,8 @@ onUnmounted(() => {
 
 /* Messages */
 .chat-messages {
+  position: relative;
+  z-index: 1;
   flex: 1;
   overflow-y: auto;
   padding: 12px;
@@ -524,6 +594,56 @@ onUnmounted(() => {
 /* Loading / Thinking */
 .chat-bubble--loading {
   padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.zzz-container {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+  font-weight: 600;
+  font-style: italic;
+}
+
+.zzz {
+  display: inline-block;
+  opacity: 0;
+  animation: float-zzz 1.8s ease-in-out infinite;
+  font-size: 0.9rem;
+}
+
+.zzz-1 {
+  animation-delay: 0s;
+  font-size: 0.75rem;
+}
+
+.zzz-2 {
+  animation-delay: 0.3s;
+  font-size: 0.9rem;
+}
+
+.zzz-3 {
+  animation-delay: 0.6s;
+  font-size: 1.1rem;
+}
+
+@keyframes float-zzz {
+  0% {
+    opacity: 0;
+    transform: translateY(0) rotate(0deg);
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-12px) rotate(-10deg);
+  }
 }
 
 .thinking-text {
@@ -539,12 +659,13 @@ onUnmounted(() => {
 
 /* Quick Reply Buttons */
 .chat-quick-replies {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
   padding: 8px 12px;
-  border-top: 1px solid #f0f0f0;
-  background: var(--chat-drawer-bg, #f7f7f7);
+  background: transparent;
 }
 
 .quick-reply-btn {
@@ -571,11 +692,12 @@ onUnmounted(() => {
 
 /* Input */
 .chat-input-form {
+  position: relative;
+  z-index: 1;
   display: flex;
   gap: 8px;
   padding: 10px 12px;
-  border-top: 1px solid #e5e7eb;
-  background: white;
+  background: transparent;
 }
 
 .chat-input {
@@ -635,6 +757,8 @@ onUnmounted(() => {
 
 /* Footer */
 .chat-footer {
+  position: relative;
+  z-index: 1;
   display: flex;
   justify-content: space-between;
   align-items: center;
