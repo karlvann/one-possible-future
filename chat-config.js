@@ -227,9 +227,10 @@ Not quite right? We fix it:
 • 2 free component swaps to dial in firmness
 • Swap to different model anytime
 
-Still not happy?
-• Return cost: $90 + pickup ({deliveryCost}) = {returnCost}
-• You'd get back: {refundAmount}
+Your risk?
+{returnCost} to try it for 4 months ($90 processing + {deliveryCost} pickup)
+
+If 4 months isn't enough, you can extend for free - just let us know :)
 
 Want this emailed?`,
 
