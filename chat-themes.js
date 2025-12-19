@@ -132,8 +132,8 @@ export const PATTERNS = {
     size: '40px 40px'
   },
   dots: {
-    svg: (color) => `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='1.5' fill='${color}' opacity='0.15'/%3E%3C/svg%3E")`,
-    size: '24px 24px'
+    svg: (color) => `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='12' cy='18' r='1' fill='${color}' opacity='0.25'/%3E%3Ccircle cx='55' cy='8' r='1.8' fill='${color}' opacity='0.3'/%3E%3Ccircle cx='85' cy='32' r='0.8' fill='${color}' opacity='0.18'/%3E%3Ccircle cx='28' cy='45' r='1.4' fill='${color}' opacity='0.28'/%3E%3Ccircle cx='72' cy='58' r='1' fill='${color}' opacity='0.2'/%3E%3Ccircle cx='8' cy='72' r='1.6' fill='${color}' opacity='0.32'/%3E%3Ccircle cx='45' cy='85' r='0.7' fill='${color}' opacity='0.15'/%3E%3Ccircle cx='90' cy='78' r='1.2' fill='${color}' opacity='0.25'/%3E%3Ccircle cx='38' cy='25' r='0.5' fill='${color}' opacity='0.12'/%3E%3Ccircle cx='65' cy='38' r='0.6' fill='${color}' opacity='0.14'/%3E%3Ccircle cx='18' cy='92' r='1.1' fill='${color}' opacity='0.22'/%3E%3Ccircle cx='78' cy='12' r='0.9' fill='${color}' opacity='0.2'/%3E%3C/svg%3E")`,
+    size: '100px 100px'
   },
   grid: {
     svg: (color) => `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath d='M0 15 H30 M15 0 V30' fill='none' stroke='${color}' stroke-width='0.4' opacity='0.1'/%3E%3C/svg%3E")`,
