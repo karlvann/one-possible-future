@@ -385,34 +385,42 @@ onUnmounted(() => {
   z-index: 0;
   pointer-events: none;
 
-  /* Faded edges vignette effect */
+  /* Faded edges vignette effect - 20px inset with 10px fade */
   -webkit-mask-image: linear-gradient(
     to bottom,
-    transparent 0%,
-    black 20px,
-    black calc(100% - 20px),
+    transparent 0px,
+    transparent 20px,
+    black 30px,
+    black calc(100% - 30px),
+    transparent calc(100% - 20px),
     transparent 100%
   ),
   linear-gradient(
     to right,
-    transparent 0%,
-    black 20px,
-    black calc(100% - 20px),
+    transparent 0px,
+    transparent 20px,
+    black 30px,
+    black calc(100% - 30px),
+    transparent calc(100% - 20px),
     transparent 100%
   );
   -webkit-mask-composite: source-in;
   mask-image: linear-gradient(
     to bottom,
-    transparent 0%,
-    black 20px,
-    black calc(100% - 20px),
+    transparent 0px,
+    transparent 20px,
+    black 30px,
+    black calc(100% - 30px),
+    transparent calc(100% - 20px),
     transparent 100%
   ),
   linear-gradient(
     to right,
-    transparent 0%,
-    black 20px,
-    black calc(100% - 20px),
+    transparent 0px,
+    transparent 20px,
+    black 30px,
+    black calc(100% - 30px),
+    transparent calc(100% - 20px),
     transparent 100%
   );
   mask-composite: intersect;
