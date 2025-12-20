@@ -15,12 +15,12 @@
       @click="openChat"
     />
 
+    <!-- Overlay - blocks page interaction, click to close -->
+    <div v-if="isOpen" class="chat-overlay" @click="closeChat"></div>
+
     <!-- Chat Drawer -->
     <Transition name="slide">
       <div v-if="isOpen" class="chat-drawer">
-        <!-- Themed background layer -->
-        <div class="chat-drawer-bg" :style="bgPatternStyle"></div>
-
         <!-- Header -->
         <div class="chat-header">
           <div class="chat-header-info">
@@ -29,14 +29,20 @@
             </div>
             <div class="chat-header-text">
               <h3 class="chat-title">Chat with Karl's Brain</h3>
-              <span class="chat-status">Every mattress question he's ever answered, searchable</span>
             </div>
           </div>
-          <button class="chat-close" @click="closeChat" aria-label="Close chat">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M18 6L6 18M6 6l12 12" />
-            </svg>
-          </button>
+          <div class="chat-header-actions">
+            <button class="chat-header-btn" @click="clearChat" aria-label="Clear chat">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14" />
+              </svg>
+            </button>
+            <button class="chat-header-btn" @click="closeChat" aria-label="Close chat">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 6L6 18M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
         </div>
 
         <!-- Messages -->
@@ -50,15 +56,15 @@
             <div class="chat-bubble" v-html="formatMessage(msg.content)"></div>
           </div>
 
-          <!-- Loading indicator with Zzz animation and thinking phrases -->
+          <!-- Loading indicator with thinking phrase and bouncing zzz -->
           <div v-if="isLoading" class="chat-message chat-message--assistant">
             <div class="chat-bubble chat-bubble--loading">
-              <div class="zzz-container">
-                <span class="zzz zzz-1">z</span>
-                <span class="zzz zzz-2">z</span>
-                <span class="zzz zzz-3">z</span>
-              </div>
               <span class="thinking-text">{{ currentThinkingPhrase }}</span>
+              <span class="zzz-dots">
+                <span class="zzz-dot">z</span>
+                <span class="zzz-dot">z</span>
+                <span class="zzz-dot">z</span>
+              </span>
             </div>
           </div>
         </div>
@@ -97,23 +103,6 @@
             </svg>
           </button>
         </form>
-
-        <!-- Footer -->
-        <div class="chat-footer">
-          <span>Powered by Karl's brain</span>
-          <div class="chat-footer-actions">
-            <select
-              v-model="selectedTheme"
-              class="chat-theme-select"
-              aria-label="Select theme"
-            >
-              <option v-for="theme in themeOptions" :key="theme.id" :value="theme.id">
-                {{ theme.name }}
-              </option>
-            </select>
-            <button @click="clearChat" class="chat-clear">Clear chat</button>
-          </div>
-        </div>
       </div>
     </Transition>
   </div>
@@ -134,7 +123,7 @@
 import { ref, computed, watch, onMounted, onUnmounted, nextTick } from 'vue'
 import { useChat } from '~/composables/useChat'
 import { POPUP } from '~/chat-config.js'
-import { THEMES, PATTERNS, ACTIVE_THEME, getThemeCSS } from '~/chat-themes.js'
+import { THEME, getThemeCSS } from '~/chat-themes.js'
 import ChatBubble from '~/components/ChatBubble.vue'
 import ChatPopup from '~/components/ChatPopup.vue'
 
@@ -213,24 +202,7 @@ const currentPhrases = computed(() => loadingType.value === 'quick' ? QUICK_PHRA
 const currentThinkingPhrase = computed(() => currentPhrases.value[thinkingPhraseIndex.value % currentPhrases.value.length])
 
 // Theme
-const selectedTheme = ref(ACTIVE_THEME)
-const themeOptions = Object.values(THEMES)
-const themeStyles = computed(() => getThemeCSS(THEMES[selectedTheme.value]))
-
-// Computed background style for the geometric pattern (CSS vars can't be used in data URLs)
-const currentTheme = computed(() => THEMES[selectedTheme.value])
-const bgPatternStyle = computed(() => {
-  const theme = currentTheme.value
-  const patternColor = theme.colors.bgPatternColor || '%237249C3'
-  const baseColor = theme.colors.bgBase || 'rgba(250, 248, 255, 0.95)'
-  const patternType = theme.pattern || 'waves'
-  const pattern = PATTERNS[patternType]
-
-  return {
-    background: `${pattern.svg(patternColor)} repeat, ${baseColor}`,
-    backgroundSize: `${pattern.size}, auto`
-  }
-})
+const themeStyles = computed(() => getThemeCSS())
 
 // Handle missing avatar image
 function handleAvatarError(e) {
@@ -349,12 +321,22 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap');
+
 .chat-widget {
   position: fixed;
   bottom: 20px;
   right: 20px;
   z-index: 9999;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Overlay - blocks page scroll/interaction */
+.chat-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  cursor: pointer;
 }
 
 /* Drawer */
@@ -366,44 +348,49 @@ onUnmounted(() => {
   max-width: calc(100vw - 40px);
   height: 700px;
   max-height: calc(100vh - 40px);
-  background: transparent;
+  background: var(--chat-drawer-bg, #ffffff);
   border-radius: var(--chat-drawer-radius, 16px);
-  box-shadow: none;
-  border: none;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
   display: flex;
   flex-direction: column;
   overflow: visible;
-}
-
-/* Faded background layer - sits behind content */
-.chat-drawer-bg {
-  position: absolute;
-  inset: 0;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border-radius: inherit;
-  z-index: 0;
-  pointer-events: none;
+  z-index: 9999;
 }
 
 /* Header */
 .chat-header {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 12px 16px;
+  color: var(--chat-header-text);
+  border-bottom: var(--chat-header-border, none);
+  overflow: visible;
+}
+
+/* Brushstroke background - extends beyond header */
+.chat-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: -20px;
   background-color: var(--chat-header-bg);
   background-image: var(--chat-header-bg-image, none);
   background-size: var(--chat-header-bg-size, auto);
   background-position: var(--chat-header-bg-position, center);
   background-repeat: no-repeat;
-  color: var(--chat-header-text);
-  border-bottom: var(--chat-header-border, none);
+  border-radius: var(--chat-drawer-radius, 16px) var(--chat-drawer-radius, 16px) 0 0;
+  z-index: 0;
+  pointer-events: none;
 }
 
 .chat-header-info {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -444,32 +431,35 @@ onUnmounted(() => {
 }
 
 .chat-title {
-  font-size: 1rem;
-  font-weight: 600;
+  font-family: 'Permanent Marker', cursive;
+  font-size: 1.25rem;
+  font-weight: 400;
   margin: 0;
   white-space: nowrap;
 }
 
-.chat-status {
-  font-size: 0.7rem;
-  opacity: 0.8;
-  line-height: 1.3;
-  display: block;
+.chat-header-actions {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
-.chat-close {
+.chat-header-btn {
   background: none;
   border: none;
   color: inherit;
   cursor: pointer;
-  padding: 8px;
-  border-radius: 8px;
+  padding: 6px;
+  border-radius: 6px;
   transition: background 0.2s;
-  flex-shrink: 0;
-  margin-left: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.chat-close:hover {
+.chat-header-btn:hover {
   background: rgba(0, 0, 0, 0.1);
 }
 
@@ -479,6 +469,7 @@ onUnmounted(() => {
   z-index: 1;
   flex: 1;
   overflow-y: auto;
+  overscroll-behavior: contain;
   padding: 12px;
   display: flex;
   flex-direction: column;
@@ -563,66 +554,47 @@ onUnmounted(() => {
 .chat-bubble--loading {
   padding: 12px 16px;
   display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.zzz-container {
-  display: flex;
   align-items: baseline;
-  gap: 2px;
-  font-weight: 600;
-  font-style: italic;
-}
-
-.zzz {
-  display: inline-block;
-  opacity: 0;
-  animation: float-zzz 1.8s ease-in-out infinite;
-  font-size: 0.9rem;
-}
-
-.zzz-1 {
-  animation-delay: 0s;
-  font-size: 0.75rem;
-}
-
-.zzz-2 {
-  animation-delay: 0.3s;
-  font-size: 0.9rem;
-}
-
-.zzz-3 {
-  animation-delay: 0.6s;
-  font-size: 1.1rem;
-}
-
-@keyframes float-zzz {
-  0% {
-    opacity: 0;
-    transform: translateY(0) rotate(0deg);
-  }
-  20% {
-    opacity: 1;
-  }
-  80% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(-12px) rotate(-10deg);
-  }
+  gap: 6px;
 }
 
 .thinking-text {
   font-style: italic;
-  opacity: 0.85;
-  animation: fade-pulse 2s ease-in-out infinite;
 }
 
-@keyframes fade-pulse {
-  0%, 100% { opacity: 0.6; }
-  50% { opacity: 1; }
+.zzz-dots {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 1px;
+}
+
+.zzz-dot {
+  display: inline-block;
+  font-size: 0.6rem;
+  font-weight: 600;
+  font-style: italic;
+  animation: bounce-zzz 1.4s ease-in-out infinite;
+}
+
+.zzz-dot:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.zzz-dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.zzz-dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes bounce-zzz {
+  0%, 60%, 100% {
+    transform: translateY(0);
+  }
+  30% {
+    transform: translateY(-4px);
+  }
 }
 
 /* Quick Reply Buttons */
@@ -721,66 +693,6 @@ onUnmounted(() => {
   background: var(--chat-send-disabled-bg, #d1d5db);
   color: var(--chat-send-disabled-text, #9ca3af);
   cursor: not-allowed;
-}
-
-/* Footer */
-.chat-footer {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 6px 12px;
-  font-size: 0.7rem;
-  color: var(--chat-footer-text, #9ca3af);
-  background-color: var(--chat-footer-bg, transparent);
-  background-image: var(--chat-footer-bg-image, none);
-  background-size: var(--chat-footer-bg-size, auto);
-  background-position: var(--chat-footer-bg-position, center);
-  background-repeat: no-repeat;
-  border-top: 1px solid #f3f4f6;
-}
-
-.chat-clear {
-  background: none;
-  border: none;
-  color: var(--chat-footer-text, #9ca3af);
-  cursor: pointer;
-  font-size: 0.7rem;
-  padding: 4px 6px;
-  border-radius: 4px;
-  transition: color 0.2s, background 0.2s;
-}
-
-.chat-clear:hover {
-  color: #6b7280;
-  background: var(--chat-clear-hover, #f3f4f6);
-}
-
-.chat-footer-actions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.chat-theme-select {
-  background: transparent;
-  border: 1px solid #d1d5db;
-  border-radius: 4px;
-  color: var(--chat-footer-text, #9ca3af);
-  font-size: 0.75rem;
-  padding: 2px 6px;
-  cursor: pointer;
-  outline: none;
-}
-
-.chat-theme-select:hover {
-  border-color: #9ca3af;
-}
-
-.chat-theme-select option {
-  background: #fff;
-  color: #333;
 }
 
 /* Animations */

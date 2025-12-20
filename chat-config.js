@@ -145,9 +145,7 @@ export const SCRIPT = {
   // ─────────────────────────────────────────────────────────────────────────
   // INTRO - First message when chat opens
   // ─────────────────────────────────────────────────────────────────────────
-  INTRO: `Years of fitting people to mattresses, now instant. Hmm, where to start... I know!
-
-What's your weight? (e.g. 90 for 90kg)`,
+  INTRO: `I've wired an AI to my brain - ask me anything about mattresses, or just tell me your weight (e.g. 90) and I'll recommend the right firmness.`,
 
   // ─────────────────────────────────────────────────────────────────────────
   // WEIGHT_RECEIVED - After customer provides their weight

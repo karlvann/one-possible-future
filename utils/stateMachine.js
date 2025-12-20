@@ -204,7 +204,7 @@ function handleWeightReceived(input, context) {
     return {
       nextState: STATES.WEIGHT_RECEIVED, // Stay in same state
       response: getResponse('LEARN_FIRMNESS', context),
-      context,
+      context: { ...context, learnedFirmness: true },
       needsAI: false
     }
   }
@@ -247,7 +247,7 @@ function handleSizeSelected(input, context) {
     return {
       nextState: STATES.SIZE_SELECTED, // Stay in same state
       response: getResponse('LEARN_PRODUCTS', context),
-      context,
+      context: { ...context, learnedProducts: true },
       needsAI: false
     }
   }
@@ -255,9 +255,11 @@ function handleSizeSelected(input, context) {
   // Check for product selection
   for (const [productId, pattern] of Object.entries(PRODUCT_PATTERNS)) {
     if (pattern.test(input)) {
-      const selectedProduct = context.products.find(p => p.id === productId)
+      // Look up product directly from config (context.products may be missing after page reload)
+      const product = PRODUCTS[productId]
 
-      if (selectedProduct) {
+      if (product) {
+        const selectedProduct = { id: productId, ...product }
         const newContext = {
           ...context,
           selectedProduct
@@ -275,7 +277,7 @@ function handleSizeSelected(input, context) {
 
   // Check for price-related selection
   if (/cheap|budget|affordable/i.test(input)) {
-    const selectedProduct = context.products.find(p => p.id === 'cooper')
+    const selectedProduct = { id: 'cooper', ...PRODUCTS.cooper }
     const newContext = { ...context, selectedProduct }
     return {
       nextState: STATES.PRODUCT_SELECTED,
@@ -286,7 +288,7 @@ function handleSizeSelected(input, context) {
   }
 
   if (/middle|medium|popular/i.test(input)) {
-    const selectedProduct = context.products.find(p => p.id === 'aurora')
+    const selectedProduct = { id: 'aurora', ...PRODUCTS.aurora }
     const newContext = { ...context, selectedProduct }
     return {
       nextState: STATES.PRODUCT_SELECTED,
@@ -297,7 +299,7 @@ function handleSizeSelected(input, context) {
   }
 
   if (/best|top|premium|expensive|side.*sleep/i.test(input)) {
-    const selectedProduct = context.products.find(p => p.id === 'cloud')
+    const selectedProduct = { id: 'cloud', ...PRODUCTS.cloud }
     const newContext = { ...context, selectedProduct }
     return {
       nextState: STATES.PRODUCT_SELECTED,

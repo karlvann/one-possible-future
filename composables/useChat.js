@@ -52,20 +52,24 @@ export function useChat() {
 
     // Handle dynamic size buttons with firmness-specific "Why X?" button
     if (replies === 'DYNAMIC_SIZES' && context.firmness) {
-      return [
+      const buttons = [
         { label: 'King', value: 'king' },
         { label: 'Queen', value: 'queen' },
         { label: 'Double', value: 'double' },
         { label: "K'Single", value: 'kingSingle' },
-        { label: 'Single', value: 'single' },
-        { label: `Why ${context.firmness.name}?`, value: 'learn_firmness' }
+        { label: 'Single', value: 'single' }
       ]
+      // Only show "Why X?" if not already clicked
+      if (!context.learnedFirmness) {
+        buttons.push({ label: `Why ${context.firmness.name}?`, value: 'learn_firmness' })
+      }
+      return buttons
     }
 
     // Handle dynamic product buttons with size-specific prices
     if (replies === 'DYNAMIC_PRODUCTS' && context.selectedSize) {
       const size = context.selectedSize
-      return [
+      const buttons = [
         {
           label: `Cooper ${PRODUCTS.cooper.prices[size].formatted}`,
           value: 'cooper'
@@ -77,12 +81,13 @@ export function useChat() {
         {
           label: `Cloud ${PRODUCTS.cloud.prices[size].formatted}`,
           value: 'cloud'
-        },
-        {
-          label: "What's the difference?",
-          value: 'learn_products'
         }
       ]
+      // Only show "What's the difference?" if not already clicked
+      if (!context.learnedProducts) {
+        buttons.push({ label: "What's the difference?", value: 'learn_products' })
+      }
+      return buttons
     }
 
     return Array.isArray(replies) ? replies : []
