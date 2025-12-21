@@ -20,7 +20,7 @@
 
     <!-- Chat Drawer -->
     <Transition name="slide">
-      <div v-if="isOpen" class="chat-drawer">
+      <div v-if="isOpen" ref="drawerRef" class="chat-drawer">
         <!-- Header -->
         <div class="chat-header">
           <div class="chat-header-info">
@@ -56,14 +56,14 @@
             <div class="chat-bubble" v-html="formatMessage(msg.content)"></div>
           </div>
 
-          <!-- Loading indicator with thinking phrase and bouncing zzz -->
+          <!-- Loading indicator with thinking phrase and typing dots -->
           <div v-if="isLoading" class="chat-message chat-message--assistant">
             <div class="chat-bubble chat-bubble--loading">
               <span class="thinking-text">{{ currentThinkingPhrase }}</span>
-              <span class="zzz-dots">
-                <span class="zzz-dot">z</span>
-                <span class="zzz-dot">z</span>
-                <span class="zzz-dot">z</span>
+              <span class="typing-dots">
+                <span class="typing-dot"></span>
+                <span class="typing-dot"></span>
+                <span class="typing-dot"></span>
               </span>
             </div>
           </div>
@@ -183,6 +183,12 @@ const {
 
 // Handle quick reply button click
 function handleQuickReply(reply) {
+  // If button has a link, open it in new tab
+  if (reply.link) {
+    window.open(reply.link, '_blank')
+    return
+  }
+
   // Send the label for display, but the value for processing
   // For "learn more" buttons, show the label; for others, show the value
   const displayText = reply.value.startsWith('learn_') ? reply.label : reply.value
@@ -307,15 +313,46 @@ watch(isLoading, (loading) => {
   }
 })
 
+// Handle mobile keyboard - keep drawer in viewport
+const drawerRef = ref(null)
+
+function handleViewportResize() {
+  if (!drawerRef.value || !window.visualViewport) return
+
+  // Only apply mobile keyboard handling on small screens
+  if (window.innerWidth > 480) return
+
+  const viewport = window.visualViewport
+  // Set drawer height to visual viewport height (excludes keyboard)
+  drawerRef.value.style.height = `${viewport.height}px`
+  // Keep drawer at top of visual viewport
+  drawerRef.value.style.top = `${viewport.offsetTop}px`
+  // Ensure it stays full width from left edge
+  drawerRef.value.style.left = '0'
+  drawerRef.value.style.right = '0'
+  drawerRef.value.style.width = '100%'
+}
+
 // Start popup timer on mount
 onMounted(() => {
   startPopupTimer(props.popupDelay)
+
+  // Listen for viewport changes (keyboard open/close)
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', handleViewportResize)
+    window.visualViewport.addEventListener('scroll', handleViewportResize)
+  }
 })
 
-// Cleanup interval on unmount
+// Cleanup on unmount
 onUnmounted(() => {
   if (thinkingInterval.value) {
     clearInterval(thinkingInterval.value)
+  }
+
+  if (window.visualViewport) {
+    window.visualViewport.removeEventListener('resize', handleViewportResize)
+    window.visualViewport.removeEventListener('scroll', handleViewportResize)
   }
 })
 </script>
@@ -364,7 +401,7 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 16px;
+  padding: 8px 12px;
   color: var(--chat-header-text);
   border-bottom: var(--chat-header-border, none);
   overflow: visible;
@@ -377,7 +414,7 @@ onUnmounted(() => {
   top: 0;
   left: 0;
   right: 0;
-  bottom: -20px;
+  bottom: -10px;
   background-color: var(--chat-header-bg);
   background-image: var(--chat-header-bg-image, none);
   background-size: var(--chat-header-bg-size, auto);
@@ -399,9 +436,9 @@ onUnmounted(() => {
 }
 
 .chat-avatar {
-  width: 40px;
-  height: 40px;
-  min-width: 40px;
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
   border-radius: 50%;
   overflow: hidden;
   border: var(--chat-avatar-border-width, 2px) solid var(--chat-avatar-border);
@@ -432,7 +469,7 @@ onUnmounted(() => {
 
 .chat-title {
   font-family: 'Permanent Marker', cursive;
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   font-weight: 400;
   margin: 0;
   white-space: nowrap;
@@ -474,12 +511,6 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   gap: 8px;
-}
-
-/* Push messages to bottom when few messages, but allow scroll when many */
-.chat-messages::before {
-  content: '';
-  flex: 1;
 }
 
 .chat-message {
@@ -562,33 +593,35 @@ onUnmounted(() => {
   font-style: italic;
 }
 
-.zzz-dots {
+.typing-dots {
   display: inline-flex;
-  align-items: baseline;
-  gap: 1px;
+  align-items: center;
+  gap: 4px;
+  margin-left: 2px;
 }
 
-.zzz-dot {
-  display: inline-block;
-  font-size: 0.6rem;
-  font-weight: 600;
-  font-style: italic;
-  animation: bounce-zzz 1.4s ease-in-out infinite;
+.typing-dot {
+  width: 6px;
+  height: 6px;
+  background: currentColor;
+  border-radius: 50%;
+  opacity: 0.6;
+  animation: typing-bounce 1.4s ease-in-out infinite;
 }
 
-.zzz-dot:nth-child(1) {
+.typing-dot:nth-child(1) {
   animation-delay: 0s;
 }
 
-.zzz-dot:nth-child(2) {
+.typing-dot:nth-child(2) {
   animation-delay: 0.2s;
 }
 
-.zzz-dot:nth-child(3) {
+.typing-dot:nth-child(3) {
   animation-delay: 0.4s;
 }
 
-@keyframes bounce-zzz {
+@keyframes typing-bounce {
   0%, 60%, 100% {
     transform: translateY(0);
   }
@@ -635,6 +668,7 @@ onUnmounted(() => {
   position: relative;
   z-index: 1;
   display: flex;
+  align-items: center;
   gap: 8px;
   padding: 10px 12px;
   background: transparent;
@@ -710,17 +744,67 @@ onUnmounted(() => {
 /* Mobile responsive */
 @media (max-width: 480px) {
   .chat-drawer {
-    width: 100%;
-    height: 100%;
-    max-height: 100%;
-    bottom: 0;
+    position: fixed;
+    top: 0;
+    left: 0;
     right: 0;
+    bottom: 0;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 100%;
+    max-height: none;
     border-radius: 0;
+    overflow: hidden;
   }
 
   .chat-widget {
     bottom: 16px;
     right: 16px;
+  }
+
+  /* Smaller title on mobile to prevent overlap with icons */
+  .chat-title {
+    font-size: 0.95rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* More space between title and action buttons */
+  .chat-header-info {
+    margin-right: 8px;
+  }
+
+  /* Ensure action buttons don't get pushed off */
+  .chat-header-actions {
+    flex-shrink: 0;
+  }
+
+  /* Header stays fixed at top even with keyboard */
+  .chat-header {
+    flex-shrink: 0;
+    min-height: 56px;
+  }
+
+  /* Messages area shrinks to fit available space */
+  .chat-messages {
+    min-height: 0;
+    flex: 1 1 0;
+  }
+
+  /* Input area stays at bottom */
+  .chat-input-form {
+    flex-shrink: 0;
+  }
+
+  .chat-quick-replies {
+    flex-shrink: 0;
+    max-height: 120px;
+    overflow-y: auto;
+  }
+
+  /* Prevent iOS keyboard from pushing content */
+  .chat-input {
+    font-size: 16px; /* Prevents iOS zoom on focus */
   }
 }
 </style>

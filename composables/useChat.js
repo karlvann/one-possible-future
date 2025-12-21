@@ -40,9 +40,9 @@ export function useChat() {
       [STATES.PRODUCT_SELECTED]: 'PRODUCT_SELECTED',
       [STATES.LIFETIME_PITCH]: 'LIFETIME_PITCH',
       [STATES.SHOW_QUOTE]: 'SHOW_QUOTE',
-      [STATES.ASK_PHONE]: 'ASK_PHONE',
-      [STATES.FREEFORM]: 'FREEFORM',
-      [STATES.QUOTE_SENT]: 'FREEFORM'
+      [STATES.QUOTE_SENT]: 'QUOTE_SENT',
+      [STATES.QUOTE_REFINED]: 'QUOTE_REFINED',
+      [STATES.FREEFORM]: 'FREEFORM'
     }
 
     const replyKey = stateToReplies[currentState.value]
@@ -148,6 +148,11 @@ export function useChat() {
       await saveQuoteToAPI()
     }
 
+    // Check if we just transitioned to QUOTE_REFINED - update with refinement data
+    if (result.nextState === STATES.QUOTE_REFINED) {
+      await updateQuoteRefinement()
+    }
+
     if (result.needsAI) {
       // Off-script: need to call Claude API (deep search)
       await handleAIResponse(userMessage, result.hint)
@@ -178,6 +183,9 @@ export function useChat() {
 
   /**
    * Handle AI response for off-script questions
+   * Uses different endpoints based on chatMode:
+   * - 'full': /api/chat/scripted (entire KB context)
+   * - 'fast': /api/chat/fast (Ragie RAG retrieval)
    */
   async function handleAIResponse(userMessage, hint = '') {
     isLoading.value = true
@@ -281,7 +289,7 @@ export function useChat() {
       const product = PRODUCTS[context.selectedProduct?.id]
       const sizeData = product?.prices?.[context.selectedSize]
 
-      await $fetch('/api/quote/preview', {
+      const response = await $fetch('/api/quote/preview', {
         method: 'POST',
         body: {
           email: context.email,
@@ -304,10 +312,41 @@ export function useChat() {
         }
       })
 
-      console.log('[Chat] Quote saved to API')
+      // Store quote ID in context for refinement/checkout
+      if (response.quoteId) {
+        context.quoteId = response.quoteId
+        context.checkoutUrl = response.checkoutUrl
+      }
+
+      console.log('[Chat] Quote saved to API:', response.quoteId)
     } catch (error) {
       console.error('[Chat] Failed to save quote:', error)
       // Don't block the flow if this fails
+    }
+  }
+
+  /**
+   * Update quote with refinement data (name, address, phone)
+   */
+  async function updateQuoteRefinement() {
+    if (!context.quoteId) {
+      console.warn('[Chat] No quote ID to update')
+      return
+    }
+
+    try {
+      await $fetch(`/api/quote/${context.quoteId}`, {
+        method: 'PATCH',
+        body: {
+          customerName: context.customerName,
+          address: context.deliveryAddress,
+          phone: context.phone
+        }
+      })
+
+      console.log('[Chat] Quote refined:', context.quoteId)
+    } catch (error) {
+      console.error('[Chat] Failed to update quote:', error)
     }
   }
 

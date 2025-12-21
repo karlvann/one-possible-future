@@ -4,7 +4,7 @@
  * Answers questions using the full Ausbeds knowledge base.
  *
  * Flow:
- * 1. Fetch /api/faq/combined (full KB markdown)
+ * 1. Fetch /kb (full KB markdown)
  * 2. Send question + KB to Claude
  * 3. Return answer
  *
@@ -36,7 +36,7 @@ export default defineEventHandler(async (event) => {
 
   try {
     // Fetch the full knowledge base
-    const kbResponse = await $fetch('/api/faq/combined', {
+    const kbResponse = await $fetch('/kb', {
       baseURL: getRequestURL(event).origin
     })
 

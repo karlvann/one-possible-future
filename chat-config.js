@@ -145,7 +145,7 @@ export const SCRIPT = {
   // ─────────────────────────────────────────────────────────────────────────
   // INTRO - First message when chat opens
   // ─────────────────────────────────────────────────────────────────────────
-  INTRO: `I've wired an AI to my brain - ask me anything about mattresses, or just tell me your weight (e.g. 90) and I'll recommend the right firmness.`,
+  INTRO: `I built Ausbeds from scratch. I've fitted 15,000+ people. Now you can tap into all of it - ask anything, or just drop your weight (e.g. 90) and I'll tell you what firmness you need.`,
 
   // ─────────────────────────────────────────────────────────────────────────
   // WEIGHT_RECEIVED - After customer provides their weight
@@ -168,7 +168,7 @@ What size bed?`,
 
 Get it wrong? Swap to any model during trial. Go cheaper, we refund the difference.
 
-Want to know why this could be the last mattress you ever buy?`,
+What would you like to do next?`,
 
   // ─────────────────────────────────────────────────────────────────────────
   // LEARN MORE - Educational tangents (user stays in current state)
@@ -246,9 +246,18 @@ Still weighing it up? Ask anything or pick a topic:`,
 
   QUOTE_SENT: `Done! Quote on its way to {email}.
 
-Take your time - no expiry on the quote.
+Want a more accurate quote? Share your delivery address and I'll lock in the exact price.`,
 
-Curious about anything? Ask or pick a topic:`
+  // Refinement flow - after quote sent
+  REFINE_NAME: `What name should I put on the order?`,
+
+  REFINE_ADDRESS: `What's your delivery address?`,
+
+  REFINE_PHONE: `Phone for delivery updates? (or say 'skip')`,
+
+  QUOTE_REFINED: `Perfect! I've updated your quote with the exact details.
+
+Check your email - there's a **Checkout** button that'll take you straight to payment with everything pre-filled.`
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -264,10 +273,11 @@ export const QUICK_REPLIES = {
   // Plus a "learn more" option
   SIZE_SELECTED: 'DYNAMIC_PRODUCTS',
 
-  // After product selected - yes/no for pitch
+  // After product selected - three paths
   PRODUCT_SELECTED: [
-    { label: 'Why is it the last mattress?', value: 'yes' },
-    { label: 'Take me to the product page', value: 'no' }
+    { label: 'Get my total with delivery', value: 'quote' },
+    { label: 'Why is this the last mattress?', value: 'pitch' },
+    { label: 'Check it out online', value: 'browse' }
   ],
 
   // After pitch - quote or browse
@@ -286,6 +296,18 @@ export const QUICK_REPLIES = {
   // Phone is optional
   ASK_PHONE: [
     { label: 'Prefer not to', value: 'skip' }
+  ],
+
+  // After quote sent - refine or view email
+  QUOTE_SENT: [
+    { label: 'Yes, make it exact', value: 'refine' },
+    { label: 'No, this is fine', value: 'done' },
+    { label: 'View Email', value: 'view_email', link: '/email' }
+  ],
+
+  // After quote refined - view email with checkout link
+  QUOTE_REFINED: [
+    { label: 'View Email', value: 'view_email', link: '/email' }
   ],
 
   // After ready to order - common questions
@@ -351,7 +373,7 @@ export const POPUP = {
   delayMs: 20000,
 
   // Preview text shown in the popup (truncated intro)
-  preview: `Years of fitting people to mattresses, now instant...`,
+  preview: `It's ChatGPT for Ausbeds. Ask anything.`,
 
   // Don't show popup on these pages (partial URL match)
   excludePages: ['/checkout', '/cart', '/thank-you']

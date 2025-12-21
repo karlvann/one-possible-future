@@ -2,7 +2,7 @@
  * Scripted Chat API Endpoint
  *
  * Handles off-script questions by:
- * 1. Fetching the knowledge base from /api/faq/combined
+ * 1. Fetching the knowledge base from /kb
  * 2. Building context-aware system prompt
  * 3. Calling Claude 4.5 for intelligent response
  *
@@ -38,7 +38,7 @@ export default defineEventHandler(async (event) => {
 
   try {
     // Fetch the knowledge base
-    const kbResponse = await $fetch('/api/faq/combined', {
+    const kbResponse = await $fetch('/kb', {
       baseURL: getRequestURL(event).origin
     })
 
@@ -58,7 +58,7 @@ export default defineEventHandler(async (event) => {
         'anthropic-version': '2023-06-01'
       },
       body: {
-        model: 'claude-sonnet-4-20250514',  // Using Sonnet for cost efficiency
+        model: 'claude-opus-4-5-20251101',  // Using Opus 4.5 for best quality
         max_tokens: 1024,
         messages: apiMessages,
         system: systemPrompt
@@ -112,7 +112,8 @@ FIRMNESS GUIDE:
 • 111kg+: Level 10 (Extra Firm)
 
 CONTACT:
-• Showroom: 19 Sydenham Road, Brookvale NSW (by appointment)
+• Marrickville showroom: 136 Victoria Road - Mon-Fri 10am-6pm, Sat-Sun 10am-2pm
+• Willoughby showroom: Unstaffed, open daily 6am-8pm
 • Phone: (02) 8999 3333
 • WhatsApp: +61 450 606 589
 
