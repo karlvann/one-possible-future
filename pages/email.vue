@@ -1,0 +1,420 @@
+<template>
+  <div class="email-preview">
+    <div class="email-toolbar">
+      <span class="toolbar-label">Email Preview</span>
+      <NuxtLink to="/" class="toolbar-link">← Back to site</NuxtLink>
+    </div>
+
+    <div v-if="error" class="email-error">
+      <h2>No Quote Found</h2>
+      <p>Complete the chat flow first to generate a quote.</p>
+      <NuxtLink to="/" class="btn">Go to Homepage</NuxtLink>
+    </div>
+
+    <div v-else class="email-container">
+      <!-- Email Header -->
+      <div class="email-header">
+        <img src="https://cdn.ausbeds.com.au/logo.png" alt="Ausbeds" class="email-logo" />
+      </div>
+
+      <!-- Email Body -->
+      <div class="email-body">
+        <h1>Your {{ quote.product?.name }} {{ quote.sizeName }} Quote</h1>
+
+        <p class="email-intro">
+          Thanks for chatting! Here's your personalised quote based on your {{ quote.weight }}kg body weight.
+        </p>
+
+        <!-- Quote Summary -->
+        <div class="quote-box">
+          <div class="quote-row">
+            <span>{{ quote.product?.name }} {{ quote.sizeName }}</span>
+            <span>{{ quote.product?.priceFormatted }}</span>
+          </div>
+          <div class="quote-row">
+            <span>Delivery to {{ quote.postcode }}</span>
+            <span>{{ quote.delivery?.formatted || '$79' }}</span>
+          </div>
+          <div class="quote-row quote-total">
+            <span>Total</span>
+            <span>{{ quote.totalFormatted }}</span>
+          </div>
+        </div>
+
+        <!-- Risk Section -->
+        <div class="risk-section">
+          <h3>Your Risk</h3>
+          <p>
+            <strong>{{ quote.returnCost }}</strong> to try it for 4 months.
+            <br />
+            <span class="risk-detail">($90 processing + {{ quote.delivery?.formatted || '$79' }} pickup if you return it)</span>
+          </p>
+          <p class="risk-note">
+            If 4 months isn't enough, just let us know — we'll extend for free.
+          </p>
+        </div>
+
+        <!-- The "Last Mattress" Pitch - moved from chat -->
+        <div class="pitch-section">
+          <h2>Why This Could Be The Last Mattress You Ever Buy</h2>
+
+          <div class="pitch-points">
+            <div class="pitch-point">
+              <strong>Latex doesn't dip</strong>
+              <p>We've never seen it fail. Unlike memory foam that develops body impressions, latex bounces back night after night.</p>
+            </div>
+
+            <div class="pitch-point">
+              <strong>Springs don't wear out</strong>
+              <p>The comfort layer above them can — but that's usually plastic foam or memory foam, not latex. Our springs will outlast everything else.</p>
+            </div>
+
+            <div class="pitch-point">
+              <strong>Adjust firmness forever</strong>
+              <p>Not just during trial. If your body changes, your needs change, or you just want to try something different — we adjust it. Forever.</p>
+            </div>
+
+            <div class="pitch-point">
+              <strong>Replace parts, not the mattress</strong>
+              <p>Swap springs or latex anytime. Most mattresses need replacing every 7-10 years. With us, just replace parts as needed.</p>
+            </div>
+
+            <div class="pitch-point">
+              <strong>Matched to your weight</strong>
+              <p>At {{ quote.weight }}kg, you're on our {{ quote.firmness?.name }} springs. 82% of customers in your weight range find this right. For the 18% who don't, we swap until it's right — no charge during trial.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Trial Details -->
+        <div class="trial-section">
+          <h3>What's Included</h3>
+          <ul>
+            <li><strong>4-month trial</strong> (120 nights)</li>
+            <li><strong>2 free component swaps</strong> to dial in firmness</li>
+            <li><strong>Swap to any model</strong> anytime during trial</li>
+            <li><strong>Free firmness adjustments</strong> — not just trial, forever</li>
+          </ul>
+        </div>
+
+        <!-- CTA -->
+        <div class="cta-section">
+          <NuxtLink :to="checkoutUrl" class="btn btn-primary btn-checkout">
+            Checkout Now
+          </NuxtLink>
+          <a :href="`https://ausbeds.com.au/mattresses/${quote.product?.id}`" class="btn btn-secondary">
+            View {{ quote.product?.name }} Online
+          </a>
+          <p class="cta-note">Or reply to this email with any questions</p>
+        </div>
+
+        <!-- Contact -->
+        <div class="contact-section">
+          <p>
+            <strong>Questions?</strong><br />
+            Call (02) 8999 3333<br />
+            WhatsApp +61 450 606 589<br />
+            Visit: 19 Sydenham Road, Brookvale NSW
+          </p>
+        </div>
+      </div>
+
+      <!-- Email Footer -->
+      <div class="email-footer">
+        <p>This quote was generated by Karl's Brain — our AI assistant trained on 15,000+ mattress fittings.</p>
+        <p class="footer-small">Ausbeds · Sydney, Australia · ausbeds.com.au</p>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+definePageMeta({
+  layout: 'raw'
+})
+
+const route = useRoute()
+
+// Fetch quote by ID if provided, otherwise get the latest quote
+const quoteId = route.query.quote
+const endpoint = quoteId ? `/api/quote/${quoteId}` : '/api/quote/preview'
+
+const { data: quote, error } = await useFetch(endpoint)
+
+// Generate checkout URL with quote ID
+const checkoutUrl = computed(() => {
+  const id = quote.value?.quoteId || quoteId
+  return id ? `/checkout?quote=${id}` : '/checkout'
+})
+</script>
+
+<style scoped>
+.email-preview {
+  min-height: 100vh;
+  background: #f3f4f6;
+  padding-bottom: 40px;
+}
+
+.email-toolbar {
+  background: #1E1E1E;
+  color: white;
+  padding: 12px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.toolbar-label {
+  font-weight: 600;
+}
+
+.toolbar-link {
+  color: #97D7ED;
+  text-decoration: none;
+}
+
+.toolbar-link:hover {
+  text-decoration: underline;
+}
+
+.email-error {
+  max-width: 500px;
+  margin: 80px auto;
+  text-align: center;
+  padding: 40px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.email-error h2 {
+  margin: 0 0 12px 0;
+}
+
+.email-error p {
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.email-container {
+  max-width: 600px;
+  margin: 20px auto;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.email-header {
+  background: #FFE5A8;
+  padding: 24px;
+  text-align: center;
+}
+
+.email-logo {
+  height: 40px;
+}
+
+.email-body {
+  padding: 32px;
+}
+
+.email-body h1 {
+  font-size: 1.5rem;
+  margin: 0 0 16px 0;
+  color: #1E1E1E;
+}
+
+.email-intro {
+  color: #666;
+  margin-bottom: 24px;
+}
+
+.quote-box {
+  background: #f9fafb;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.quote-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.quote-row:last-child {
+  border-bottom: none;
+}
+
+.quote-total {
+  font-weight: 700;
+  font-size: 1.125rem;
+  padding-top: 12px;
+  margin-top: 4px;
+  border-top: 2px solid #1E1E1E;
+  border-bottom: none;
+}
+
+.risk-section {
+  background: #EFF6FF;
+  border-left: 4px solid #0857A6;
+  padding: 16px 20px;
+  margin-bottom: 24px;
+  border-radius: 0 8px 8px 0;
+}
+
+.risk-section h3 {
+  margin: 0 0 8px 0;
+  color: #0857A6;
+}
+
+.risk-section p {
+  margin: 0;
+}
+
+.risk-detail {
+  color: #666;
+  font-size: 0.875rem;
+}
+
+.risk-note {
+  margin-top: 8px;
+  font-size: 0.875rem;
+  color: #666;
+}
+
+.pitch-section {
+  margin: 32px 0;
+  padding-top: 24px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.pitch-section h2 {
+  font-size: 1.25rem;
+  margin: 0 0 20px 0;
+  color: #1E1E1E;
+}
+
+.pitch-points {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.pitch-point {
+  padding-left: 16px;
+  border-left: 3px solid #FFE5A8;
+}
+
+.pitch-point strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.pitch-point p {
+  margin: 0;
+  color: #666;
+  font-size: 0.9375rem;
+}
+
+.trial-section {
+  background: #f9fafb;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+}
+
+.trial-section h3 {
+  margin: 0 0 12px 0;
+}
+
+.trial-section ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.trial-section li {
+  margin: 8px 0;
+}
+
+.cta-section {
+  text-align: center;
+  margin: 32px 0;
+}
+
+.btn {
+  display: inline-block;
+  padding: 14px 28px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.btn-primary {
+  background: #0857A6;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #064785;
+}
+
+.btn-checkout {
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-size: 1.125rem;
+  padding: 16px 28px;
+  margin-bottom: 12px;
+}
+
+.btn-secondary {
+  background: #f3f4f6;
+  color: #1E1E1E;
+  border: 1px solid #e5e7eb;
+}
+
+.btn-secondary:hover {
+  background: #e5e7eb;
+}
+
+.cta-note {
+  margin-top: 12px;
+  color: #666;
+  font-size: 0.875rem;
+}
+
+.contact-section {
+  text-align: center;
+  padding: 20px;
+  background: #f9fafb;
+  border-radius: 8px;
+}
+
+.contact-section p {
+  margin: 0;
+  color: #666;
+}
+
+.email-footer {
+  background: #1E1E1E;
+  color: #999;
+  padding: 24px;
+  text-align: center;
+}
+
+.email-footer p {
+  margin: 0 0 8px 0;
+  font-size: 0.875rem;
+}
+
+.footer-small {
+  font-size: 0.75rem;
+}
+</style>

@@ -18,7 +18,8 @@ import { SCRIPT, DELIVERY, PRODUCTS } from '~/chat-config.js'
 
 // State definitions
 // Flow: INTRO → WEIGHT_RECEIVED → SIZE_SELECTED → PRODUCT_SELECTED → LIFETIME_PITCH
-//       → ASK_SUBURB → SHOW_QUOTE → ASK_EMAIL → ASK_NAME → ASK_ADDRESS → ASK_PHONE → QUOTE_SENT
+//       → ASK_POSTCODE → SHOW_QUOTE → ASK_EMAIL → QUOTE_SENT
+//       → (optional refinement) REFINE_NAME → REFINE_ADDRESS → REFINE_PHONE → QUOTE_REFINED
 export const STATES = {
   INTRO: 'INTRO',
   WEIGHT_RECEIVED: 'WEIGHT_RECEIVED',   // User gave weight, now pick size
@@ -29,10 +30,12 @@ export const STATES = {
   ASK_POSTCODE: 'ASK_POSTCODE',         // Ask for postcode to calculate delivery
   SHOW_QUOTE: 'SHOW_QUOTE',             // Show estimate, offer to email
   ASK_EMAIL: 'ASK_EMAIL',               // Get email for quote
-  ASK_NAME: 'ASK_NAME',                 // Get name for quote
-  ASK_ADDRESS: 'ASK_ADDRESS',           // Get full address for exact delivery
-  ASK_PHONE: 'ASK_PHONE',               // Get phone (optional)
-  QUOTE_SENT: 'QUOTE_SENT',             // Confirmation
+  QUOTE_SENT: 'QUOTE_SENT',             // Email sent, offer refinement
+  // Refinement flow (optional, after quote sent)
+  REFINE_NAME: 'REFINE_NAME',           // Get name for checkout
+  REFINE_ADDRESS: 'REFINE_ADDRESS',     // Get full address for exact delivery
+  REFINE_PHONE: 'REFINE_PHONE',         // Get phone (optional)
+  QUOTE_REFINED: 'QUOTE_REFINED',       // All details collected
   FREEFORM: 'FREEFORM'
 }
 
@@ -111,17 +114,20 @@ export function processInput(state, input, context = {}) {
     case STATES.ASK_EMAIL:
       return handleAskEmail(trimmedInput, context)
 
-    case STATES.ASK_NAME:
-      return handleAskName(trimmedInput, context)
-
-    case STATES.ASK_ADDRESS:
-      return handleAskAddress(trimmedInput, context)
-
-    case STATES.ASK_PHONE:
-      return handleAskPhone(trimmedInput, context)
-
     case STATES.QUOTE_SENT:
       return handleQuoteSent(trimmedInput, context)
+
+    case STATES.REFINE_NAME:
+      return handleRefineName(trimmedInput, context)
+
+    case STATES.REFINE_ADDRESS:
+      return handleRefineAddress(trimmedInput, context)
+
+    case STATES.REFINE_PHONE:
+      return handleRefinePhone(trimmedInput, context)
+
+    case STATES.QUOTE_REFINED:
+      return handleQuoteRefined(trimmedInput, context)
 
     case STATES.FREEFORM:
     default:
@@ -322,10 +328,21 @@ function handleSizeSelected(input, context) {
 
 /**
  * PRODUCT_SELECTED state handler
- * Expecting: yes/no for lifetime pitch question
+ * Three paths: quote (get price), pitch (learn more), browse (website)
  */
 function handleProductSelected(input, context) {
-  if (AFFIRMATIVE_PATTERN.test(input)) {
+  // Path 1: Get quote - go straight to postcode
+  if (/quote|price|total|delivery|how much|cost/i.test(input)) {
+    return {
+      nextState: STATES.ASK_POSTCODE,
+      response: getResponse('ASK_POSTCODE', context),
+      context,
+      needsAI: false
+    }
+  }
+
+  // Path 2: Learn more - go to pitch
+  if (/pitch|why|last|more|tell me|yes|yeah|sure/i.test(input)) {
     return {
       nextState: STATES.LIFETIME_PITCH,
       response: getResponse('LIFETIME_PITCH', context),
@@ -334,8 +351,8 @@ function handleProductSelected(input, context) {
     }
   }
 
-  // Check for "no" or declining
-  if (/^(no|nope|not|skip|just|ready|order|buy|checkout|cart)/i.test(input)) {
+  // Path 3: Browse - go to website
+  if (/browse|check|online|website|no|skip|page/i.test(input)) {
     return {
       nextState: STATES.FREEFORM,
       response: getResponse('READY_TO_ORDER', context),
@@ -651,16 +668,136 @@ function handleAskPhone(input, context) {
 
 /**
  * QUOTE_SENT state handler
- * Quote has been sent - go to freeform
+ * Quote sent - offer refinement or go to freeform
  */
 function handleQuoteSent(input, context) {
-  // Any follow-up goes to AI
+  // Check for "refine" / "yes" / "make it exact"
+  if (/refine|yes|exact|accurate|address|sure/i.test(input)) {
+    return {
+      nextState: STATES.REFINE_NAME,
+      response: getResponse('REFINE_NAME', context),
+      context,
+      needsAI: false
+    }
+  }
+
+  // Check for "done" / "no" / "fine"
+  if (/done|no|fine|good|thanks|ok/i.test(input)) {
+    return {
+      nextState: STATES.FREEFORM,
+      response: "No worries! Check your email when you're ready. Ask me anything else or pick a topic:",
+      context,
+      needsAI: false
+    }
+  }
+
+  // Anything else goes to AI
   return {
     nextState: STATES.FREEFORM,
     response: null,
     context,
     needsAI: true,
     reason: 'post_quote_followup'
+  }
+}
+
+/**
+ * REFINE_NAME state handler
+ */
+function handleRefineName(input, context) {
+  const name = input.trim()
+
+  if (name.length >= 2 && !/^[\d@]+$/.test(name)) {
+    const newContext = { ...context, customerName: name }
+    return {
+      nextState: STATES.REFINE_ADDRESS,
+      response: getResponse('REFINE_ADDRESS', context),
+      context: newContext,
+      needsAI: false
+    }
+  }
+
+  return {
+    nextState: STATES.REFINE_NAME,
+    response: "What name should I put on the order?",
+    context,
+    needsAI: false
+  }
+}
+
+/**
+ * REFINE_ADDRESS state handler
+ */
+function handleRefineAddress(input, context) {
+  const address = input.trim()
+
+  if (address.length >= 10) {
+    const newContext = { ...context, deliveryAddress: address }
+    return {
+      nextState: STATES.REFINE_PHONE,
+      response: getResponse('REFINE_PHONE', context),
+      context: newContext,
+      needsAI: false
+    }
+  }
+
+  return {
+    nextState: STATES.REFINE_ADDRESS,
+    response: "What's your full delivery address? (street, suburb, state, postcode)",
+    context,
+    needsAI: false
+  }
+}
+
+/**
+ * REFINE_PHONE state handler
+ */
+function handleRefinePhone(input, context) {
+  // Check for skip
+  if (/skip|no|prefer not|rather not/i.test(input)) {
+    return {
+      nextState: STATES.QUOTE_REFINED,
+      response: getResponse('QUOTE_REFINED', context),
+      context,
+      needsAI: false,
+      triggerRefinementUpdate: true
+    }
+  }
+
+  // Basic phone validation
+  const phoneMatch = input.match(/[\d\s]{8,}/)
+
+  if (phoneMatch) {
+    const phone = phoneMatch[0].replace(/\s/g, '')
+    const newContext = { ...context, phone }
+    return {
+      nextState: STATES.QUOTE_REFINED,
+      response: getResponse('QUOTE_REFINED', newContext),
+      context: newContext,
+      needsAI: false,
+      triggerRefinementUpdate: true
+    }
+  }
+
+  return {
+    nextState: STATES.REFINE_PHONE,
+    response: "Phone for delivery updates? (or say 'skip')",
+    context,
+    needsAI: false
+  }
+}
+
+/**
+ * QUOTE_REFINED state handler
+ * All refinement collected - freeform from here
+ */
+function handleQuoteRefined(input, context) {
+  return {
+    nextState: STATES.FREEFORM,
+    response: null,
+    context,
+    needsAI: true,
+    reason: 'post_refinement'
   }
 }
 
