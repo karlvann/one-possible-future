@@ -218,6 +218,8 @@ export default defineNuxtConfig({
     // On-demand ISR revalidation
     revalidateSecret: process.env.REVALIDATE_SECRET,
     vercelBypassToken: process.env.VERCEL_BYPASS_TOKEN,
+    // Ragie RAG knowledge base
+    ragieApiKey: process.env.RAGIE_API_KEY,
   },
 
   hooks: {
@@ -357,7 +359,7 @@ export default defineNuxtConfig({
     // On-demand ISR revalidation via bypassToken header
     vercel: {
       config: {
-        bypassToken: process.env.VERCEL_BYPASS_TOKEN
+        bypassToken: process.env.VERCEL_BYPASS_TOKEN?.trim()
       }
     }
   },

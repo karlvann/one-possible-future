@@ -15,8 +15,8 @@
       <!-- Page Header -->
       <header class="raw-page__header">
         <h1 class="raw-page__title">{{ data.title }}</h1>
-        <p v-if="data.lastEdited" class="raw-page__meta">
-          Last updated: {{ formatDate(data.lastEdited) }}
+        <p v-if="data.lastEditedTime" class="raw-page__meta">
+          Last updated: {{ formatDate(data.lastEditedTime) }}
         </p>
       </header>
 

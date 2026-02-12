@@ -113,8 +113,8 @@
       <!-- Page Header -->
       <header class="shadow-page__header">
         <h1 class="shadow-page__title">{{ data.title }}</h1>
-        <p v-if="data.lastEdited" class="shadow-page__meta">
-          Last updated: {{ formatDate(data.lastEdited) }}
+        <p v-if="data.lastEditedTime" class="shadow-page__meta">
+          Last updated: {{ formatDate(data.lastEditedTime) }}
         </p>
       </header>
 

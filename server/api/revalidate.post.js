@@ -102,7 +102,7 @@ export default defineEventHandler(async (event) => {
     pathsToRevalidate.push('/kb')
     pathsToRevalidate.push('/raw/combined-knowledge')
     // Marketing pages with FAQ dropdowns - add new pages here
-    const marketingPages = ['/delivery', '/trial', '/warranty', '/adjustments']
+    const marketingPages = ['/delivery']
     pathsToRevalidate.push(...marketingPages)
     // Note: API routes don't need ISR revalidation - they fetch fresh from Notion
   } else if (type === 'guides' || notionSlug) {
@@ -135,11 +135,33 @@ export default defineEventHandler(async (event) => {
 
     console.log(`[Revalidate] Completed. ${results.filter(r => r.revalidated).length}/${results.length} paths revalidated`)
 
+    // Re-ingest KB to Ragie after FAQ revalidation
+    let ragieResult = null
+    if (type === 'faq' && config.ragieApiKey) {
+      const ragieDocId = '16248a9c-bcbf-4a65-9456-402e6bfd2dd0'
+      try {
+        const ragieResponse = await fetch(`https://api.ragie.ai/documents/${ragieDocId}/url`, {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${config.ragieApiKey.trim()}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ url: `${baseUrl}/kb` })
+        })
+        ragieResult = { status: ragieResponse.status, ok: ragieResponse.ok }
+        console.log(`[Revalidate] Ragie re-ingest: ${ragieResponse.status} ${ragieResponse.ok ? 'OK' : 'FAILED'}`)
+      } catch (ragieError) {
+        ragieResult = { error: ragieError.message }
+        console.error(`[Revalidate] Ragie re-ingest failed: ${ragieError.message}`)
+      }
+    }
+
     return {
       success: true,
       revalidated: allRevalidated,
       partiallyRevalidated: anyRevalidated && !allRevalidated,
       results,
+      ragie: ragieResult,
       timestamp: new Date().toISOString()
     }
 
