@@ -50,7 +50,7 @@ export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig()
 
   // Get params from body or query (Notion webhooks use POST body)
-  const body = await readBody(event).catch(() => ({}))
+  const body = await readBody(event).catch(() => null) || {}
   const query = getQuery(event)
 
   const secret = body.secret || query.secret
@@ -74,8 +74,9 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  // Validate bypass token is configured
-  if (!config.vercelBypassToken) {
+  // Validate bypass token is configured (trim to handle env var whitespace/newlines)
+  const bypassToken = config.vercelBypassToken?.trim()
+  if (!bypassToken) {
     console.error('[Revalidate] VERCEL_BYPASS_TOKEN not configured')
     throw createError({
       statusCode: 500,
@@ -126,7 +127,7 @@ export default defineEventHandler(async (event) => {
   try {
     // Revalidate all paths
     const results = await Promise.all(
-      pathsToRevalidate.map(p => revalidatePath(baseUrl, p, config.vercelBypassToken))
+      pathsToRevalidate.map(p => revalidatePath(baseUrl, p, bypassToken))
     )
 
     const allRevalidated = results.every(r => r.revalidated)
