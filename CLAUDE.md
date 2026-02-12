@@ -127,6 +127,9 @@ Required on Vercel:
 - `NOTION_API_KEY` - Notion integration token (must have access to all databases)
 - `NOTION_BLOG_DATABASE_ID` - Database ID for blog articles
 - `NOTION_FAQ_DATABASE_ID` - Database ID for FAQ articles (`f0502a707e3b4d1cb6d3410102d05cee`)
+- `REVALIDATE_SECRET` - Secret for webhook authentication
+- `VERCEL_BYPASS_TOKEN` - Vercel's ISR bypass token (from project settings)
+- `RAGIE_API_KEY` - Ragie API key for automatic KB re-ingestion
 
 ---
 
@@ -155,10 +158,6 @@ POST /api/revalidate?secret=YOUR_SECRET&type=guides
    - **Content:** Check "Slug" property (required for path-specific revalidation)
 
 **IMPORTANT:** The trigger MUST include "Page content edited" - not just "Any property edited". Otherwise, editing the page body won't trigger revalidation (only property changes will).
-
-**Environment Variables Required:**
-- `REVALIDATE_SECRET` - Secret for webhook authentication
-- `VERCEL_BYPASS_TOKEN` - Vercel's ISR bypass token (from project settings)
 
 ---
 
@@ -225,14 +224,14 @@ No navigation, no annotations, no site chrome.
 ### Pipeline Overview
 
 ```
-Notion FAQ Database → Vercel /kb endpoint → Ragie (RAG)
-         ↓
-   /api/faq/combined
-         ↓
-   https://one-possible-future.vercel.app/kb
-         ↓
-   Ragie ingests as "Ausbeds KB v3"
+Notion FAQ Database
+         ↓ (Notion automation webhook)
+   POST /api/revalidate?type=faq
+         ↓ (busts ISR cache, then auto re-ingests)
+   /kb → Ragie ingests as "Ausbeds KB v3"
 ```
+
+The full pipeline is automatic: edit Notion → webhook fires → ISR cache busts → Ragie re-ingests.
 
 ### Ragie Configuration
 
@@ -265,17 +264,13 @@ The Ragie MCP only exposes `retrieve` (read-only). For document management (crea
 
 ### Re-syncing After Notion Edits
 
-1. **Edit content** in Notion FAQ Database (not Operations pages!)
-2. **Trigger ISR revalidation** (automatic via webhook, or manual):
-   ```bash
-   curl -X POST "https://one-possible-future.vercel.app/api/revalidate?secret=YOUR_SECRET&type=faq"
-   ```
-3. **Re-ingest to Ragie** (manual - no auto-sync):
-   ```bash
-   curl -X PUT -H "Authorization: Bearer YOUR_RAGIE_KEY" \
-     "https://api.ragie.ai/documents/16248a9c-bcbf-4a65-9456-402e6bfd2dd0/url" \
-     -d '{"url": "https://one-possible-future.vercel.app/kb"}'
-   ```
+**Automatic (recommended):** Just edit the Notion FAQ Database. The Notion automation fires a webhook → ISR cache busts → Ragie re-ingests. No manual steps needed.
+
+**Manual (if webhook isn't firing):**
+```bash
+curl -X POST "https://one-possible-future.vercel.app/api/revalidate?secret=YOUR_SECRET&type=faq"
+```
+This busts the ISR cache AND triggers Ragie re-ingestion automatically.
 
 ---
 
@@ -301,9 +296,9 @@ There are TWO places where KB content exists in Notion:
 ### Verifying Content Flow
 
 1. Edit page in FAQ Articles Database
-2. Visit `https://one-possible-future.vercel.app/kb` to verify changes appear
-3. Re-ingest to Ragie via API
-4. Test retrieval via Ragie MCP
+2. Wait for webhook to fire (or trigger manually)
+3. Visit `https://one-possible-future.vercel.app/kb` to verify changes appear
+4. Test retrieval via Ragie MCP (re-ingestion happens automatically)
 
 ---
 
